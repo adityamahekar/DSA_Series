@@ -1,26 +1,38 @@
-
-
-// User function Template for Java
+    
+                                                                                                // User function Template for Java
 
 class Solution {
     
     static void counting(int arr[], int n, int ex){
-        int output[] = new int[n];
-        int count[] = new int[10];
         
-        for(int i=0;i<10;i++){ count[i] = 0;}
-        for(int i=0;i<n;i++){ count[(arr[i]/ex)%10]++;}
-        for(int i=1;i<10;i++){ count[i] = count[i] + count[i-1];}
-        for(int i=n-1;i>=0;i--){
-             output[count[(arr[i]/ex) %10] - 1] = arr[i];
-             count[(arr[i]/ex) %10]--;
+        int output[] = new int[n];                                                                   // stores sorted numbers for this digit
+        int count[] = new int[10];                                                           // count array for digits 0-9
+        
+        for(int i=0;i<10;i++){ 
+            count[i] = 0;                                                                            // initialize count array
         }
+        
+        for(int i=0;i<n;i++){ 
+            count[(arr[i]/ex)%10]++;                                                                                 // count occurrences of digits
+        }
+        
+        for(int i=1;i<10;i++){ 
+            count[i] = count[i] + count[i-1];                                                                     // prefix sum for positions
+        }
+        
+        for(int i=n-1;i>=0;i--){
+             output[count[(arr[i]/ex)%10] - 1] = arr[i];                                                             // place element in output
+             count[(arr[i]/ex)%10]--;                                                                                                        // decrease count
+        }
+        
         for(int i=0;i<n;i++){
-            arr[i] = output[i];
+            arr[i] = output[i];                                                                                      // copy sorted elements back to original array
         }
     }
+
     static void radixSort(int arr[], int n) {
-        int mx = arr[0];
+        
+        int mx = arr[0];                                                                                                     // find maximum element
         
         for(int i=1;i<n;i++){
             if(arr[i] > mx){
@@ -28,16 +40,13 @@ class Solution {
             }
         }
         
-        for(int ex=1;mx/ex > 0;ex++){
+        for(int ex=1; mx/ex > 0; ex*=10){                                                                     // process digits (1s, 10s, 100s...)
             counting(arr,n,ex);
         }
         
     }
     
-    
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 
