@@ -1,0 +1,111 @@
+
+
+// User function Template for Java
+
+class Solution {
+    
+    static void counting(int arr[], int n, int ex){
+        int output[] = new int[n];
+        int count[] = new int[10];
+        
+        for(int i=0;i<10;i++){ count[i] = 0;}
+        for(int i=0;i<n;i++){ count[(arr[i]/ex)%10]++;}
+        for(int i=1;i<10;i++){ count[i] = count[i] + count[i-1];}
+        for(int i=n-1;i>=0;i--){
+             output[count[(arr[i]/ex) %10] - 1] = arr[i];
+             count[(arr[i]/ex) %10]--;
+        }
+        for(int i=0;i<n;i++){
+            arr[i] = output[i];
+        }
+    }
+    static void radixSort(int arr[], int n) {
+        int mx = arr[0];
+        
+        for(int i=1;i<n;i++){
+            if(arr[i] > mx){
+                mx = arr[i];
+            }
+        }
+        
+        for(int ex=1;mx/ex > 0;ex++){
+            counting(arr,n,ex);
+        }
+        
+    }
+    
+    
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+## Radix Sort Example
+
+Input
+
+```
+319, 2122, 6, 8, 100, 50
+```
+
+Rewrite numbers with leading zeros
+
+```
+0319, 2122, 0006, 0008, 0100, 0050
+```
+
+Stable sort according to last digit (units place)
+
+```
+0100, 0050, 2122, 0006, 0008, 0319
+```
+
+Stable sort according to middle digit (tens place)
+
+```
+0100, 0006, 0008, 0319, 2122, 0050
+```
+
+Stable sort according to most significant digit
+
+```
+0006, 0008, 0050, 0100, 0319, 2122
+```
+
+Final sorted order
+
+```
+6, 8, 50, 100, 319, 2122
+```
+
+///////////////////////////////////////////////////////////////////////////////////
+
+Radix Sort
+Given an array arr[] of positive integer size N, use Radix Sort Algorithm to sort arr[] in ascending order.
+
+Example 1:
+
+Input :
+N = 4
+arr[] = {1, 9, 345, 2}
+Output: 1 2 9 345
+-------------------------------
+Example 2:
+
+Input :
+N = 10
+arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
+Output: 1 2 3 4 5 6 7 8 9 10
+------------------------------------------
+Your Task:  
+You dont need to read input or print anything. Complete the function radixSort() which takes arr[] and N as input parameters and sorts arr[] in-place. 
+
+
+Expected Time Complexity: O(N * K) where K is the number of bits required to store each key.
+Expected Auxiliary Space: O(N + K)
+
+
+Constraints:
+1 ≤ N ≤ 10^3
+
