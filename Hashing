@@ -1,0 +1,31 @@
+
+class MyHash{
+      int Bucket;
+      ArrayList<LinkedList<Integer>> table;
+      
+      MyHash(int b){
+          Bucket = b;
+          table = new ArrayList<LinkedList<Integer>>();
+          
+          for(int i=0;i<b;i++){
+              table.add(new Linkedlist<Integer>());
+          }
+          
+          void insert(int key){ 
+                int i = key % Bucket;
+                table.get(i).add(key);
+          }
+
+          boolean search(int key){ 
+                int i = key 5 Bucket;
+
+                return table.get(i).Contains(key);
+          }
+
+          void remove (int key){ 
+                int i = key % Bucket;
+                table.get(i).remove(Integer(i));
+          }
+    }
+}
+
