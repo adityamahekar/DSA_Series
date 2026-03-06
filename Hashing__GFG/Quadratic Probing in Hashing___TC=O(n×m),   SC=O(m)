@@ -1,0 +1,67 @@
+
+class Solution {
+    public ArrayList<Integer> quadraticProbing(int[] arr, int m) {
+        ArrayList<Integer> list = new ArrayList<>();                              // Result list to return final hash table
+
+        int table[] = new int[m];                                                 // Create hash table of size m
+
+        Arrays.fill(table, -1);                                                   // Initialize all slots as empty (-1)
+
+        for (int i = 0; i < arr.length; i++) {                                    // Iterate through each element in arr
+
+            int j = 1;                                                            // Probe counter starts at 1
+            int idx = arr[i] % m;                                                 // Compute initial hash index
+            int h = idx;                                                          // Save original index for quadratic formula
+
+            while (table[idx] != -1 && table[idx] != arr[i]) {                   // Probe until empty slot or duplicate found
+                idx = (h + j * j) % m;                                            // Next probe: (original + j²) % m
+                j++;                                                              // Increment probe counter
+
+                if (j == m) { break; }                                            // All slots checked — discard element
+            }
+
+            if (table[idx] == -1 || table[idx] == arr[i]) {                      // Slot is empty OR duplicate element
+                table[idx] = arr[i];                                              // Insert element at probed position
+            }
+        }
+
+        for (int i = 0; i < table.length; i++) {                                  // Traverse completed hash table
+            list.add(table[i]);                                                   // Add each slot value to result list
+        }
+
+        return list;                                                               // Return final hash table as ArrayList
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Quadratic Probing in Hashing
+Given an array arr[] of integers and a hash table of size m, insert each element of the array into the hash table using Quadratic Probing for collision handling.
+
+Note: All the positions that are unoccupied are denoted by -1 in the hash table.
+Quadratic Probing is a collision handling technique used in hashing. When a collision occurs (i.e. two elements hash to the same index), Quadratic Probing searches for the next available slot using a quadratic function of the form: newIndex = (originalIndex + i2) % m (i = number of collisions seen so far for this insertion)
+
+Examples :
+
+Input: arr[] = [21, 10, 33, 43], m = 5
+Output: [10, 21, -1, 33, 43]
+Explanation:
+21 % 5 = 1, So 21 goes into hashtable[1],
+10 % 5 = 0, So 10 goes into hashtable[0],
+33 % 5 = 3, So 33 goes into hashtable[3],
+43 % 5 = 3, but hashtable[3] is already filled so we try (3 + 12) % 5 = 4, So 43 goes into hashtable[4] because it is empty.
+
+
+Input: arr[] = [31, 48, 37, 70], m = 4
+Output: [48, 37, 70, 31]
+Explanation:
+31 % 4 = 3, So 31 goes into hashtable[3],
+48 % 4 = 0, So 48 goes into hashtable[0],
+37 % 4 = 1, So 37 goes into hashtable[1],
+70 % 4 = 2, So 70 goes into hashtable[2].
+
+
+Constraints:
+2 ≤ m ≤ 104
+1 ≤ arr.size() ≤ m
+1 ≤ arr[i] ≤ 106
