@@ -52,6 +52,34 @@ class MyHashMap {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+                MyHashMap
+                    │
+                    │
+            size = 1000  (total buckets)
+                    │
+                    ▼
+            table  (hash table)
+        ┌───────────────────────────┐
+index → │ 0   │ 1   │ 2   │ 3   │... │
+        ├─────┼─────┼─────┼─────┼────┤
+        │     │     │     │     │
+        ▼     ▼     ▼     ▼
+
+   table[0]  table[1]  table[2]  table[3]
+      │         │         │         │
+      ▼         ▼         ▼         ▼
+   List       List      List      List
+ (bucket)   (bucket)  (bucket)  (bucket)
+      │
+      ▼
+   int[] pairs
+  ┌───────────┐
+  │ {key,value} │
+  │ {key,value} │
+  └───────────┘
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Your MyHashMap object will be instantiated and called as such:
  * MyHashMap obj = new MyHashMap();
