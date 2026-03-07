@@ -1,0 +1,50 @@
+```java
+import java.util.*;
+
+class test {
+    public static void main(String args[]) {
+        HashSet<String> h = new HashSet<>();   // correct Java set class
+        h.add("one");                          // adds "one" to the set
+        h.add("two");                          // adds "two" to the set
+        h.add("three");                        // adds "three" to the set
+
+        System.out.println(h);                 // output => [one, two, three]
+        System.out.println(h.contains("one")); // output => true
+
+        h.remove("three");                     // removes "three" from the set
+        System.out.println(h.size());          // output => 2
+
+        Iterator<String> i = h.iterator();     // gets iterator to walk through set
+        while (i.hasNext()) {
+            System.out.println(i.next());      // output => one
+        }                                      //        => two
+
+        for (String s : h) {
+            System.out.println(s + " ");       // output => one
+        }                                      //        => two
+
+        System.out.println(h.isEmpty());       // output => false
+        h.clear();                             // removes all elements from set
+    }
+}
+```
+
+---
+
+```
+///////////////////////////////////////////////////////
+//           HashSet METHOD CHEATSHEET               //
+///////////////////////////////////////////////////////
+//  new HashSet<>()          -- create empty set     //
+//  h.add(val)               -- insert element       //
+//  h.remove(val)            -- delete element       //
+//  h.contains(val)          -- true/false lookup    //
+//  h.size()                 -- number of elements   //
+//  h.isEmpty()              -- true if size == 0    //
+//  h.clear()                -- wipe all elements    //
+//  h.iterator()             -- get iterator         //
+//  i.hasNext()              -- check if more exist  //
+//  i.next()                 -- fetch next element   //
+//  for (String s : h)       -- for-each traversal   //
+///////////////////////////////////////////////////////
+```
