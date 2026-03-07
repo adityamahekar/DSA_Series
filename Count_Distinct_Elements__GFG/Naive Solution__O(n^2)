@@ -1,0 +1,41 @@
+
+int countDist(int arr[]) {
+    int n   = arr.length;                // total number of elements
+    int res = 0;                         // count of distinct elements
+
+    for (int i = 0; i < n; i++) {
+        boolean flag = false;            // assume current element is distinct
+
+        for (int j = 0; j < i; j++) {
+            if (arr[i] == arr[j]) {      // duplicate found in previous elements
+                flag = true;             // mark as duplicate
+                break;                   // no need to check further
+            }
+        }
+
+        if (flag == false) {             // if not a duplicate
+            res++;                       // count it as distinct
+        }
+    }                                    // fixed: return was inside for loop
+
+    return res;                          // output => number of distinct elements
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+**Description:**
+
+Counts distinct elements in an array using a brute force approach. For each element, it looks back at all previous elements to check if it has already appeared. If not seen before, it increments the result counter. Time complexity is O(n²) and space complexity is O(1).
+
+---
+
+**Test Cases:**
+```
+arr = {1, 2, 3, 4, 5}        => 5   // all unique
+arr = {1, 1, 1, 1, 1}        => 1   // all same
+arr = {1, 2, 1, 3, 2}        => 3   // mixed duplicates
+arr = {5}                    => 1   // single element
+arr = {}                     => 0   // empty array
+arr = {-1, -2, -1, 3}        => 3   // negative numbers
+arr = {0, 0, 1, 2, 0}        => 3   // zeros as duplicates
