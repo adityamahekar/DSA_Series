@@ -10,7 +10,7 @@ class Solution {
         for(int x : arr){
             sum += x;                                     // update prefix sum
 
-            if(hs.contains(sum - tar)){                  // ✅ sum-tar seen → subarray==tar exists
+            if(hs.contains(sum - tar) || sum == tar){                  // ✅ sum-tar seen → subarray==tar exists
                 count++;                                  // increment count
             }
 
