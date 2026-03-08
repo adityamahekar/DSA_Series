@@ -1,0 +1,75 @@
+
+
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        ArrayList<Integer> al = new ArrayList<Integer>();  // stores unique result
+        HashSet<Integer>   hs = new HashSet<>();           // stores nums1 elements
+
+        for(int i : nums1){
+            hs.add(i);                                     // add nums1 to hashset
+        }
+
+        for(int j : nums2){
+            if(hs.contains(j) && !al.contains(j)){        // found and not duplicate
+                al.add(j);                                 // add to result
+            }
+        }
+
+        int a[] = new int[al.size()];                      // result array
+
+        for(int i = 0; i < al.size(); i++){
+            a[i] = al.get(i);                              // fill array from list
+        }
+
+        return a;                                          // [2] ✅
+    }
+}
+
+/////////////////////////////////////////////////////////////////////
+
+//  nums1 = [ 1,  2,  2,  1 ]
+//  nums2 = [ 2,  2 ]
+
+// ── PASS 1 : nums1 → hs ──────────────
+//  i=1  hs = { 1 }
+//  i=2  hs = { 1, 2 }
+//  i=2  hs = { 1, 2 }  duplicate ignored
+//  i=1  hs = { 1, 2 }  duplicate ignored
+
+// ── PASS 2 : nums2 check ─────────────
+//  j=2  hs has 2 ✅  al empty ✅  al = [ 2 ]
+//  j=2  hs has 2 ✅  al has 2 ❌  skip
+
+// ── PASS 3 : al → a ──────────────────
+//  a  = new int[1]
+//  i=0  a[0] = al.get(0) = 2
+
+// ─────────────────────────────────────
+//  hs = { 1,  2 }
+//  al = [ 2 ]
+//  a  = [ 2 ]  ✅
+
+/////////////////////////////////////////////////////////////////////
+
+349. Intersection of Two Arrays
+Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
+
+ 
+
+Example 1:
+
+Input: nums1 = [1,2,2,1], nums2 = [2,2]
+Output: [2]
+Example 2:
+
+Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+Output: [9,4]
+Explanation: [4,9] is also accepted.
+ 
+
+Constraints:
+
+1 <= nums1.length, nums2.length <= 1000
+0 <= nums1[i], nums2[i] <= 1000
+
