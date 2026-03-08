@@ -1,0 +1,63 @@
+
+class Solution {
+    static boolean findsum(int arr[]) {
+
+        int n = arr.length;                               // store array length
+
+        for(int i = 0; i < n; i++){                      // start index of subarray
+            int csum = 0;                                 // reset sum every outer loop
+
+            for(int j = i; j < n; j++){                  // end index of subarray
+                csum += arr[j];                          // add element to current sum
+
+                if(csum == 0){                           // subarray sum == 0
+                    return true;                         // found ✅
+                }
+            }
+        }
+
+        return false;                                     // no zero sum subarray ❌
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// ── BACKTRACK ─────────────────────────────────────
+arr = [ 4,  2,  -3,  1,  6 ]
+
+i=0  csum=0
+   j=0  csum=0+4  =4   ❌
+   j=1  csum=4+2  =6   ❌
+   j=2  csum=6-3  =3   ❌
+   j=3  csum=3+1  =4   ❌
+   j=4  csum=4+6  =10  ❌
+
+i=1  csum=0
+   j=1  csum=0+2  =2   ❌
+   j=2  csum=2-3  =-1  ❌
+   j=3  csum=-1+1 =0   ✅  return true
+
+// subarray [2, -3, 1] sums to 0 ✅
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+Subarray with 0 sum
+Given an array of integers, arr[]. Find if there is a subarray (of size at least one) with 0 sum. Return true/false depending upon whether there is a subarray present with 0-sum or not. 
+
+Examples:
+
+Input: arr[] = [4, 2, -3, 1, 6]
+Output: true
+Explanation: 2, -3, 1 is the subarray with a sum of 0.
+
+Input: arr = [4, 2, 0, 1, 6]
+Output: true
+Explanation: 0 is one of the element in the array so there exist a subarray with sum 0.
+
+Input: arr = [1, 2, -1]
+Output: false
+
+Constraints:
+1 <= arr.size <= 105
+-105 <= arr[i] <= 105
+
