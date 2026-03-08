@@ -1,0 +1,102 @@
+
+void countFreq(int arr[], int n){
+
+    HashMap<Integer, Integer> hm = new HashMap<>();           // stores element → frequency
+
+    for(int x : arr){
+        hm.put(x, hm.getOrDefault(x, 0) + 1);                // increment freq of x
+    }
+
+    for(Map.Entry<Integer, Integer> e : hm.entrySet()){       // iterate each entry
+        System.out.println(e.getKey() + " " + e.getValue());  // print key and freq
+    }
+}
+
+/////////////////////////////////////////////////////////////
+
+**Backtrack — `arr = [2, 3, 2, 3, 5]`:**
+```
+┌───────┬───────────────────────────┬───────────────────┐
+│   x   │   getOrDefault(x, 0)+1    │   hm              │
+├───────┼───────────────────────────┼───────────────────┤
+│   2   │   missing  → 0+1 = 1      │   {2:1}           │
+│   3   │   missing  → 0+1 = 1      │   {2:1, 3:1}      │
+│   2   │   exists   → 1+1 = 2      │   {2:2, 3:1}      │
+│   3   │   exists   → 1+1 = 2      │   {2:2, 3:2}      │
+│   5   │   missing  → 0+1 = 1      │   {2:2, 3:2, 5:1} │
+└───────┴───────────────────────────┴───────────────────┘
+
+┌──────────────────┐
+│     Output       │
+├──────────────────┤
+│  2  →  freq = 2  │
+│  3  →  freq = 2  │
+│  5  →  freq = 1  │
+└──────────────────┘
+```
+
+/////////////////////////////////////////////////////////////////
+
+# Frequency Count of Array Elements
+
+## Description
+Given an array of integers, print each unique element along with
+its frequency. Each element should be printed only once in the
+order it first appears.
+
+---
+
+## Input Format
+Line 1 : size of array (n)
+Line 2 : array elements separated by space
+
+## Output Format
+element  frequency
+element  frequency
+...
+
+---
+
+## Test Cases
+
+### Test 1 — Basic
+Input  : arr[] = [2, 3, 2, 3, 5]
+Output : 2 2
+         3 2
+         5 1
+
+### Test 2 — All Same
+Input  : arr[] = [4, 4, 4, 4]
+Output : 4 4
+
+### Test 3 — All Unique
+Input  : arr[] = [1, 2, 3, 4, 5]
+Output : 1 1
+         2 1
+         3 1
+         4 1
+         5 1
+
+### Test 4 — Single Element
+Input  : arr[] = [7]
+Output : 7 1
+
+### Test 5 — Negative Numbers
+Input  : arr[] = [-1, -2, -1, -3, -2]
+Output : -1 2
+         -2 2
+         -3 1
+
+### Test 6 — Large Repeated
+Input  : arr[] = [10, 20, 10, 30, 20, 10]
+Output : 10 3
+         20 2
+         30 1
+
+---
+
+## Constraints
+1       ≤  n      ≤  10^6
+-10^6   ≤  arr[i] ≤  10^6
+
+---
