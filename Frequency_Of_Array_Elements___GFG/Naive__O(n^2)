@@ -1,0 +1,117 @@
+
+void printFreq(int arr[], int n){
+
+    for(int i = 0; i < n; i++){
+
+        boolean flag = false;                             // reset for each element
+
+        for(int j = 0; j < i; j++){                      // check if arr[i] seen before
+            if(arr[i] == arr[j]){                        // duplicate found
+                flag = true;                             // mark as seen
+                break;                                   // stop searching
+            }
+        }
+
+        if(flag){ continue; }                            // skip already printed element
+
+        int freq = 1;                                    // count self as first occurrence
+
+        for(int j = i + 1; j < n; j++){                 // count remaining duplicates
+            if(arr[i] == arr[j]){                        // match found
+                freq++;                                  // increment frequency
+            }
+        }
+
+        System.out.println(arr[i] + " " + freq);        // print element and its frequency
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+arr = [ 2,  3,  2,  3,  5 ]
+idx =   0   1   2   3   4
+
+┌─────────────────────────────────────────┐
+│  i=0  arr[0]=2  flag=false → process    │
+│    freq=1  j=2 match → freq=2           │
+│    print: 2 2                           │
+├─────────────────────────────────────────┤
+│  i=1  arr[1]=3  flag=false → process    │
+│    freq=1  j=3 match → freq=2           │
+│    print: 3 2                           │
+├─────────────────────────────────────────┤
+│  i=2  arr[2]=2  j=0 match → flag=true → skip ⏭  │
+├─────────────────────────────────────────┤
+│  i=3  arr[3]=3  j=1 match → flag=true → skip ⏭  │
+├─────────────────────────────────────────┤
+│  i=4  arr[4]=5  flag=false → process    │
+│    freq=1  no match                     │
+│    print: 5 1                           │
+└─────────────────────────────────────────┘
+
+┌──────────────────┐
+│     Output       │
+├──────────────────┤
+│  2  →  freq = 2  │
+│  3  →  freq = 2  │
+│  5  →  freq = 1  │
+└──────────────────┘
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Frequency Count of Array Elements
+
+Description:
+Given an array of integers, print each unique element along with its frequency. Each element should be printed only once in the order it first appears.
+````````````````````````````````````````````````````
+Input Format:
+Line 1 : size of array (n)
+Line 2 : array elements separated by space
+
+Output Format:
+element  frequency
+element  frequency
+...
+```````````````````````````````````````````````
+Test Cases:
+```````````````````````````````````````````````
+Test 1 — Basic:
+Input  : arr[] = [2, 3, 2, 3, 5]
+Output : 2 2
+         3 2
+         5 1
+
+```````````````````````````````````
+Test 2 — All same:
+Input  : arr[] = [4, 4, 4, 4]
+Output : 4 4
+````````````````````````````````````
+Test 3 — All unique:
+Input  : arr[] = [1, 2, 3, 4, 5]
+Output : 1 1
+         2 1
+         3 1
+         4 1
+         5 1
+````````````````````````````````````````
+Test 4 — Single element:
+Input  : arr[] = [7]
+Output : 7 1
+
+`````````````````````````````````````````````````
+Test 5 — Negative numbers:
+Input  : arr[] = [-1, -2, -1, -3, -2]
+Output : -1 2
+         -2 2
+         -3 1
+
+```````````````````````````````````````````````
+Test 6 — Large repeated:
+Input  : arr[] = [10, 20, 10, 30, 20, 10]
+Output : 10 3
+         20 2
+         30 1
+``````````````````````````````````````````````
+Constraints:
+1  ≤  n         ≤  10^6
+-10^6  ≤  arr[i]  ≤  10^6
