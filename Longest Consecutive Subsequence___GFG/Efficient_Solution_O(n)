@@ -1,0 +1,26 @@
+
+class Solution {
+    public int longestConsecutive(int[] arr) {
+        
+        HashSet<Integer> hs = new HashSet<>();
+        
+        for(int x: arr){
+            hs.add(x);                             // store all elements in hashset
+        }
+        
+        int res = 0;
+        
+        for(int x: arr){
+            if(!hs.contains(x-1)){                 // start of a new sequence
+                int curr = 1;
+                
+                while(hs.contains(x+curr)){        // extend streak forward
+                    curr++;
+                }
+                res = Math.max(res, curr);         // update max streak
+            }
+        }
+        return res;                                // return longest consecutive sequence
+    }
+}
+
