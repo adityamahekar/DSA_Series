@@ -1,0 +1,56 @@
+
+class Solution {
+    public int equalSumSpan(int[] a1, int[] a2) {
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        hm.put(0,-1);                                 // base case: sum 0 seen at index -1
+        
+        int n = a1.length, sum=0,res=0;
+        
+        int temp[] = new int[n];
+        
+        for(int i=0;i<n;i++){
+            temp[i] = a1[i] - a2[i];                 // difference array trick
+        }
+        
+        for(int j=0;j<n;j++){
+            
+            sum += temp[j];                           // prefix sum of difference array
+            
+            if(sum == 0){                             // whole subarray from start has equal sum
+                res = Math.max(res, j-hm.get(0));     // span = j - (-1) = j+1
+            }
+            
+            if(!hm.containsKey(sum)){                 // first occurrence of this sum
+                hm.put(sum,j);                        // store index for future use
+            }
+            else{                                     // sum seen before
+                res = Math.max(res,j-hm.get(sum));    // update max span length
+            }
+        }
+        return res;                                   // return longest equal sum span
+    }
+}
+
+////////////////////////////////////////////////////////////////
+
+Longest Span in two Binary Arrays
+Given two binary arrays, a1[] and a2[] of equal length. Find the length of longest common span (i, j), where i<= j such that a1[i] + a1[i+1] + .... + a1[j] =  a2[i] + a2[i+1] + ... + a2[j].
+
+Examples:
+
+Input: a1[] = [0, 1, 0, 0, 0, 0], a2[] = [1, 0, 1, 0, 0, 1]
+Output: 4
+Explanation: The longest span with same sum is from index 1 to 4 (0-based indexing).
+
+Input: a1[] = [0, 1, 0, 1, 1, 1, 1], a2[] = [1, 1, 1, 1, 1, 0, 1]
+Output: 6
+Explanation: The longest span with same sum is from index 1 to 6 (0-based indexing).
+
+Input: a1[] = [0, 0, 0], a2[] = [1, 1, 1]
+Output: 0
+Explanation: There is no span where the sum of the elements in a1[] and a2[] is equal.
+
+Constraints:
+1 ≤ a1.size() = a2.size() ≤ 106
+0 ≤ a1[i], a2[i] ≤ 1
+
