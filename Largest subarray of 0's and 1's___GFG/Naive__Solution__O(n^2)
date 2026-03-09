@@ -1,0 +1,47 @@
+
+class Solution {
+    public int maxLen(int[] arr) {
+        int n = arr.length, res = 0;                       // res=maxLen
+
+        for(int i=0;i<n;i++){
+            int c0 = 0, c1 = 0;                           // reset counts for each start index
+            for(int j=i;j<n;j++){
+                if(arr[j] == 0){
+                    c0++;                                  // count zeros
+                }
+                else{
+                    c1++;                                  // count ones
+                }
+
+                if(c0 == c1){                             // equal 0s and 1s found
+                    res = Math.max(res, c0+c1);           // update max length
+                }
+            }
+        }
+
+        return res;                                       // return longest length
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+
+Largest subarray of 0's and 1's
+Given an array arr of 0s and 1s. Find and return the length of the longest subarray with equal number of 0s and 1s.
+
+Examples:
+
+Input: arr[] = [1, 0, 1, 1, 1, 0, 0]
+Output: 6
+Explanation: arr[1...6] is the longest subarray with three 0s and three 1s.
+
+Input: arr[] = [0, 0, 1, 1, 0]
+Output: 4
+Explnation: arr[0...3] or arr[1...4] is the longest subarray with two 0s and two 1s.
+
+Input: arr[] = [0]
+Output: 0
+Explnation: There is no subarray with an equal number of 0s and 1s.
+
+Constraints:
+1 <= arr.size() <= 105
+0 <= arr[i] <= 1
