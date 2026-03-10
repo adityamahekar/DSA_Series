@@ -55,41 +55,6 @@ Output : [3, 4, 4, 3]
 
 ---
 
-## Code
-
-```java
-class Solution {
-    ArrayList<Integer> countDistinct(int arr[], int k) {
-        int n = arr.length;
-
-        ArrayList<Integer> list = new ArrayList<>();
-        HashMap<Integer, Integer> map = new HashMap<>();       // key=element, value=frequency in window
-
-        for (int i = 0; i < k; i++) {                         // build first window [0, k)
-            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add element, increment its frequency
-        }
-
-        list.add(map.size());                                  // distinct count = number of keys in map
-
-        for (int i = k; i < n; i++) {                         // slide window: i = new element entering
-            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add incoming element (right side)
-
-            int out = arr[i - k];                             // out = element leaving window (left side)
-            map.put(out, map.get(out) - 1);                   // decrement its frequency
-            if (map.get(out) == 0) {                          // frequency hits 0 → no longer in window
-                map.remove(out);                              // remove key so map.size() stays accurate
-            }
-
-            list.add(map.size());                             // distinct count = current number of keys
-        }
-
-        return list;                                          // return all window counts
-    }
-}
-```
-
----
-
 ## Step-by-Step Trace
 
 **Array:** `[1, 2, 1, 3, 4, 2, 3]` | **k = 4**
