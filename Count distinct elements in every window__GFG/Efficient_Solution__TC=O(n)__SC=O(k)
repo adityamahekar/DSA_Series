@@ -1,0 +1,194 @@
+class Solution {
+    ArrayList<Integer> countDistinct(int arr[], int k) {
+        int n = arr.length;
+
+        ArrayList<Integer> list = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();       // key=element, value=frequency in window
+
+        for (int i = 0; i < k; i++) {                         // build first window [0, k)
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add element, increment its frequency
+        }
+
+        list.add(map.size());                                  // distinct count = number of keys in map
+
+        for (int i = k; i < n; i++) {                         // slide window: i = new element entering
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add incoming element (right side)
+
+            int out = arr[i - k];                             // out = element leaving window (left side)
+            map.put(out, map.get(out) - 1);                   // decrement its frequency
+            if (map.get(out) == 0) {                          // if frequency hits 0 → no longer in window
+                map.remove(out);                              // remove key so map.size() stays accurate
+            }
+
+            list.add(map.size());                             // distinct count = current number of keys
+        }
+
+        return list;                                          // return all window counts
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+
+# Count Distinct Elements in Every Window
+
+## Problem
+
+Given an array and window size `k`, find the count of **distinct elements** in each sliding window.
+
+```
+Input  : arr = [1, 2, 1, 3, 4, 2, 3],  k = 4
+Output : [3, 4, 4, 3]
+```
+
+---
+
+## Approach — Sliding Window + HashMap
+
+| Key | Value |
+|-----|-------|
+| Element | Frequency in current window |
+
+- `map.size()` = distinct count at any point
+- Slide by **adding** right element + **removing** left element
+- Delete key when frequency → 0 (keeps `map.size()` accurate)
+
+---
+
+## Code
+
+```java
+class Solution {
+    ArrayList<Integer> countDistinct(int arr[], int k) {
+        int n = arr.length;
+
+        ArrayList<Integer> list = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();       // key=element, value=frequency in window
+
+        for (int i = 0; i < k; i++) {                         // build first window [0, k)
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add element, increment its frequency
+        }
+
+        list.add(map.size());                                  // distinct count = number of keys in map
+
+        for (int i = k; i < n; i++) {                         // slide window: i = new element entering
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1); // add incoming element (right side)
+
+            int out = arr[i - k];                             // out = element leaving window (left side)
+            map.put(out, map.get(out) - 1);                   // decrement its frequency
+            if (map.get(out) == 0) {                          // frequency hits 0 → no longer in window
+                map.remove(out);                              // remove key so map.size() stays accurate
+            }
+
+            list.add(map.size());                             // distinct count = current number of keys
+        }
+
+        return list;                                          // return all window counts
+    }
+}
+```
+
+---
+
+## Step-by-Step Trace
+
+**Array:** `[1, 2, 1, 3, 4, 2, 3]` | **k = 4**
+
+### Build First Window `[0, k)`
+
+```
+i=0 → add arr[0]=1 → map={1:1}
+i=1 → add arr[1]=2 → map={1:1, 2:1}
+i=2 → add arr[2]=1 → map={1:2, 2:1}
+i=3 → add arr[3]=3 → map={1:2, 2:1, 3:1}
+
+list.add(map.size()=3) → result = [3]
+```
+
+### Slide Window
+
+```
+┌────┬──────────────────┬───────────────────────────────┬──────────┬──────────────┐
+│ i  │ Window           │ map after slide                │ map.size │ result       │
+├────┼──────────────────┼───────────────────────────────┼──────────┼──────────────┤
+│  4 │ [2, 1, 3, 4]     │ add 4 → {1:2, 2:1, 3:1, 4:1}  │          │              │
+│    │                  │ rem 1 → {1:1, 2:1, 3:1, 4:1}  │    4     │ [3, 4]       │
+├────┼──────────────────┼───────────────────────────────┼──────────┼──────────────┤
+│  5 │ [1, 3, 4, 2]     │ add 2 → {1:1, 2:2, 3:1, 4:1}  │          │              │
+│    │                  │ rem 2 → {1:1, 2:1, 3:1, 4:1}  │    4     │ [3, 4, 4]    │
+├────┼──────────────────┼───────────────────────────────┼──────────┼──────────────┤
+│  6 │ [3, 4, 2, 3]     │ add 3 → {1:1, 2:1, 3:2, 4:1}  │          │              │
+│    │                  │ rem 1 → freq=0 → delete        │          │              │
+│    │                  │ map = {2:1, 3:2, 4:1}          │    3     │ [3, 4, 4, 3] │
+└────┴──────────────────┴───────────────────────────────┴──────────┴──────────────┘
+```
+
+---
+
+## Array Diagram
+
+```
+Index:  0    1    2    3    4    5    6
+arr:  [ 1    2    1    3    4    2    3 ]
+
+Window 1: |←————————→|                   map={1:2, 2:1, 3:1}        distinct = 3
+Window 2:      |←————————→|              map={1:1, 2:1, 3:1, 4:1}   distinct = 4
+Window 3:           |←————————→|         map={1:1, 2:1, 3:1, 4:1}   distinct = 4
+Window 4:                |←————————→|    map={2:1, 3:2, 4:1}         distinct = 3
+```
+
+---
+
+## Complexity
+
+| | Complexity |
+|---|---|
+| **Time** | O(n) — each element added & removed exactly once |
+| **Space** | O(k) — map holds at most k elements |
+
+---
+
+## Brute Force vs HashMap
+
+| | Brute Force | HashMap |
+|---|---|---|
+| **Time** | O(n · k²) | **O(n)** |
+| **Space** | O(1) | O(k) |
+| **Per window** | Re-scan entire window | Swap one element in/out |
+| **Distinct count** | Manual flag + counter | `map.size()` directly |
+
+---
+
+## GFG Links
+
+- 🔴 **Practice:** https://www.geeksforgeeks.org/problems/count-distinct-elements-in-every-window/1
+- 📖 **Article:** https://www.geeksforgeeks.org/dsa/count-distinct-elements-in-every-window-of-size-k/
+
+////////////////////////////////////////////////////////////////////////////
+
+Count distinct elements in every window
+Given an integer array arr[] and a number k. Find the count of distinct elements in every window of size k in the array.
+
+Examples:
+
+Input: arr[] = [1, 2, 1, 3, 4, 2, 3], k = 4
+Output: [3, 4, 4, 3]
+Explanation:
+First window is [1, 2, 1, 3], count of distinct numbers is 3.
+Second window is [2, 1, 3, 4] count of distinct numbers is 4.
+Third window is [1, 3, 4, 2] count of distinct numbers is 4.
+Fourth window is [3, 4, 2, 3] count of distinct numbers is 3.
+
+Input: arr[] = [4, 1, 1], k = 2
+Output: [2, 1]
+Explanation:
+First window is [4, 1], count of distinct numbers is 2.
+Second window is [1, 1], count of distinct numbers is 1.
+
+Input: arr[] = [1, 1, 1, 1, 1], k = 3
+Output: [1, 1, 1]
+Explanation: Every window of size 3 in the array [1, 1, 1, 1, 1], contains only the element 1, so the number of distinct elements in each window is 1.
+
+Constraints:
+1 ≤ k ≤ arr.size() ≤ 105
+1 ≤ arr[i] ≤ 105
