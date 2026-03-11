@@ -1,19 +1,46 @@
 
+import java.util.*;
+class Solution {
+    public int countOccurence(int[] arr, int k) {
+        int n = arr.length;                                    // n = total elements
 
+        // STEP 1: FIND CANDIDATES (Boyer-Moore Voting)
+        HashMap<Integer, Integer> map = new HashMap<>();       // {candidate : count}
+        for(int num : arr){                                    // loop each element
+            if(map.containsKey(num)){                          // already a candidate?
+                map.put(num, map.get(num) + 1);                // yes → increment
+            }
+            else if(map.size() < k - 1){                       // space for new candidate?
+                map.put(num, 1);                               // yes → add new
+            }
+            else{                                              // no space → reduce all
+                ArrayList<Integer> removeList = new ArrayList<>();
+                for(Map.Entry<Integer,Integer> e : map.entrySet()){
+                    map.put(e.getKey(), e.getValue() - 1);     // decrement all counts
+                    if(map.get(e.getKey()) == 0){              // count reached 0?
+                        removeList.add(e.getKey());            // mark for removal
+                    }
+                }
+                for(int key : removeList){
+                    map.remove(key);                           // remove zero candidates
+                }
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // STEP 2: VERIFY ACTUAL FREQUENCY
+        int count = 0;                                         // qualifying elements
+        for(int key : map.keySet()){                           // loop candidates
+            int freq = 0;                                      // actual frequency
+            for(int num : arr){                                // count in array
+                if(num == key) freq++;                         // match → increment
+            }
+            if(freq > n/k){                                    // frequency > threshold?
+                count++;                                       // yes → count++
+            }
+        }
+        return count;                                          // total qualifying
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
