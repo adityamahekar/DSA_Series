@@ -1,0 +1,51 @@
+
+class Solution {
+    int missingNum(int arr[]) {
+        int n = arr.length;                // n = total elements
+        Arrays.sort(arr);                  // sort array
+        int k = 1;                         // expected number starts at 1
+        for(int i = 0; i < n; i++){        // loop each element
+            if(arr[i] != k){               // mismatch found?
+                return k;                  // yes → k is missing
+            }
+            k++;                           // move to next expected
+        }
+        return n + 1;                      // no gap → missing is n+1
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+arr = [1,2,4,5,6]   n=5
+
+after sort = [1,2,4,5,6]
+
+i=0  arr[0]=1  k=1  1==1  ✅  k=2
+i=1  arr[1]=2  k=2  2==2  ✅  k=3
+i=2  arr[2]=4  k=3  4!=3  ❌  return 3 ✅
+
+///////////////////////////////////////////////////////////////////////////////////
+
+Missing in Array
+You are given an array arr[] of size n - 1 that contains distinct integers in the range from 1 to n (inclusive). 
+This array represents a permutation of the integers from 1 to n with one element missing. 
+Your task is to identify and return the missing element.
+
+Examples:
+
+Input: arr[] = [1, 2, 3, 5]
+Output: 4
+Explanation: All the numbers from 1 to 5 are present except 4.
+
+Input: arr[] = [8, 2, 4, 5, 3, 7, 1]
+Output: 6
+Explanation: All the numbers from 1 to 8 are present except 6.
+
+Input: arr[] = [1]
+Output: 2
+Explanation: Only 1 is present so the missing element is 2.
+
+Constraints:
+1 ≤ arr.size() ≤ 106
+1 ≤ arr[i] ≤ arr.size() + 1
+
