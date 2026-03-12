@@ -1,0 +1,120 @@
+
+class Solution {
+
+    public boolean isSubSeq(String s1, String s2) {
+
+        int n = s1.length(), m = s2.length();      // lengths of both strings
+
+        int i = 0, j = 0;                          // pointers for s1 and s2
+
+        while (i < n && j < m) {                   // traverse both strings
+
+            if (s1.charAt(i) == s2.charAt(j)) {    // characters match
+                i++;                               // move pointer in s1
+                j++;                               // move pointer in s2
+            } 
+            else {
+                j++;                               // move only in s2 to find next match
+            }
+        }
+
+        if (i < n && j >= m) {                     // s1 not fully matched but s2 ended
+            return false;                          // s1 is not a subsequence
+        }
+
+        return true;                               // all characters of s1 matched
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Subsequence Dry Run
+
+s1 = "abc"
+s2 = "ahbgdc"
+
+Initial pointers
+i = 0 (s1)
+j = 0 (s2)
+
+
+Step 1
+s1[i] = 'a'
+s2[j] = 'a'   → Match
+
+i = 1
+j = 1
+
+
+Step 2
+s1[i] = 'b'
+s2[j] = 'h'   → No match
+
+j = 2
+
+
+Step 3
+s1[i] = 'b'
+s2[j] = 'b'   → Match
+
+i = 2
+j = 3
+
+
+Step 4
+s1[i] = 'c'
+s2[j] = 'g'   → No match
+
+j = 4
+
+
+Step 5
+s1[i] = 'c'
+s2[j] = 'd'   → No match
+
+j = 5
+
+
+Step 6
+s1[i] = 'c'
+s2[j] = 'c'   → Match
+
+i = 3
+j = 6
+
+
+Matched positions
+
+a  h  b  g  d  c
+↑     ↑        ↑
+a     b        c
+
+
+Final Condition
+i == s1.length()
+
+All characters of s1 are found in order inside s2.
+
+
+Result
+true
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Check if a String is Subsequence of Other:
+
+Given two strings s1 and s2. You have to check that s1 is a subsequence of s2 or not.
+Note: A subsequence is a sequence that can be derived from another sequence by deleting some elements without changing the order of the remaining elements.
+
+Examples:
+
+Input: s1 = "AXY", s2 = "YADXCP"
+Output: false
+Explanation: s1 is not a subsequence of s2 as 'Y' appears before 'A'.
+
+Input: s1 = "gksrek", s2 = "geeksforgeeks"
+Output: true
+Explanation: If we combine the bold character of "geeksforgeeks", it equals to s1. So s1 is a subsequence of s2.
+
+Constraints:
+1 ≤ s1.size(), s2.size() ≤ 106
