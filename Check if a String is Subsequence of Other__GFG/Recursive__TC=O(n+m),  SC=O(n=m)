@@ -1,0 +1,69 @@
+
+class Solution {
+
+    boolean subSeq(String s1, String s2, int n, int m){
+
+        if(n == 0)                                      // all characters of s1 matched
+            return true;
+
+        if(m == 0)                                      // s2 finished but s1 still left
+            return false;
+
+        if(s1.charAt(n-1) == s2.charAt(m-1))             // characters match
+            return subSeq(s1, s2, n-1, m-1);             // move in both strings
+
+        else
+            return subSeq(s1, s2, n, m-1);               // move only in s2
+    }
+
+    public boolean isSubSeq(String s1, String s2) {
+
+        int n = s1.length(), m = s2.length();            // lengths of both strings
+
+        return subSeq(s1, s2, n, m);                     // start recursion
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+isSSR("ABC","AC",3,2)
+        |
+        └── isSSR("ABC","AC",2,1)
+                |
+                └── isSSR("ABC","AC",1,1)
+                        |
+                        └── isSSR("ABC","AC",0,0)
+                                |
+                                └── true
+Short explanation
+s1 = "ABC"
+s2 = "AC"
+
+Steps:
+
+C == C  → move both → (2,1)
+B != A  → move in s1 → (1,1)
+A == A  → move both → (0,0)
+
+Result:
+
+true
+
+
+Check if a String is Subsequence of Other:
+Given two strings s1 and s2. You have to check that s1 is a subsequence of s2 or not.
+Note: A subsequence is a sequence that can be derived from another sequence by deleting some elements without changing the order of the remaining elements.
+
+Examples:
+
+Input: s1 = "AXY", s2 = "YADXCP"
+Output: false
+Explanation: s1 is not a subsequence of s2 as 'Y' appears before 'A'.
+
+Input: s1 = "gksrek", s2 = "geeksforgeeks"
+Output: true
+Explanation: If we combine the bold character of "geeksforgeeks", it equals to s1. So s1 is a subsequence of s2. 
+
+Constraints:
+1 ≤ s1.size(), s2.size() ≤ 106
+
