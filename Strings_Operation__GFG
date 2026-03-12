@@ -37,29 +37,31 @@ Index :  0 1 2 3 4 5 6 7 8 9
 String:  H e l l o W o r l d
 
 
-System.out.println(str.length());           // 10
-System.out.println(str.charAt(1));          // e
-System.out.println(str.substring(3));       // loWorld
-System.out.println(str.substring(2,3));     // l
-System.out.println(str.contains("World"));  // true
-System.out.println(str.equals("Hello"));    // false
-System.out.println(str.compareTo("Hello")); // positive value
-System.out.println(str.indexOf("o"));       // 4
-System.out.println(str.indexOf(s2,1));      // 5
+System.out.println(str.length());            // 10
+System.out.println(str.charAt(1));           // e
+System.out.println(str.substring(3));        // loWorld
+System.out.println(str.substring(2,3));      // l
+System.out.println(str.contains("World"));   // true
+System.out.println(str.equals("Hello"));     // false
+System.out.println(str.compareTo("Hello"));  // positive value
+System.out.println(str.indexOf("o"));        // 4
+System.out.println(str.indexOf(s2,1));       // 5
+System.out.println(str.concat("Java"));      // HelloWorldJava
 
 
 --------------------------------------------------------------------------------------------------------
-| Operation              | Syntax                      | Example                     | Output          |
-|:----------------------:|:---------------------------:|:---------------------------:|:---------------:|
-| Length                 | str.length()                | str.length();               | 10              |
-| Character at index     | str.charAt(index)           | str.charAt(1);              | e               |
-| Substring from index   | str.substring(start)        | str.substring(3);           | loWorld         |
-| Substring range        | str.substring(start,end)    | str.substring(2,3);         | l               |
-| Contains               | str.contains(text)          | str.contains("World");      | true            |
-| Equals                 | str.equals(text)            | str.equals("Hello");        | false           |
-| Compare Strings        | str.compareTo(text)         | str.compareTo("Hello");     | positive value  |
-| Index of character     | str.indexOf(text)           | str.indexOf("o");           | 4               |
-| Index from position    | str.indexOf(text,fromIndex) | str.indexOf(s2,1);          | 5               |
+| Operation              | Syntax                      | Example                     | Output           |
+|:----------------------:|:---------------------------:|:---------------------------:|:----------------:|
+| Length                 | str.length()                | str.length();               | 10               |
+| Character at index     | str.charAt(index)           | str.charAt(1);              | e                |
+| Substring from index   | str.substring(start)        | str.substring(3);           | loWorld          |
+| Substring range        | str.substring(start,end)    | str.substring(2,3);         | l                |
+| Contains               | str.contains(text)          | str.contains("World");      | true             |
+| Equals                 | str.equals(text)            | str.equals("Hello");        | false            |
+| Compare Strings        | str.compareTo(text)         | str.compareTo("Hello");     | positive value   |
+| Index of character     | str.indexOf(text)           | str.indexOf("o");           | 4                |
+| Index from position    | str.indexOf(text,fromIndex) | str.indexOf(s2,1);          | 5                |
+| Concatenate            | str.concat(text)            | str.concat("Java");         | HelloWorldJava   |
 --------------------------------------------------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
