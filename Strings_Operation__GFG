@@ -1,0 +1,119 @@
+
+i) char:
+
+Example Code
+
+char ch = 'A';
+
+System.out.println(Character.isLetter(ch));        // true
+System.out.println(Character.isDigit(ch));         // false
+System.out.println(Character.isUpperCase(ch));     // true
+System.out.println(Character.isLowerCase(ch));     // false
+System.out.println(Character.toLowerCase(ch));     // a
+System.out.println(Character.toUpperCase('b'));    // B
+
+
+----------------------------------------------------------------------------------------------------------
+| Operation            | Syntax                          | Example                              | Output |
+|:--------------------:|:-------------------------------:|:------------------------------------:|:------:|
+| Check letter         | Character.isLetter(ch)          | Character.isLetter('A');             | true   |
+| Check digit          | Character.isDigit(ch)           | Character.isDigit('5');              | true   |
+| Check uppercase      | Character.isUpperCase(ch)       | Character.isUpperCase('A');          | true   |
+| Check lowercase      | Character.isLowerCase(ch)       | Character.isLowerCase('a');          | true   |
+| Convert to lowercase | Character.toLowerCase(ch)       | Character.toLowerCase('A');          | a      |
+| Convert to uppercase | Character.toUpperCase(ch)       | Character.toUpperCase('b');          | B      |
+----------------------------------------------------------------------------------------------------------
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ii) String:
+
+Example Code
+
+String str = "HelloWorld";
+String s2 = "World";
+
+Index :  0 1 2 3 4 5 6 7 8 9
+String:  H e l l o W o r l d
+
+
+System.out.println(str.length());           // 10
+System.out.println(str.charAt(1));          // e
+System.out.println(str.substring(3));       // loWorld
+System.out.println(str.substring(2,3));     // l
+System.out.println(str.contains("World"));  // true
+System.out.println(str.equals("Hello"));    // false
+System.out.println(str.compareTo("Hello")); // positive value
+System.out.println(str.indexOf("o"));       // 4
+System.out.println(str.indexOf(s2,1));      // 5
+
+
+--------------------------------------------------------------------------------------------------------
+| Operation              | Syntax                      | Example                     | Output          |
+|:----------------------:|:---------------------------:|:---------------------------:|:---------------:|
+| Length                 | str.length()                | str.length();               | 10              |
+| Character at index     | str.charAt(index)           | str.charAt(1);              | e               |
+| Substring from index   | str.substring(start)        | str.substring(3);           | loWorld         |
+| Substring range        | str.substring(start,end)    | str.substring(2,3);         | l               |
+| Contains               | str.contains(text)          | str.contains("World");      | true            |
+| Equals                 | str.equals(text)            | str.equals("Hello");        | false           |
+| Compare Strings        | str.compareTo(text)         | str.compareTo("Hello");     | positive value  |
+| Index of character     | str.indexOf(text)           | str.indexOf("o");           | 4               |
+| Index from position    | str.indexOf(text,fromIndex) | str.indexOf(s2,1);          | 5               |
+--------------------------------------------------------------------------------------------------------
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+iii) StringBuilder:
+
+Example Code
+
+StringBuilder sb = new StringBuilder("Hello");
+
+System.out.println(sb.length());            // 5
+System.out.println(sb.charAt(1));           // e
+System.out.println(sb.append("World"));     // HelloWorld
+System.out.println(sb.insert(5,"Java"));    // HelloJavaWorld
+System.out.println(sb.delete(5,9));         // HelloWorld
+System.out.println(sb.reverse());           // dlroWolleH
+
+
+----------------------------------------------------------------------------------------------------
+| Operation           | Syntax                      | Example                   | Output           |
+|:-------------------:|:---------------------------:|:-------------------------:|:----------------:|
+| Length              | sb.length()                 | sb.length();              | 5                |
+| Character at index  | sb.charAt(index)            | sb.charAt(1);             | e                |
+| Append              | sb.append(text)             | sb.append("World");       | HelloWorld       |
+| Insert              | sb.insert(index,text)       | sb.insert(5,"Java");      | HelloJavaWorld   |
+| Delete              | sb.delete(start,end)        | sb.delete(5,9);           | HelloWorld       |
+| Reverse             | sb.reverse()                | sb.reverse();             | dlroWolleH       |
+----------------------------------------------------------------------------------------------------
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+iv) StringBuffer:
+
+Example Code
+
+StringBuffer sb = new StringBuffer("Hello");
+
+System.out.println(sb.length());            // 5
+System.out.println(sb.charAt(1));           // e
+System.out.println(sb.append("World"));     // HelloWorld
+System.out.println(sb.insert(5,"Java"));    // HelloJavaWorld
+System.out.println(sb.delete(5,9));         // HelloWorld
+System.out.println(sb.reverse());           // dlroWolleH
+
+
+----------------------------------------------------------------------------------------------------
+| Operation           | Syntax                      | Example                   | Output           |
+|:-------------------:|:---------------------------:|:-------------------------:|:----------------:|
+| Length              | sb.length()                 | sb.length();              | 5                |
+| Character at index  | sb.charAt(index)            | sb.charAt(1);             | e                |
+| Append              | sb.append(text)             | sb.append("World");       | HelloWorld       |
+| Insert              | sb.insert(index,text)       | sb.insert(5,"Java");      | HelloJavaWorld   |
+| Delete              | sb.delete(start,end)        | sb.delete(5,9);           | HelloWorld       |
+| Reverse             | sb.reverse()                | sb.reverse();             | dlroWolleH       |
+----------------------------------------------------------------------------------------------------
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
