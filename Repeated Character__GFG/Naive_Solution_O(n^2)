@@ -1,0 +1,77 @@
+
+class Solution {
+    char firstRep(String S) {
+    
+        int n = S.length();                         // Store length of string
+        
+        for(int i=0;i<n;i++){                       // Pick each character one by one
+            for(int j=i+1;j<n;j++){                 // Compare with every character ahead
+                if(S.charAt(i) == S.charAt(j)){     // Match found — first repeating character
+                    return S.charAt(i);             // Return the repeating character
+                }
+            }
+        }
+        return '#';                                 // No repeating character found
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Dry Run — S = "geeksforgeeks"
+
+Step 1 — Length
+```
+n = 13
+```
+
+Step 2 — Outer & Inner Loop
+```
+i=0  S[0]='g'
+     j=1  'g' == 'e' ? No
+     j=2  'g' == 'e' ? No
+     j=3  'g' == 'k' ? No
+     j=4  'g' == 's' ? No
+     j=5  'g' == 'f' ? No
+     j=6  'g' == 'o' ? No
+     j=7  'g' == 'r' ? No
+     j=8  'g' == 'g' ? Yes → return 'g'
+```
+
+Step 3 — Result
+```
+return 'g'  →  'g' is the first repeating character
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Repeated Character
+Given a string consisting of lowercase english alphabets. Find the repeated character present first in the string.
+
+NOTE - If there are no repeating characters return '#'.
+
+```
+Example 1:
+
+Input:
+S = "geeksforgeeks"
+Output: g
+Explanation: g, e, k and s are the repeating
+characters. Out of these, g occurs first. 
+
+```
+Example 2:
+
+Input: 
+S = "abcde"
+Output: -1
+Explanation: No repeating character present. (You need to return '#')
+```
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function firstRep() which takes the string S as input and returns the the first repeating character in the string. In case there's no repeating character present, return '#'.
+
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1<=|S|<=105
+
+ 
