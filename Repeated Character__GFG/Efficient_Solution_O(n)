@@ -1,0 +1,76 @@
+
+class Solution {
+    char firstRep(String S) {
+        int count[] = new int[256];                 // Frequency array for all ASCII characters
+
+        for(int i=0;i<S.length();i++){              // First pass — count frequency of each character
+            count[S.charAt(i)]++;                   // Increment count for current character
+        }
+
+        for(int i=0;i<S.length();i++){              // Second pass — find first repeating character
+            if(count[S.charAt(i)] > 1){             // Frequency > 1 means character repeats
+                return S.charAt(i);                 // Return first repeating character
+            }
+        }
+        return '#';                                 // No repeating character found
+    }
+}
+```
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Dry Run — S = "geeksforgeeks"
+
+Step 1 — Build Frequency Array
+```
+g → count[103] = 2
+e → count[101] = 4
+k → count[107] = 2
+s → count[115] = 2
+f → count[102] = 1
+o → count[111] = 1
+r → count[114] = 1
+```
+
+Step 2 — Second Pass Find First Repeat
+```
+i=0  S[0]='g'  count[103] = 2 > 1  → return 'g'
+```
+
+Step 3 — Result
+```
+return 'g'  →  'g' is the first repeating character
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Repeated Character
+Given a string consisting of lowercase english alphabets. Find the repeated character present first in the string.
+
+NOTE - If there are no repeating characters return '#'.
+
+```
+Example 1:
+
+Input:
+S = "geeksforgeeks"
+Output: g
+Explanation: g, e, k and s are the repeating
+characters. Out of these, g occurs first. 
+
+```
+Example 2:
+
+Input: 
+S = "abcde"
+Output: -1
+Explanation: No repeating character present. (You need to return '#')
+```
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function firstRep() which takes the string S as input and returns the the first repeating character in the string. In case there's no repeating character present, return '#'.
+
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1<=|S|<=105
+
+ 
