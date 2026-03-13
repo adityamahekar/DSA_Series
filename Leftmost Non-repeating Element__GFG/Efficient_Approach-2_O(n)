@@ -1,0 +1,89 @@
+
+int nonRep(String Str){
+    int count[] = new int[256];                         // Frequency array for all ASCII characters
+    Arrays.fill(count,-1);                              // Initialize all positions with -1 (not seen)
+    int res = Integer.MAX_VALUE;                        // Track minimum index among non-repeating
+
+    for(int i=0;i<Str.length();i++){                    // Traverse string once
+        if(count[Str.charAt(i)] == -1){                 // Character seen for first time
+            count[Str.charAt(i)] = i;                   // Store its first occurrence index
+        }
+        else{                                           // Character seen before — it repeats
+            count[Str.charAt(i)] = -2;                  // Mark as repeating with -2
+        }
+    }
+
+    for(int i=0;i<256;i++){                             // Scan all ASCII positions
+        if(count[i] > 0){                               // Value > 0 means seen exactly once
+            res = Math.min(res, count[i]);              // Pick smallest index
+        }
+    }
+
+    return (res == Integer.MAX_VALUE) ? -1 : res;       // Return result or -1 if none found
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Dry Run — Str = "geeksforgeeks"
+
+Step 1 — Initialize
+```
+count[] = all -1
+res     = Integer.MAX_VALUE
+```
+
+Step 2 — First Pass
+```
+i=0   'g'(103)  count[103]=-1  → store  count[103]=0
+i=1   'e'(101)  count[101]=-1  → store  count[101]=1
+i=2   'e'(101)  count[101]=1   → repeat count[101]=-2
+i=3   'k'(107)  count[107]=-1  → store  count[107]=3
+i=4   's'(115)  count[115]=-1  → store  count[115]=4
+i=5   'f'(102)  count[102]=-1  → store  count[102]=5
+i=6   'o'(111)  count[111]=-1  → store  count[111]=6
+i=7   'r'(114)  count[114]=-1  → store  count[114]=7
+i=8   'g'(103)  count[103]=0   → repeat count[103]=-2
+i=9   'e'(101)  count[101]=-2  → repeat count[101]=-2
+i=10  'e'(101)  count[101]=-2  → repeat count[101]=-2
+i=11  'k'(107)  count[107]=3   → repeat count[107]=-2
+i=12  's'(115)  count[115]=4   → repeat count[115]=-2
+```
+
+Step 3 — Second Pass
+```
+count[102]='f' → 5  → res = min(MAX, 5) = 5
+count[111]='o' → 6  → res = min(5, 6)   = 5
+count[114]='r' → 7  → res = min(5, 7)   = 5
+```
+
+Step 4 — Result
+```
+return 5  →  index 5 character 'f' is the first non-repeating character
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Leftmost Non-repeating Element
+
+Given a string Str, find the index of the first non-repeating character.
+A non-repeating character is one that appears exactly once in the entire string.
+If no such character exists, return -1.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Test Cases
+```
+Input  : Str = "geeksforgeeks"
+Output : 5
+Reason : 'f' at index 5 appears only once
+
+Input  : Str = "aabbcc"
+Output : -1
+Reason : all characters repeat, no non-repeating character
+
+Input  : Str = "abcabd"
+Output : 2
+Reason : 'c' at index 2 appears only once
+
+Input  : Str = "z"
+Output : 0
+Reason : single character is always non-repeating
