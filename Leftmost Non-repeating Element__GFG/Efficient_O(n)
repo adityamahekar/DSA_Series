@@ -1,0 +1,73 @@
+
+int nonRep(String Str){
+    int count[] = new int[256];                         // Frequency array for all ASCII characters
+
+    for(int i=0;i<Str.length();i++){                    // First pass — count frequency of each character
+        count[Str.charAt(i)]++;                         // Increment count for current character
+    }
+
+    for(int i=0;i<Str.length();i++){                    // Second pass — find first non-repeating character
+        if(count[Str.charAt(i)] == 1){                  // Frequency 1 means non-repeating
+            return i;                                   // Return index of first non-repeating character
+        }
+    }
+    return -1;                                          // No non-repeating character found
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Dry Run — Str = "geeksforgeeks"
+
+Step 1 — Build Frequency Array
+```
+'g' → count[103] = 2
+'e' → count[101] = 4
+'k' → count[107] = 2
+'s' → count[115] = 2
+'f' → count[102] = 1
+'o' → count[111] = 1
+'r' → count[114] = 1
+```
+
+Step 2 — Second Pass
+```
+i=0  'g'  count[103]=2  → skip
+i=1  'e'  count[101]=4  → skip
+i=2  'e'  count[101]=4  → skip
+i=3  'k'  count[107]=2  → skip
+i=4  's'  count[115]=2  → skip
+i=5  'f'  count[102]=1  → return 5
+```
+
+Step 3 — Result
+```
+return 5  →  index 5 character 'f' is the first non-repeating character
+```
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Leftmost Non-repeating Element
+
+Given a string Str, find the index of the first non-repeating character.
+A non-repeating character is one that appears exactly once in the entire string.
+If no such character exists, return -1.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Test Cases
+```
+Input  : Str = "geeksforgeeks"
+Output : 5
+Reason : 'f' at index 5 appears only once
+
+Input  : Str = "aabbcc"
+Output : -1
+Reason : all characters repeat, no non-repeating character
+
+Input  : Str = "abcabd"
+Output : 2
+Reason : 'c' at index 2 appears only once
+
+Input  : Str = "z"
+Output : 0
+Reason : single character is always non-repeating
