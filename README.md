@@ -8,6 +8,6 @@
           
           GFG 202
 
-          FSD 155
+          FSD Home Component P1
 
           AIML Python Fundamentals(part_2).zip
