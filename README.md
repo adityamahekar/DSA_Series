@@ -6,6 +6,8 @@
 * HackerEarth
           
           
-          193
+          GFG 193
 
-          155
+          FSD 155
+
+          AIML Python Fundamentals(part_2).zip
