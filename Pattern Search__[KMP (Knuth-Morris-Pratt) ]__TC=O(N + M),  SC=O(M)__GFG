@@ -1,0 +1,161 @@
+
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    void fill(String pat, int lps[]) {
+        int len = 0;                          // length of prev longest prefix suffix
+        int i = 1;
+        
+        lps[0] = 0;                           // first value always 0
+        
+        while (i < pat.length()) {
+            if (pat.charAt(i) == pat.charAt(len)) {  // characters match
+                len++;
+                lps[i] = len;                 // store length
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];       // fall back using lps itself
+                } else {
+                    lps[i] = 0;              // no prefix suffix, set 0
+                    i++;
+                }
+            }
+        }
+    }
+
+    ArrayList<Integer> search(String pat, String txt) {
+        ArrayList<Integer> list = new ArrayList<>();
+
+        int N = txt.length();                 // length of text
+        int M = pat.length();                 // length of pattern
+        int i = 0, j = 0;                    // i → txt pointer, j → pat pointer
+
+        int lps[] = new int[M];
+
+        fill(pat, lps);                       // precompute lps array
+
+        while (i < N) {
+            if (pat.charAt(j) == txt.charAt(i)) {  // characters match, move both
+                i++; j++;
+            }
+
+            if (j == M) {                    // full pattern matched
+                list.add(i - j);             // store start index
+                j = lps[j - 1];             // look for next match using lps
+            }
+
+            else if (i < N && pat.charAt(j) != txt.charAt(i)) {  // mismatch
+                if (j == 0) {
+                    i++;                     // no prefix to fall back, move txt
+                } else {
+                    j = lps[j - 1];         // fall back j using lps
+                }
+            }
+        }
+
+        return list;                         // return all match start indices
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+## Dry Run
+```
+txt = "AABAACAADAABAABA"
+pat = "AABA"
+```
+
+**Step 1 — Build LPS for `"AABA"`**
+```
+Index :  0   1   2   3
+Char  :  A   A   B   A
+LPS   :  0   1   0   1
+```
+```
+i=1: A==A → len=1, lps[1]=1
+i=2: B!=A → len=lps[0]=0, lps[2]=0
+i=3: A==A → len=1, lps[3]=1
+```
+
+---
+
+**Step 2 — Search**
+```
+txt = A  A  B  A  A  C  A  A  D  A  A  B  A  A  B  A
+idx = 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+
+pat = A  A  B  A
+      0  1  2  3
+```
+```
+i=0,j=0 → A==A  match → i=1,j=1
+i=1,j=1 → A==A  match → i=2,j=2
+i=2,j=2 → B==B  match → i=3,j=3
+i=3,j=3 → A==A  match → i=4,j=4
+
+j==M(4) ✓  → MATCH at index (4-4)=0 ✓
+            j = lps[3] = 1
+
+i=4,j=1 → A==A  match → i=5,j=2
+i=5,j=2 → C!=B  mismatch → j=lps[1]=1
+
+i=5,j=1 → C!=A  mismatch → j=lps[0]=0
+
+i=5,j=0 → C!=A  mismatch → i=6
+
+i=6,j=0 → A==A  match → i=7,j=1
+i=7,j=1 → A==A  match → i=8,j=2
+i=8,j=2 → D!=B  mismatch → j=lps[1]=1
+
+i=8,j=1 → D!=A  mismatch → j=lps[0]=0
+
+i=8,j=0 → D!=A  mismatch → i=9
+
+i=9,j=0  → A==A  match → i=10,j=1
+i=10,j=1 → A==A  match → i=11,j=2
+i=11,j=2 → B==B  match → i=12,j=3
+i=12,j=3 → A==A  match → i=13,j=4
+
+j==M(4) ✓  → MATCH at index (13-4)=9 ✓
+            j = lps[3] = 1
+
+i=13,j=1 → A==A  match → i=14,j=2
+i=14,j=2 → B==B  match → i=15,j=3
+i=15,j=3 → A==A  match → i=16,j=4
+
+j==M(4) ✓  → MATCH at index (16-4)=12 ✓
+```
+
+---
+
+**Result**
+```
+Matches found at indices → [0, 9, 12]
+
+txt = A  A  B  A  A  C  A  A  D  [A  A  B  A]  A  B  A
+      ^index 0                     ^index 9      ^index 12
+
+//////////////////////// QUESTION ////////////////////////////
+
+Search Pattern
+Difficulty: HardAccuracy: 45.04%Submissions: 135K+Points: 8
+Given two strings, one is a text string txt and the other is a pattern string pat. The task is to print the indexes of all the occurrences of the pattern string in the text string. Use 0-based indexing while returning the indices.
+Note: Return an empty list in case of no occurrences of pattern.
+
+Examples :
+
+Input: txt = "abcab", pat = "ab"
+Output: [0, 3]
+Explanation: The string "ab" occurs twice in txt, one starts at index 0 and the other at index 3. 
+Input: txt = "abesdu", pat = "edu"
+Output: []
+Explanation: There's no substring "edu" present in txt.
+Input: txt = "aabaacaadaabaaba", pat = "aaba"
+Output: [0, 9, 12]
+Explanation:
+
+Constraints:
+1 ≤ txt.size() ≤ 106
+1 ≤ pat.size() < txt.size()
+Both the strings consist of lowercase English alphabets.
