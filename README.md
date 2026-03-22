@@ -6,7 +6,7 @@
 * HackerEarth
           
           
-          GFG 202
+          GFG 203 complete
 
           FSD Home Component P3  complete
 
