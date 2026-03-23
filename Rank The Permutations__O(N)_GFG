@@ -1,0 +1,81 @@
+
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    
+    long fact(int n) {
+        if (n <= 1) return 1;                          // base case
+        return n * fact(n - 1);                        // n!
+    }
+
+    public long findRank(String S) {
+        int n      = S.length();
+        int ch     = 256;
+        long mul   = fact(n - 1);                      // (n-1)! → perms of remaining chars
+        long ct[]  = new long[ch];
+        long res   = 1;                                // rank starts at 1
+
+        for (int i = 0; i < n; i++) {
+            ct[S.charAt(i)]++;                         // count freq of each char
+        }
+
+        for (int j = 1; j < ch; j++) {
+            ct[j] += ct[j - 1];                       // prefix sum → count of chars ≤ j
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            int c = S.charAt(i);
+
+            res += ct[c - 1] * mul;                    // chars smaller than S[i] × remaining perms
+
+            for (int j = c; j < ch; j++) {
+                ct[j]--;                               // remove S[i] from count (backtrack)
+            }
+
+            mul = mul / (n - i - 1);                  // shrink factorial for next position
+        }
+
+        return res;                                    // 1-indexed lexicographic rank
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+How backtrack works here
+
+S = "CAB"
+
+i=0  c='C'
+     smaller chars (A,B) × 2! = 2×2 = 4
+     res = 1+4 = 5
+     backtrack → remove 'C' from ct        ← ct[C]-- ct[D]-- ... ct[255]--
+     mul = 2!/2 = 1
+
+i=1  c='A'
+     smaller chars (none) × 1! = 0
+     res = 5+0 = 5
+     backtrack → remove 'A' from ct        ← ct[A]-- ct[B]-- ... ct[255]--
+     mul = 1!/1 = 1
+
+return 5  ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Rank The Permutations
+Given a string s consisting of distinct characters, determine its rank among all its permutations when the permutations are arranged in lexicographically sorted order.
+
+Note: |s| denotes the length of the string s.
+
+Examples:
+
+Input: s = "abc"
+Output: 1
+Explanation: The order permutations with letters 'a', 'c', and 'b' : 
+abc, acb, bac, bca, cab, cba
+
+Input: s = "acb"
+Output: 2
+
+Constraints:
+1 ≤ |s| ≤ 18
