@@ -1,0 +1,82 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+  public int longestUniqueSubstr(String s) {
+    int n = s.length();                        // length of string
+    int res = 0;                               // store max length
+
+    for(int i = 0; i < n; i++){                // i = start index
+        
+        boolean visit[] = new boolean[256];    // 256 ASCII character tracker
+        
+        for(int j = i; j < n; j++){            // j = end index
+            if(visit[s.charAt(j)] == true){    // char already seen → not unique
+                break;                         // stop current substring
+            }
+            visit[s.charAt(j)] = true;         // mark char as visited
+            res = Math.max(res, j - i + 1);    // update max length
+        }
+    }
+    return res;                                // return longest unique length
+  }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: s = "abcabcbb"
+
+Start → res = 0
+
+i = 0
+j=0 → "a" → unique → res = 1
+j=1 → "ab" → unique → res = 2
+j=2 → "abc" → unique → res = 3
+j=3 → "abca" → repeat → break
+
+i = 1
+j=1 → "b"
+j=2 → "bc"
+j=3 → "bca"
+j=4 → repeat → break
+
+i = 2
+j=2 → "c"
+j=3 → "ca"
+j=4 → "cab"
+j=5 → repeat → break
+
+i = 3
+j=3 → "a"
+j=4 → "ab"
+j=5 → "abc"
+j=6 → repeat → break
+
+Rest → repeats
+
+Final Answer
+res = 3
+
+Longest substrings: "abc", "bca", "cab"
+
+//////////////////////// QUESTION ////////////////////////////
+
+Longest substring with distinct characters
+You are given a string s. You have to find the length of the longest substring with all distinct characters. 
+
+Examples:
+
+Input: s = "geeksforgeeks"
+Output: 7
+Explanation: "eksforg" is the longest substring with all distinct characters.
+
+Input: s = "aaa"
+Output: 1
+Explanation: "a" is the longest substring with all distinct characters.
+
+Input: s = "abcdefabcbb"
+Output: 6
+Explanation: The longest substring with all distinct characters is "abcdef", which has a length of 6.
+
+Constraints:
+1 ≤ s.size() ≤ 105
+s consists of lowercase english letters.
