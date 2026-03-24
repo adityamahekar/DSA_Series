@@ -12,7 +12,7 @@ int prev[] = new int[256];                  // store last index of characters
     
     for (int i = 0; i < n; i++) {               // i = end of window
         
-        j = Math.max(j, prev[s.charAt(i)] + 1); // move start if repeated
+        j = Math.max(j, prev[s.charAt(i)] + 1); // move start if repeated    prev[a]
         
         res = Math.max(res, i - j + 1);         // update max length
         
