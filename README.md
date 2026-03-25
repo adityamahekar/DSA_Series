@@ -1,8 +1,8 @@
 # DSA_Series
 
-* GeeksForGeeks
-* LeetCode
-* HackerRank
+* [GeeksforGeeks](https://www.geeksforgeeks.org/profile/mahekaradb1n1)
+* [LeetCode](https://leetcode.com/u/aditya__mahekar/)
+* [HackerRank](https://www.hackerrank.com/profile/mahekaraditya468)
 * HackerEarth
           
           
