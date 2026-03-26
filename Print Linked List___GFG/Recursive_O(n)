@@ -1,0 +1,73 @@
+//////////////////////// CODE ////////////////////////////////
+/*
+class Node {
+    int data;
+    Node next;
+    Node(int x) {
+        data = x;
+        next = null;
+    }
+}*/
+
+class Solution {
+    public ArrayList<Integer> printList(Node head) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        if (head == null) return list;              // base case: end of list, return empty
+
+        list.add(head.data);                        // add current node's value
+        list.addAll(printList(head.next));          // recursively add remaining nodes
+
+        return list;                                // return collected values
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Linked List:
+
+  [1] → [2] → [3] → null
+
+            ↓ printList()
+
+ArrayList:
+  ┌───┬───┬───┐
+  │ 1 │ 2 │ 3 │
+  └───┴───┴───┘
+   [0] [1] [2]
+
+-----------------------------------------------------
+
+Step-by-Step Traversal:
+
+Dry run for 1 -> 2 -> 3 -> null:
+printList(1)
+└── printList(2)
+    └── printList(3)
+        └── printList(null)
+            └── return []
+        └── return [3]
+    └── return [2, 3]
+└── return [1, 2, 3]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Print Linked List
+You are given the head of a singly linked list. Return an array containing the values of the nodes.
+
+Examples:
+
+Input:
+    
+Output: [1, 2, 3, 4, 5]
+Explanation: The linked list contains 5 elements [1, 2, 3, 4, 5]. The elements are printed in a single line.
+
+
+Input:
+    
+Output: [10, 20, 30, 40, 50, 60]
+Explanation: The linked list contains 5 elements [10, 20, 30, 40, 50, 60]. The elements are printed in a single line.
+
+Constraints :
+1 ≤ numbers of nodes ≤ 105
+1 ≤ node values ≤ 106
