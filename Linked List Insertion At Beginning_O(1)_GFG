@@ -1,0 +1,39 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public Node insertAtFront(Node head, int x) {
+        Node temp = new Node(x);   // create new node with value x
+        temp.next = head;          // point new node to current head
+        return temp;               // new node is now the head
+    }
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+
+**Dry run** for `2 -> 3 -> null`, insert `1`:
+```
+temp = Node(1)        →   1 -> null
+temp.next = head      →   1 -> 2 -> 3 -> null
+return temp           →   head is now 1 ✅
+
+//////////////////////// QUESTION ////////////////////////////
+
+Linked List Insertion At Beginning
+You are given the head of a Singly Linked List and a value x, insert that value x at the beginning of the LinkedList and return the head of the modified Linked List.
+
+Examples :
+
+Input: x = 1,
+Output: 1 -> 2 -> 10
+Explanation: We can see that 1 is inserted at the beginning of the linked list.
+    
+Input: x = 1,
+Output: 1 -> 2 -> 3 -> 4 -> 5
+Explanation: We can see that 1 is inserted at the beginning of the linked list.
+       
+Constraints:
+1 ≤ number of nodes ≤ 105
+1 ≤ node->data, x ≤ 103
+
