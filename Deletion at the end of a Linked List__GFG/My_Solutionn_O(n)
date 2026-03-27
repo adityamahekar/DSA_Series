@@ -1,0 +1,107 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node
+{
+    int data;
+    Node next;
+
+    Node(int data)
+    {
+        this.data = data;
+        this.next = next;
+    }
+}
+*/
+
+class Solution {
+    public Node removeLastNode(Node head) {
+        
+        if (head == null) return null;        // empty list
+        
+        if (head.next == null) return null;   // single node → delete it
+        
+        Node curr = head;                    // pointer to traverse
+        Node prev = curr;                    // pointer to track previous
+        
+        while(curr.next != null){            // go till last node
+            prev = curr;                     // move prev
+            curr = curr.next;                // move curr
+        }      
+        
+        prev.next = null;                    // remove last node
+        
+        return head;                         // return updated list
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Dry Run:
+
+Input: 1 -> 2 -> 3 -> null
+
+Initial:
+
+        head
+         ↓
+        [1] -> [2] -> [3] -> null
+         ↑
+        curr, prev
+
+
+Step 1:
+
+        [1] -> [2] -> [3] -> null
+         ↑      ↑
+        prev   curr
+
+
+Step 2:
+
+        [1] -> [2] -> [3] -> null
+                ↑      ↑
+               prev   curr
+
+
+Loop ends (curr.next == null)
+
+        prev.next = null
+
+Final:
+
+        head
+         ↓
+        [1] -> [2] -> null
+✅ Node 3 deleted
+-------------------------------------------
+Edge Case: 1 -> null
+        head
+         ↓
+        [1] -> null
+
+        head.next == null → return null
+
+        Final: null
+✅ List becomes empty
+
+//////////////////////// QUESTION ////////////////////////////
+
+Deletion at the end of a Linked List
+Given a Linked List, delete the tail (i.e., the last node) of the Linked List and return the new head of the modified Linked List.
+
+Examples:
+
+Input:
+   
+Output: 1 -> 2 -> 3 -> 4
+Explanation: After deleting tail from the given linked list, we'll be left with just 1 -> 2 -> 3 -> 4.
+   
+Input:
+   
+Output: 3 -> 12
+Explanation: After deleting tail from the given linked list, we'll be left with just 3 -> 12.
+   
+Constraints:
+1 ≤ number of nodes ≤ 105
+1 ≤ node->data ≤ 105
