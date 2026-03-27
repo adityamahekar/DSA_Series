@@ -12,19 +12,14 @@ class Node
     }
 }
 */
-
 class Solution {
     public static boolean searchLinkedList(Node head, int x) {
-        Node curr = head;                    // start at head
 
-        while (curr != null) {               // ✅ check all nodes including last
-            if (curr.data == x) {            // if data matches
-                return true;                 // found → return true
-            }
-            curr = curr.next;                // move to next node
-        }
+        if (head == null)      return false;       // base case → list ended, x not found
 
-        return false;                        // x not found → return false
+        if (head.data == x)    return true;        // found x → return true
+
+        return searchLinkedList(head.next, x);     // recurse on next node
     }
 }
 
@@ -33,23 +28,23 @@ class Solution {
 Dry Run:
 
 Input: `1 -> 2 -> 3 -> null`, x = `3`
-
-        Step 1:   curr = [1]   1 == 3? No  → move
-        Step 2:   curr = [2]   2 == 3? No  → move
-        Step 3:   curr = [3]   3 == 3? Yes → return true
+```
+        call 1:   head = [1]   1 == 3? No  → recursea
+        call 2:   head = [2]   2 == 3? No  → recurse
+        call 3:   head = [3]   3 == 3? Yes → return true
+```
 
 ✅ Found
 
----------------------------------------------------------------
-
 Input: `1 -> 2 -> 3 -> null`, x = `5`
-
-        Step 1:   curr = [1]   1 == 5? No  → move
-        Step 2:   curr = [2]   2 == 5? No  → move
-        Step 3:   curr = [3]   3 == 5? No  → move
-        Step 4:   curr = null  → exit loop → return false
+```
+        call 1:   head = [1]   1 == 5? No  → recurse
+        call 2:   head = [2]   2 == 5? No  → recurse
+        call 3:   head = [3]   3 == 5? No  → recurse
+        call 4:   head = null              → return false
 
 ❌ Not found
+
 
 //////////////////////// QUESTION ////////////////////////////
 
