@@ -1,0 +1,59 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    Node insertAtBeginning(Node head, int x) {
+        Node temp = new Node(x);    // create new node
+        temp.next = head;           // new node points to old head
+        if (head != null) {         // if list is not empty
+            head.prev = temp;       // old head's prev points to new node
+        }
+        return temp;                // new node is new head
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+    List  :  1 <-> 2 <-> 3 <-> NULL
+    Insert:  0 at beginning
+
+    STEP 1: Create new node
+                temp = [0]
+                temp.next = null
+                temp.prev = null
+
+    STEP 2: temp.next = head
+                temp = [0] -> [1] <-> [2] <-> [3]
+
+    STEP 3: head != null, so head.prev = temp
+                temp = [0] <-> [1] <-> [2] <-> [3]
+
+    STEP 4: return temp (new head)
+                Result: 0 <-> 1 <-> 2 <-> 3 <-> NULL  ✅
+
+    EDGE CASE: head == null (empty list)
+                temp = [0]
+                temp.next = null (head is null)
+                skip head.prev (head is null)
+                Result: 0  ✅
+
+//////////////////////// QUESTION ////////////////////////////
+
+    QUESTION:
+    Given the head of a Doubly Linked List and a value x,
+    insert x at the BEGINNING of the list and return new head.
+
+    EXAMPLE 1:
+        Input  : head = 1 <-> 2 <-> 3, x = 0
+        Output : 0 <-> 1 <-> 2 <-> 3
+
+    EXAMPLE 2:
+        Input  : head = NULL, x = 5
+        Output : 5
+
+    EXAMPLE 3:
+        Input  : head = 10, x = 20
+        Output : 20 <-> 10
+
+    CONSTRAINTS:
+        - 1 <= size of list <= 10^5
+        - 0 <= x <= 10^5
