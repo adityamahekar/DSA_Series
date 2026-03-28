@@ -83,8 +83,3 @@ class Solution {
 
     CONSTRAINTS:
         - 2 <= number of nodes <= 10^3
-
-    MISTAKE IN ORIGINAL CODE:
-        - No null check for head                        ❌
-        - No null check for head.next (single node)     ❌
-        - old head.next not set to null before delete   ❌
