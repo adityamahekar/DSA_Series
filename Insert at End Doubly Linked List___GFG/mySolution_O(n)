@@ -1,0 +1,69 @@
+//////////////////////// CODE ////////////////////////////////
+
+Node insertEnd(Node head, int data) {
+    Node temp = new Node(data);     // create new node
+
+    if (head == null) {             // if list is empty
+        return temp;                // new node is head
+    }
+
+    Node curr = head;               // start from head
+    while (curr.next != null) {     // traverse to last node
+        curr = curr.next;
+    }
+    curr.next = temp;               // last node points to new node
+    temp.prev = curr;               // new node's prev points to last node
+    return head;                    // head remains same
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+    List  :  1 <-> 2 <-> 3 <-> NULL
+    Insert:  4 at end
+
+    STEP 1: Create new node
+                temp = [4]
+                temp.next = null
+                temp.prev = null
+
+    STEP 2: Traverse to last node
+                curr = [1] -> curr.next = [2] != null
+                curr = [2] -> curr.next = [3] != null
+                curr = [3] -> curr.next = null  (STOP)
+
+    STEP 3: curr.next = temp
+                [3] -> [4]
+
+    STEP 4: temp.prev = curr
+                [3] <-> [4]
+
+    STEP 5: return head
+                Result: 1 <-> 2 <-> 3 <-> 4 <-> NULL  ✅
+
+    EDGE CASE: head == null (empty list)
+                return temp
+                Result: 4  ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+    QUESTION:
+    Given the head of a Doubly Linked List and a value data,
+    insert data at the END of the list and return head.
+
+    EXAMPLE 1:
+        Input  : head = 1 <-> 2 <-> 3, data = 4
+        Output : 1 <-> 2 <-> 3 <-> 4
+
+    EXAMPLE 2:
+        Input  : head = NULL, data = 5
+        Output : 5
+
+    EXAMPLE 3:
+        Input  : head = 10, data = 20
+        Output : 10 <-> 20
+
+    CONSTRAINTS:
+        - 1 <= size of list <= 10^5
+        - 0 <= data <= 10^5
