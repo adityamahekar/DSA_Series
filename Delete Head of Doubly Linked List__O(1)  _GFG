@@ -17,11 +17,11 @@ class Solution {
     public static Node deleteHead(Node head) {
 
         if (head == null) {             // edge case: empty list
-            return null;
+            return head;
         }
 
         if (head.next == null) {        // edge case: single node
-            return null;
+            return head;
         }
 
         head = head.next;               // move head to next node
