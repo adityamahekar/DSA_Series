@@ -1,0 +1,88 @@
+//////////////////////// CODE ////////////////////////////////
+
+Node DeleteDLL(Node head) {
+
+    if (head == null) {                 // edge case: empty list
+        return null;
+    }
+
+    if (head.next == null) {            // edge case: single node
+        return null;
+    }
+
+    Node curr = head;
+    while (curr.next != null) {         // traverse to last node
+        curr = curr.next;
+    }
+
+    Node prev = curr.prev;              // get second last node
+    prev.next = null;                   // remove link to last node
+    curr.prev = null;                   // remove last node's prev link
+
+    return head;                        // head remains same
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+    List  :  1 <-> 2 <-> 3 <-> NULL
+    Goal  :  delete [3], return head [1]
+
+    INITIAL:
+        [null|-1-|2] <-> [1|-2-|3] <-> [2|-3-|null]
+         head
+
+    STEP 1: head != null        ✅
+            head.next != null   ✅
+
+    STEP 2: Traverse to last node
+        curr = [1] -> curr.next = [2] != null
+        curr = [2] -> curr.next = [3] != null
+        curr = [3] -> curr.next = null  (STOP)
+
+    STEP 3: prev = curr.prev
+        prev = [2]
+
+    STEP 4: prev.next = null
+        [null|-1-|2] <-> [1|-2-|null]    [2|-3-|null]
+
+    STEP 5: curr.prev = null
+        [null|-1-|2] <-> [1|-2-|null]    [null|-3-|null]
+                                           (deleted)
+
+    STEP 6: return head
+        Result: 1 <-> 2 <-> NULL  ✅
+
+    EDGE CASE 1: empty list
+        [null] -> return null  ✅
+
+    EDGE CASE 2: single node
+        [null|-1-|null] -> return null  ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+    QUESTION:
+    Given the head of a Doubly Linked List,
+    delete the LAST node and return head.
+
+    EXAMPLE 1:
+        Input  : [null|-1-|2] <-> [1|-2-|3] <-> [2|-3-|null]
+        Output : [null|-1-|2] <-> [1|-2-|null]
+                  1 <-> 2 <-> NULL
+
+    EXAMPLE 2:
+        Input  : [null|-15-|null]
+        Output : NULL
+
+    APPROACH:
+        - check if list is empty         -> return null
+        - check if single node           -> return null
+        - traverse to last node (curr)
+        - set curr.prev.next = null
+        - set curr.prev      = null
+        - return head
+
+    CONSTRAINTS:
+        - 1 <= number of nodes <= 10^3
+        - 0 <= node data       <= 10^4
