@@ -18,18 +18,17 @@ class Solution {
 
         if (head == null) {                     // CASE 1: List is empty
             temp.next = temp;                   // New node points to itself (circular)
-            return temp;                        // New node is now the head, return it
+            return temp;                        // New node is the head, return it
         }
 
-         else{
-              temp.next = head.next;
-              head.next = temp;
-int t = head.data;
-head.data = temp.data;
-temp.data = t;
-
-return head;
-          }
+        else {
+            temp.next = head.next;              // temp points to node after head
+            head.next = temp;                   // head points to temp (insert after head)
+            int t = head.data;                  // Store head's data in t (swap begins)
+            head.data = temp.data;              // head gets temp's data (key)
+            temp.data = t;                      // temp gets old head's data
+            return head;                        // head now has key, return it as new head
+        }
     }
 }
 
@@ -49,7 +48,7 @@ INITIAL STATE
   ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
     ▲                                  │
     └──────────────────────────────────┘
-         head = [1]   last node = [10]
+         head = [1]
 
 
 STEP 1 — temp = new Node(5)
@@ -60,67 +59,83 @@ STEP 1 — temp = new Node(5)
   temp
 
 
-STEP 2 — traverse to find last node
+STEP 2 — temp.next = head.next
+  temp points to the node after head (which is [7])
 
-  curr = head = [1]
-
-  ITERATION 1:
-    curr = [1]   curr.next = [7]  !=  head [1]   →  TRUE  →  curr = [7]
-  ITERATION 2:
-    curr = [7]   curr.next = [8]  !=  head [1]   →  TRUE  →  curr = [8]
-  ITERATION 3:
-    curr = [8]   curr.next = [10] !=  head [1]   →  TRUE  →  curr = [10]
-  ITERATION 4:
-    curr = [10]  curr.next = [1]  ==  head [1]   →  FALSE →  EXIT loop
-
-  head                                      curr
-   │                                         │
-   ▼                                         ▼
+  head
+   │
+   ▼
   ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
   ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
   ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
     ▲                                  │
     └──────────────────────────────────┘
 
-  curr is now pointing to last node [10]
+  ╔═══╗
+  ║ 5 ║────────────────► [7]
+  ╚═══╝
+  temp     temp.next = [7] ✅
 
 
-STEP 3 — curr.next = temp
+STEP 3 — head.next = temp
+  head now points to temp (temp inserted right after head)
 
-  Last node [10] now points to new node [5]
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 5 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲         temp                              │
+    └─────────────────────────────────────────┘
 
-  head                                      curr
-   │                                         │
-   ▼                                         ▼
-  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗     ╔═══╗
-  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║────►║ 5 ║
-  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝     ╚═══╝
-    ▲                                       temp
-    │                                        │
-    │                               temp.next = null (not yet linked)
-    └──────────────────────────────────┘
-
-
-STEP 4 — temp.next = head
-
-  New node [5] now points to old head [1]  (circular link restored)
-
-  head                                      curr
-   │                                         │
-   ▼                                         ▼
-  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗     ╔═══╗
-  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║────►║ 5 ║
-  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝     ╚═══╝
-    ▲                                       temp │
-    └───────────────────────────────────────────┘
-                                     temp.next = [1] ✅
+  List so far: 1 → 5 → 7 → 8 → 10 → (back to 1)
+  But we need 5 at front, not 1 — so we SWAP data
 
 
-FINAL STATE — return temp
+STEP 4 — int t = head.data
+  Save head's data into temp variable t
 
-  new head
-     │
-     ▼
+  t = 1   (head.data saved)
+
+  head.data = 1   temp.data = 5   t = 1
+
+
+STEP 5 — head.data = temp.data
+  head gets the key value (5)
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 5 ║────►║ 5 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲         temp                              │
+    └─────────────────────────────────────────┘
+
+  head.data = 5   temp.data = 5   t = 1   (swap halfway)
+
+
+STEP 6 — temp.data = t
+  temp gets old head's data (1)
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 5 ║────►║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲         temp                              │
+    └─────────────────────────────────────────┘
+
+  head.data = 5   temp.data = 1   swap complete ✅
+
+
+FINAL STATE — return head
+
+  head
+   │
+   ▼
   ╔═══╗    ╔═══╗    ╔═══╗    ╔═══╗    ╔════╗
   ║ 5 ║───►║ 1 ║───►║ 7 ║───►║ 8 ║───►║ 10 ║
   ╚═══╝    ╚═══╝    ╚═══╝    ╚═══╝    ╚════╝
@@ -129,30 +144,41 @@ FINAL STATE — return temp
 
   Output: 5 → 1 → 7 → 8 → 10 → (back to 5) ✅
 
+-----------------------------------------------------------------------------------------------------
 
+WHY SWAP DATA instead of moving pointers?
+
+  Moving pointers to insert at beginning needs the LAST node
+  to update its next — which means full traversal O(N)
+
+  Swap trick avoids traversal entirely:
+    insert temp right after head  →  O(1)
+    swap head.data and temp.data  →  O(1)
+    head pointer stays the same   →  no need to find last node
+
+  Total time: O(1)  ✅
+
+---------------------------------------------------------------------------------------------------------
 CASE 1 — Empty List (head = null, key = 5)
 
-BEFORE:
   head ──► null
 
-
-STEP 1: new node created
-  ╔═══╗
-  ║ 5 ║   temp.next = null
-  ╚═══╝
-
-
-STEP 2: head == null  →  temp.next = temp
-
-  ┌─────────────┐
-  │   ╔═══╗     │
-  └──►║ 5 ║─────┘
-      ╚═══╝
-      temp
-      (points to itself — valid circular list of 1 node) ✅
+  STEP 1: temp = new Node(5)
+    ╔═══╗
+    ║ 5 ║   temp.next = null
+    ╚═══╝
 
 
-RETURN: temp  (temp is now the only node and the new head)
+  STEP 2: head == null  →  temp.next = temp
+
+    ┌─────────────┐
+    │   ╔═══╗     │
+    └──►║ 5 ║─────┘
+        ╚═══╝
+        temp
+        (points to itself) ✅
+
+  RETURN: temp
 
 //////////////////////// QUESTION ////////////////////////////
 
