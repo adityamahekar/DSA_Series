@@ -1,0 +1,211 @@
+
+//////////////////////// CODE ////////////////////////////////
+
+/* Node of a linked list
+ class Node{
+    int data;
+    Node next;
+    Node(int x){
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    void printList(Node head) {                                 // Function to print circular linked list
+
+        if(head == null){                                       // Edge case: empty list
+            return;                                             // Nothing to print, exit
+        }
+
+        Node curr = head;                                       // Start from head
+
+        System.out.print(curr.data + " ");                      // Print head node first (before loop)
+
+        for(curr = head.next; curr != head; curr = curr.next){  // Start from head.next, loop until back at head
+            System.out.print(curr.data + " ");                  // Print each remaining node
+        }
+    }
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: head = [1],  List → 1 → 7 → 8 → 10 → (back to 1)
+
+INITIAL STATE
+
+```
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲                                  │
+    └──────────────────────────────────┘
+               (circular link)
+
+  head != null   →   continue
+```
+
+---
+
+BEFORE LOOP — print head first
+
+```
+  curr = head = [1]
+
+  System.out.print(curr.data)   →   Print: 1
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲                                  │
+    │                                  │
+    └──────────────────────────────────┘
+  curr (printed ✅)
+
+  Output so far:  1
+```
+
+---
+
+FOR LOOP INIT — curr = head.next = [7]
+
+```
+  for(curr = head.next; curr != head; curr = curr.next)
+                  │
+                  └──► curr starts at [7]  (skips head, already printed)
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲         ▲                       │
+    │         └── curr                │
+    └─────────────────────────────────┘
+```
+
+---
+
+ITERATION 1 — curr = [7]
+
+```
+  CHECK: curr [7]  !=  head [1]   →  TRUE  →  enter loop
+
+  Print: 7
+  curr = curr.next = [8]
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲                   ▲              │
+    │                   └── curr       │
+    └─────────────────────────────────┘
+
+  Output so far:  1  7
+```
+
+---
+
+ITERATION 2 — curr = [8]
+
+```
+  CHECK: curr [8]  !=  head [1]   →  TRUE  →  enter loop
+
+  Print: 8
+  curr = curr.next = [10]
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲                               ▲  │
+    │                          curr─┘  │
+    └─────────────────────────────────┘
+
+  Output so far:  1  7  8
+```
+
+---
+
+ITERATION 3 — curr = [10]
+
+```
+  CHECK: curr [10]  !=  head [1]   →  TRUE  →  enter loop
+
+  Print: 10
+  curr = curr.next = [1]  ← back to head
+
+  head
+   │
+   ▼
+  ╔═══╗     ╔═══╗     ╔═══╗     ╔════╗
+  ║ 1 ║────►║ 7 ║────►║ 8 ║────►║ 10 ║
+  ╚═══╝     ╚═══╝     ╚═══╝     ╚════╝
+    ▲                                  │
+    └──────────────────────────────────┘
+    │
+   curr  ← now equals head
+
+  Output so far:  1  7  8  10
+```
+
+---
+
+LOOP END CHECK — curr = [1]
+
+```
+  CHECK: curr [1]  !=  head [1]   →  FALSE  →  EXIT loop  🚪
+
+  No more nodes to print.
+```
+
+---
+
+FINAL OUTPUT
+
+```
+  1  7  8  10  ✅
+
+//////////////////////// QUESTION ////////////////////////////
+
+Circular Linked List Traversal
+Given a circular linked list, your task is to complete the method printList() that prints the linked list.
+
+Input:
+The printList function takes a single argument as input the reference pointer to the head of the linked list.
+There are multiple test cases and for each test, the function will be called separately. 
+Output: You just need to print the LinkedList in the same line and the next line will be added by the Driver Code.
+
+Example
+```
+Input:
+2
+7
+374 363 171 497 282 306 426
+2
+162 231
+
+Output:
+426 306 282 497 171 363 374
+231 162
+```
+
+Constraints
+```
+1  ≤  T  ≤  50
+1  ≤  N  ≤  50
+```
