@@ -26,7 +26,7 @@ class Solution {
 
         curr.next = head.next;                      // last node skips head → points to new head
 
-        return curr;                                // return last node (acts as tail reference)
+        return curr.next;                                // return new Head
     }
 }
 
