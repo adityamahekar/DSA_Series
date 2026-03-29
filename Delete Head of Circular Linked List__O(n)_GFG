@@ -1,0 +1,122 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node next;
+    Node(int x) {
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    Node deleteNode(Node head, int key) {
+
+        if (head == null || head.next == null) {    // empty or single node
+            return null;
+        }
+
+        Node curr = head;
+
+        while (curr.next != head) {                 // reach last node
+            curr = curr.next;
+        }
+
+        curr.next = head.next;                      // last node skips head → points to new head
+
+        return curr;                                // return last node (acts as tail reference)
+    }
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+List: 1 → 7 → 8 → 10 → (back to 1)
+
+BEFORE
+  head
+   │
+   ▼
+ [1|.]──►[7|.]──►[8|.]──►[10|.]
+   ▲                          │
+   └──────────────────────────┘
+
+  traverse: curr = [1]→[7]→[8]→[10]  (curr.next == head → EXIT)
+
+  curr.next = head.next = [7]
+
+AFTER
+                 head(new)
+                  │
+                  ▼
+ [7|.]──►[8|.]──►[10|.]──►[7|.]
+   ▲        curr              │
+   └──────────────────────────┘
+
+  return curr = [10]  ✅
+
+
+EDGE CASE — Single Node
+
+  head
+   │
+   ▼
+ [5|.]
+   ▲  │
+   └──┘
+
+  head.next == head  →  return null  ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Delete Head of Circular Linked List
+
+Given a circular linked list, delete the head node and
+return the last node of the modified list.
+
+Notes
+- If list is empty or has only one node, return null.
+- After deletion the last node must point to the new head.
+
+Constraints
+1  ≤  number of nodes  ≤  10⁵
+0  ≤  node.data        ≤  10⁵
+
+Sample Input 1
+  head → 1 → 7 → 8 → 10 → (back to 1)
+
+Sample Output 1
+  7 → 8 → 10 → (back to 7)
+
+  BEFORE                              AFTER
+  head                                      curr
+   │                                         │
+   ▼                                         ▼
+ [1|.]──►[7|.]──►[8|.]──►[10|.]     [7|.]──►[8|.]──►[10|.]
+   ▲                          │        ▲                  │
+   └──────────────────────────┘        └──────────────────┘
+
+
+Sample Input 2
+  head → 3 → 9 → (back to 3)
+
+Sample Output 2
+  9 → (back to 9)
+
+  BEFORE                    AFTER
+  head                       curr
+   │                          │
+   ▼                          ▼
+ [3|.]──►[9|.]      [9|.]──►[9|.]
+   ▲          │       ▲          │
+   └──────────┘       └──────────┘
+
+
+Sample Input 3
+  head → 5 → (back to 5)   (single node)
+
+Sample Output 3
+  null  ✅
