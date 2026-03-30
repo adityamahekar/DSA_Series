@@ -1,0 +1,131 @@
+//////////////////////// CODE //////////////////////
+
+class Solution {
+    int getMiddle(Node head) {
+        if (head == null) {                    // Empty list check
+            return 0;                          // Return 0 (or -1 for error)
+        }
+
+        int count = 0;                         // Counter for total nodes
+
+        // First pass: count total nodes
+        for (Node curr = head; curr != null; curr = curr.next) {
+            count++;                           // Increment count for each node
+        }
+
+        Node newCur = head;                    // Pointer to find middle
+
+        // Second pass: move to middle position (count/2)
+        for (int i = 0; i < count / 2; i++) {
+            newCur = newCur.next;              // Move forward
+        }
+
+        return newCur.data;                    // Return middle node's data
+    }
+}
+
+
+//////////////////////// DRY RUN ////////////////////
+
+List: 10 → 20 → 30 → 40 → 50
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 1: Odd Length (5 nodes)
+
+INITIAL:
+(head)
+  │
+  ▼
+[10|•] → [20|•] → [30|•] → [40|•] → [50|•] → null
+
+STEP 1: First pass - count nodes
+  i=0: curr=10, count=1
+  i=1: curr=20, count=2
+  i=2: curr=30, count=3
+  i=3: curr=40, count=4
+  i=4: curr=50, count=5
+  curr=null → stop
+
+count = 5, middle index = 5/2 = 2
+
+STEP 2: Second pass - move to index 2
+  i=0: newCur = 20
+  i=1: newCur = 30
+  i=2: loop ends (i < 2 false)
+
+FINAL:
+(head)                (newCur)
+  │                      │
+  ▼                      ▼
+[10|•] → [20|•] → [30|•] → [40|•] → [50|•] → null
+
+Result: 30 (middle element)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 2: Even Length (4 nodes)
+
+List: 10 → 20 → 30 → 40
+
+INITIAL:
+[10|•] → [20|•] → [30|•] → [40|•] → null
+
+STEP 1: count = 4, middle index = 4/2 = 2
+
+STEP 2: Move to index 2
+  i=0: newCur = 20
+  i=1: newCur = 30
+
+FINAL:
+[10|•] → [20|•] → [30|•] → [40|•] → null
+                    ↑
+                 newCur
+
+Result: 30 (second middle element)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 3: Single Node
+
+List: 7 → null
+
+STEP 1: count = 1, middle index = 1/2 = 0
+
+STEP 2: Loop doesn't run (i < 0 false), newCur stays at head
+
+Result: 7
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Middle of a Linked List
+You are given the head of a linked list, You have to return the value of the middle node of the linked list.
+If the number of nodes is odd, return the middle node value.
+If the number of nodes is even, there are two middle nodes, so return the second middle node value.
+
+Input : 10 → 20 → 30 → 40 → 50
+Output: 30
+
+Input : 10 → 20 → 30 → 40
+Output: 30 (second middle for even length)
+
+Input : 7
+Output: 7
+
+Input : null
+Output: 0
+
+Edge Cases:
+1. Empty list → return 0
+2. Single node → return that node's data
+3. Odd length → return exact middle node
+4. Even length → return second middle node (index = n/2)
+
+Constraints:
+• 1 ≤ size of linked list ≤ 10⁶
+• 1 ≤ data of nodes ≤ 10⁶
+
+TC: O(n) | SC: O(1)
