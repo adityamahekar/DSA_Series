@@ -1,0 +1,97 @@
+//////////////////////// CODE //////////////////////
+
+Node InsertEndCDLL(Node head, int x) {
+    Node temp = new Node(x);               // Create new node with data x
+    if (head == null) {                    // If list is empty
+        temp.next = temp;                  // New node points to itself (next)
+        temp.prev = temp;                  // New node points to itself (prev)
+        return temp;                       // Return new node as head
+    }
+    temp.next = head;                      // New node's next → head
+    temp.prev = head.prev;                 // New node's prev → last node
+    head.prev.next = temp;                 // Last node's next → new node
+    head.prev = temp;                      // Head's prev → new node
+    return head;                           // Return same head (unchanged)
+}
+
+
+//////////////////////// DRY RUN ////////////////////
+
+List: 10 ↔ 20 ↔ 30 (circular), Insert x = 50 at end
+
+INITIAL:
+        (head)
+          │
+          ▼
+    [10|•|•] ↔ [20|•|•] ↔ [30|•|•]
+      ▲                       │
+      └───────────────────────┘
+    head.prev = 30, 30.next = 10
+
+STEP 1: temp = [50|•|•]
+
+STEP 2: temp.next = head
+[50|•|•] → [10|•|•]
+
+STEP 3: temp.prev = head.prev (30)
+[30|•|•] ← [50|•|•] → [10|•|•]
+
+STEP 4: head.prev.next = temp (30.next → 50)
+[30|•|•] → [50|•|•] → [10|•|•]
+
+STEP 5: head.prev = temp (10.prev → 50)
+
+FINAL:
+        (head)
+          │
+          ▼
+    [10|•|•] ↔ [20|•|•] ↔ [30|•|•] ↔ [50|•|•]
+      ▲                                       │
+      └───────────────────────────────────────┘
+
+Result: 10 ↔ 20 ↔ 30 ↔ 50 (circular, head still = 10)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Empty List Case: Insert x = 7
+
+INITIAL: head = null
+
+STEP: temp = [7|•|•], temp.next = temp, temp.prev = temp
+
+FINAL:
+        (head)
+          │
+          ▼
+    [7|•|•] ─┐
+      ▲      │
+      └──────┘
+
+Result: 7 (single node circular, head = 7)
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Insert at End of Circular Doubly Linked List
+
+Input : 10 ↔ 20 ↔ 30 (circular), x = 50
+Output: 10 ↔ 20 ↔ 30 ↔ 50 (circular, head = 10)
+
+Input : null (empty list), x = 7
+Output: 7 (single node circular, head = 7)
+
+Edge Cases:
+1. Empty list → new node points to itself, return it as head
+2. Single node → new node inserted after it, both form 2-node circle
+3. Multiple nodes → insert between last and first, update 4 links, head unchanged
+
+Constraints:
+• 0 ≤ number of nodes ≤ 10⁵
+• 1 ≤ x ≤ 10⁵
+
+TC: O(1) | SC: O(1)
+
+Key Difference from InsertAtBeginning:
+• InsertAtBeginning → returns temp (new head)
+• InsertEndCDLL → returns head (same head, list grows at end)
