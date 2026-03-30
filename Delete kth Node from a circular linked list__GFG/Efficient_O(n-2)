@@ -1,0 +1,117 @@
+//////////////////////// CODE ////////////////////////////////
+
+Node DeleteCLL(Node head, int k) {
+    if (head == null) return null;                                // Handle empty list
+    if (head.next == head) {                                      // Check single node
+        return (k == 1) ? null : head;                            // Delete if k==1, else return same
+    }
+    Node curr = head;                                             // Start traversal from head
+    if (k == 1) {                                                 // Deleting first node?
+        int j = curr.data;                                        // Swap: store head's data
+        curr.data = curr.next.data;                               // Swap: copy next's data to head
+        curr.next.data = j;                                       // Swap: put old head data in next
+        curr.next = curr.next.next;                               // Skip the next node (deleted)
+    } else {                                                      // Deleting node at position k>1
+        for (int i = 0; i < k - 2; i++) {                         // Move to (k-1)th node
+            curr = curr.next;                                     // Traverse forward
+        }
+        curr.next = curr.next.next;                               // Link around k-th node (delete)
+    }
+    return head;                                                  // Return modified list head
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Testcase: List = [10, 20, 30, 40] (circular), k = 3 (delete 30)
+
+INITIAL:
+head
+  ↓
+[10|•] → [20|•] → [30|•] → [40|•]
+  ↑                      │
+  └──────────────────────┘
+curr
+
+k=3, so loop runs (3-2)=1 time → curr moves once
+
+STEP 1 (after loop):
+head
+  ↓
+[10|•] → [20|•] → [30|•] → [40|•]
+           ↑               │
+           └───────────────┘
+         curr
+
+STEP 2 (curr.next = curr.next.next):
+head
+  ↓
+[10|•] → [20|•] ─────────→ [40|•]
+  ↑                        │
+  └────────────────────────┘
+         (30 deleted)
+
+FINAL: 10 → 20 → 40 → (back to 10)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Testcase: List = [5, 15, 25] (circular), k = 1 (delete head)
+
+INITIAL:
+head,curr
+  ↓
+[5|•] → [15|•] → [25|•]
+  ↑              │
+  └──────────────┘
+
+STEP 1 (swap head & head.next data):
+head,curr
+  ↓
+[15|•] → [5|•] → [25|•]
+  ↑              │
+  └──────────────┘
+
+STEP 2 (skip head.next):
+head
+  ↓
+[15|•] ─────────→ [25|•]
+  ↑               │
+  └───────────────┘
+  (5 deleted)
+
+FINAL: 15 → 25 → (back to 15)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Testcase: List = [100] (single node), k = 1
+
+INITIAL:
+head
+  ↓
+[100|•] ─┐
+  ↑      │
+  └──────┘
+
+FINAL: null (list empty)
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Delete k-th node from Circular Linked List.
+
+Input: head of CLL, position k (1-indexed)
+Output: head of modified CLL
+
+Testcases:
+┌─────────────────────────────────────┬───────────┬─────────────────────────────┐
+│ Input List                          │ k         │ Output List                 │
+├─────────────────────────────────────┼───────────┼─────────────────────────────┤
+│ [10|•]→[20|•]→[30|•]→[40|•]→(back) │ 3         │ [10|•]→[20|•]→[40|•]→(back) │
+│ [5|•]→[15|•]→[25|•]→(back)         │ 1         │ [15|•]→[25|•]→(back)        │
+│ [100|•]→(self)                     │ 1         │ null                        │
+│ [7|•]→[14|•]→[21|•]→(back)         │ 2         │ [7|•]→[21|•]→(back)         │
+└─────────────────────────────────────┴───────────┴─────────────────────────────┘
+
+TC: O(k) | SC: O(1)
