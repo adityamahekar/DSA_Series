@@ -1,0 +1,160 @@
+//////////////////////// CODE ////////////////////////////////
+
+Node DeleteCLL(Node head, int k) {
+    if (head == null) {                        // if list is empty
+        return null;                           // nothing to delete
+    }
+    if (head.next == null) {                   // if only one node
+        return (k == 1) ? null : head;         // k=1 delete it, else return as is
+    }
+    if (k == 1) {                              // if head needs to be deleted
+        Node temp = head;                      // start from head
+        while (temp.next != head) {            // traverse to last node
+            temp = temp.next;                  // move forward
+        }
+        temp.next = head.next;                 // last node points to 2nd node
+        return head.next;                      // 2nd node becomes new head
+    }
+    Node curr = head;                          // start from head
+    int i = 1;                                 // position counter
+    do {
+        if (k == i + 1) {                      // if next node is kth node
+            int j = curr.data;                 // store curr data
+            curr.data = curr.next.data;        // bring next data to curr
+            curr.next.data = j;                // push curr data to next
+            curr.next = curr.next.next;        // unlink next node
+            break;                             // deletion done
+        }
+        curr = curr.next;                      // move to next node
+        i++;                                   // increment position
+    } while (curr != head);                    // stop when full circle done
+    return head;                               // return updated head
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+INITIAL CIRCULAR LIST
+
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.] -> [4|.]
+  ▲                               │
+  └───────────────────────────────┘
+
+
+=========================================
+CASE 1: k = 1 (Delete Head)
+
+Before:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.] -> [4|.]
+  ▲                               │
+  └───────────────────────────────┘
+
+After:
+(head)
+  │
+  ▼
+[2|.] -> [3|.] -> [4|.]
+  ▲                       │
+  └───────────────────────┘
+
+
+=========================================
+CASE 2: k = 2
+
+Before:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.] -> [4|.]
+  ▲                               │
+  └───────────────────────────────┘
+
+After:
+(head)
+  │
+  ▼
+[1|.] -> [3|.] -> [4|.]
+  ▲                       │
+  └───────────────────────┘
+
+
+=========================================
+CASE 3: k = 3
+
+Before:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.] -> [4|.]
+  ▲                               │
+  └───────────────────────────────┘
+
+After:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [4|.]
+  ▲                       │
+  └───────────────────────┘
+
+
+=========================================
+CASE 4: k = 4 (Last Node)
+
+Before:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.] -> [4|.]
+  ▲                               │
+  └───────────────────────────────┘
+
+After:
+(head)
+  │
+  ▼
+[1|.] -> [2|.] -> [3|.]
+  ▲                       │
+  └───────────────────────┘
+
+//////////////////////// QUESTION ////////////////////////////
+
+Delete kth node from a Circular Linked List
+
+Input : [1|.]─►[2|.]─►[3|.]─►[4|.]─►(back to 1), k=3  
+Output: [1|.]─►[3|.]─►[4|.]─►(back to 1)
+
+Edge Cases:
+1. head==null        →  return null
+2. single node, k=1  →  return null
+3. single node, k!=1 →  return head
+4. k=1               →  traverse to last, point to head.next
+5. k=last            →  swap with prev node, unlink
+
+Constraints:
+1 ≤ number of nodes ≤ 10⁵  
+0 ≤ node.data ≤ 10⁵  
+1 ≤ k ≤ number of nodes  
+
+Sample Input 1 : k=3  
+[1|.]─►[2|.]─►[3|.]─►[4|.]─►(back to 1)
+
+Sample Output 1:  
+[1|.]─►[3|.]─►[4|.]─►(back to 1)
+
+Sample Input 2 : k=1  
+[1|.]─►[2|.]─►(back to 1)
+
+Sample Output 2:  
+[2|.]─►(back to 2)
+
+Sample Input 3 : single node, k=1  
+[5|.]─►(back to 5)
+
+Sample Output 3:  
+null
