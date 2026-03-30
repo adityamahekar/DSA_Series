@@ -1,6 +1,6 @@
 //////////////////////// CODE //////////////////////
 
-Node InsertCDLL(Node head, int x) {
+Node InsertBeginCDLL(Node head, int x) {
     Node temp = new Node(x);               // Create new node with data x
     if (head == null) {                    // If list is empty
         temp.next = temp;                  // New node points to itself (next)
