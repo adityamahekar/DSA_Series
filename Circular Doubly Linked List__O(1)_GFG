@@ -1,0 +1,78 @@
+//////////////////////// CODE //////////////////////
+
+Node InsertCDLL(Node head, int x) {
+    Node temp = new Node(x);               // Create new node with data x
+    if (head == null) {                    // If list is empty
+        temp.next = temp;                  // New node points to itself (next)
+        temp.prev = temp;                  // New node points to itself (prev)
+        return temp;                       // Return new node as head
+    }
+    temp.next = head;                      // New node's next → head
+    temp.prev = head.prev;                 // New node's prev → last node
+    head.prev.next = temp;                 // Last node's next → new node
+    head.prev = temp;                      // Head's prev → new node
+    return temp;                           // Return new node as new head
+}
+
+
+//////////////////////// DRY RUN ////////////////////
+
+List: 10 ↔ 20 ↔ 30 (circular), Insert x = 5 at beginning
+
+INITIAL:
+        (head)
+          │
+          ▼
+    [10|•|•] ↔ [20|•|•] ↔ [30|•|•]
+      ▲                       │
+      └───────────────────────┘
+
+STEP 1: temp = [5|•|•]
+
+STEP 2: temp.next = head
+[5|•|•] → [10|•|•]
+
+STEP 3: temp.prev = head.prev (30)
+[30|•|•] ← [5|•|•] → [10|•|•]
+
+STEP 4: head.prev.next = temp (30.next → 5)
+[30|•|•] → [5|•|•] → [10|•|•]
+
+STEP 5: head.prev = temp (10.prev → 5)
+
+FINAL:
+        (new head)
+            │
+            ▼
+    [5|•|•] ↔ [10|•|•] ↔ [20|•|•] ↔ [30|•|•]
+      ▲                                       │
+      └───────────────────────────────────────┘
+
+Result: 5 ↔ 10 ↔ 20 ↔ 30 (circular)
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Insert at Beginning of Circular Doubly Linked List
+
+Input : 10 ↔ 20 ↔ 30 (circular), x = 5
+Output: 5 ↔ 10 ↔ 20 ↔ 30 (circular, head = 5)
+
+Input : null (empty list), x = 7
+Output: 7 (single node circular, head = 7)
+
+Edge Cases:
+1. Empty list → new node points to itself, return it
+2. Single node → insert before it, both form 2-node circle
+3. Multiple nodes → insert between last and first, update 4 links
+
+Constraints:
+• 0 ≤ number of nodes ≤ 10⁵
+• 1 ≤ x ≤ 10⁵
+
+TC: O(1) | SC: O(1)
+
+Note: Original code has 2 bugs:
+- Line `temp.next = head` overwrites `temp.next = head.prev`
+- Line `head.prev.next = temp` uses updated head.prev (which is temp)
+Fix: Store last node reference or reorder assignments as shown above.
