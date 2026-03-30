@@ -1,0 +1,176 @@
+//////////////////////// CODE //////////////////////
+
+class Solution {
+    int getMiddle(Node head) {
+        if (head == null) {                    // Empty list check
+            return 0;                          // Return 0 (or -1 for error)
+        }
+
+        Node slow = head;                      // Slow pointer (moves 1 step)
+        Node fast = head;                      // Fast pointer (moves 2 steps)
+
+        // Move fast 2 steps, slow 1 step until fast reaches end
+        while (fast != null && fast.next != null) {
+            slow = slow.next;                  // Move slow by 1
+            fast = fast.next.next;             // Move fast by 2
+        }
+
+        return slow.data;                      // Slow is at middle
+    }
+}
+
+
+//////////////////////// DRY RUN ////////////////////
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 1: Odd Length (5 nodes)
+Input: 1 → 2 → 3 → 4 → 5
+
+INITIAL:
+(head)
+  │
+  ▼
+[1|•] → [2|•] → [3|•] → [4|•] → [5|•] → null
+  ↑
+slow, fast
+
+ITERATION 1:
+  slow = 2, fast = 3
+[1|•] → [2|•] → [3|•] → [4|•] → [5|•] → null
+           ↑        ↑
+         slow     fast
+
+ITERATION 2:
+  slow = 3, fast = null (fast.next.next = null)
+[1|•] → [2|•] → [3|•] → [4|•] → [5|•] → null
+                    ↑        ↑
+                  slow     fast (null)
+
+LOOP ENDS (fast == null)
+
+Result: 3 (middle element)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 2: Even Length (6 nodes)
+Input: 2 → 4 → 6 → 7 → 5 → 1
+
+INITIAL:
+[2|•] → [4|•] → [6|•] → [7|•] → [5|•] → [1|•] → null
+  ↑
+slow, fast
+
+ITERATION 1:
+  slow = 4, fast = 6
+[2|•] → [4|•] → [6|•] → [7|•] → [5|•] → [1|•] → null
+           ↑              ↑
+         slow           fast
+
+ITERATION 2:
+  slow = 7, fast = 1
+[2|•] → [4|•] → [6|•] → [7|•] → [5|•] → [1|•] → null
+                          ↑                    ↑
+                        slow                 fast
+
+ITERATION 3:
+  fast.next = null, loop condition fails
+  slow stays at 7
+
+LOOP ENDS (fast.next == null)
+
+Result: 7 (second middle element)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CASE 3: Single Node
+Input: 10 → null
+
+INITIAL:
+[10|•] → null
+  ↑
+slow, fast
+
+LOOP: fast.next == null, doesn't enter
+
+Result: 10
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Middle of a Linked List
+You are given the `head` of a linked list. Return the value of the **middle node**.
+
+- If the number of nodes is **odd**, return the exact middle node value.
+- If the number of nodes is **even**, there are two middle nodes — return the **second** middle node value.
+
+---
+
+### Examples
+
+**Example 1:**
+Input: 1 → 2 → 3 → 4 → 5
+Output: 3
+Explanation: Middle of 5 nodes is the 3rd node (value = 3).
+
+text
+
+**Example 2:**
+Input: 2 → 4 → 6 → 7 → 5 → 1
+Output: 7
+Explanation: Two middle nodes are 6 and 7. Return the second middle (7).
+
+text
+
+**Example 3:**
+Input: 10
+Output: 10
+Explanation: Single node is itself the middle.
+
+text
+
+---
+
+### Constraints
+- 1 ≤ number of nodes ≤ 10⁵
+- 1 ≤ node.data ≤ 10⁵
+
+---
+
+### Edge Cases
+1. **Single node** → return that node's data
+2. **Odd length** → return exact middle (index = n/2)
+3. **Even length** → return second middle (index = n/2)
+4. **Empty list** → return 0 (handled by base case)
+
+---
+
+### Approach: Fast & Slow Pointers (Floyd's Tortoise and Hare)
+
+**Idea:** Use two pointers moving at different speeds. When fast reaches the end, slow will be at the middle.
+
+**Steps:**
+1. Initialize `slow = head` and `fast = head`
+2. Move `slow` by 1 step, `fast` by 2 steps in each iteration
+3. When `fast` reaches null (or `fast.next` is null), `slow` is at middle
+4. Return `slow.data`
+
+**Why it works:**
+- Fast moves twice as fast as slow
+- When fast covers `n` nodes, slow covers `n/2` nodes
+- For even length, fast ends at null, slow at second middle
+- For odd length, fast ends at last node, slow at exact middle
+
+---
+
+### Complexity
+- **Time:** O(n/2) = **O(n)** — single pass through half the list
+- **Space:** **O(1)** — only two pointers used
+
+---
+
+### Key Insight
+This **one-pass** approach is optimal compared to the two-pass counting method. 
+The slow-fast pointer technique is a powerful pattern for linked list problems involving middle detection, cycle detection, and finding k-th elements from end.
