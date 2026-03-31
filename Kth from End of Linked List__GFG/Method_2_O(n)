@@ -1,0 +1,57 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    int getKthFromLast(Node head, int k) {
+        if(head == null){                                              // Handle empty list
+            return -1;
+        }
+        
+        Node first = head, second = head;                              // Two pointers at head
+        
+        for(int i = 0; i < k; i++){                                    // First moves k steps ahead
+            if(first == null){ return -1; }                            // k > length
+            first = first.next;
+        }
+        
+        while(first != null){                                          // Move together till first ends
+            second = second.next;                                      // second at kth from end
+            first = first.next;
+        }
+        
+        return second.data;                                            // Return result
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+1→2→3→4→5→6→7→8→9    k=2     →     Output: 8             
+
+Step1: first k=2 ahead   
+
+[1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
+ s     f
+
+Step2: while(first!=null)                             
+
+[1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
+                          s           f                 // first==null ✓
+
+10→5→100→5    k=5     →     Output: -1       
+
+first null after k steps → -1                         
+
+//////////////////////// QUESTION ////////////////////////////
+
+Kth from End of Linked List
+You are given the head of a linked list and the number k, 
+You have to return the kth node from the end of linkedList. 
+If k is more than the number of nodes, then return -1.
+
+Input: LinkedList: 1->2->3->4->5->6->7->8->9, k = 2     Output: 8
+
+Input: LinkedList: 10->5->100->5, k = 5                 Output: -1
+
+Constraints:
+1 ≤ number of nodes ≤ 10^6
+1 ≤ node->data, x ≤ 10^6
+1 ≤ k ≤ 10^6
