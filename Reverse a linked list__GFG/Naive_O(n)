@@ -1,0 +1,53 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    Node reverseList(Node head) {
+        ArrayList<Integer> list = new ArrayList<>();                   // Store node values
+        
+        for(Node curr = head; curr != null; curr = curr.next){         // Pass 1: Collect values
+            list.add(curr.data);
+        }
+        
+        for(Node curr = head; curr != null; curr = curr.next){         // Pass 2: Assign reversed
+            curr.data = list.remove(list.size()-1);
+        }
+        
+        return head;                                                   // Return original head
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+1→2→3→4                                 Output: 4→3→2→1
+
+Step1: list=[1,2,3,4]               
+
+[1|.]->[2|.]->[3|.]->[4|.]->null
+
+
+Step2: Assign 4,3,2,1      
+
+[4|.]->[3|.]->[2|.]->[1|.]->null
+
+8→9→10→7→2                               Output: 2→7→10→9→8
+
+list=[8,9,10,7,2] → assign 2,7,10,9,8     
+
+8                                       Output: 8
+
+list=[8] → assign 8                        
+
+//////////////////////// QUESTION ////////////////////////////
+
+Reverse a linked list
+You are given the head of a singly linked list. You have to reverse the linked list and return the head of the reversed list.
+
+Input: 1->2->3->4                         Output: 4 -> 3 -> 2 -> 1
+
+Input: 8->9->10->7->2                     Output: 2 -> 7 -> 10 -> 9 -> 8
+
+Input: 8                                  Output: 8
+
+Constraints:
+1 ≤ number of nodes ≤ 10^5
+1 ≤ node->data ≤ 10^5
