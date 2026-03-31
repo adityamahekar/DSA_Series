@@ -1,0 +1,61 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    int getKthFromLast(Node head, int k) {
+        int count = 1;                                                 // Count total nodes
+        Node curr = head;                                              // Start from head
+        
+        while(curr.next != null){                                      // Traverse to find length
+            count++;                                                   // Increment count
+            curr = curr.next;                                          // Move to next node
+        }                                                             
+        
+        if(count < k){                                                 // Check if k > length
+            return -1;                                                 // Return -1 if invalid
+        }                                                             
+        
+        Node newCur = head;                                            // Reset pointer to head
+        for(int i=1; i<=count-k; i++){                                 // Move (n-k) steps
+            newCur = newCur.next;                                      // Reach kth from end
+        }                                                             
+        
+        return newCur.data;                                            // Return kth node data
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+1→2→3→4→5→6→7→8→9    k=2     →     Output: 8             
+
+Step1: Count total=9      
+
+[1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
+                                               ↑curr end 
+
+
+Step2: Move 7 steps (9-2)    
+
+[1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
+                            ↑newCur (8th node)
+
+
+10→5→100→5    k=5     →     Output: -1  
+
+count=4 < 5 → return -1                              
+
+//////////////////////// QUESTION ////////////////////////////
+
+Kth from End of Linked List
+You are given the head of a linked list and the number k, 
+You have to return the kth node from the end of linkedList. 
+If k is more than the number of nodes, then return -1.
+
+Input: LinkedList: 1->2->3->4->5->6->7->8->9, k = 2     Output: 8
+
+Input: LinkedList: 10->5->100->5, k = 5                 Output: -1
+
+Constraints:
+1 ≤ number of nodes ≤ 10^6
+1 ≤ node->data, x ≤ 10^6
+1 ≤ k ≤ 10^6
+
