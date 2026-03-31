@@ -2,24 +2,19 @@
 
 class Solution {
     int getKthFromLast(Node head, int k) {
-        int count = 1;                                                 // Count total nodes
-        Node curr = head;                                              // Start from head
-        
-        while(curr.next != null){                                      // Traverse to find length
-            count++;                                                   // Increment count
-            curr = curr.next;                                          // Move to next node
-        }                                                             
-        
-        if(count < k){                                                 // Check if k > length
-            return -1;                                                 // Return -1 if invalid
-        }                                                             
-        
-        Node newCur = head;                                            // Reset pointer to head
-        for(int i=1; i<=count-k; i++){                                 // Move (n-k) steps
-            newCur = newCur.next;                                      // Reach kth from end
-        }                                                             
-        
-        return newCur.data;                                            // Return kth node data
+        Node slow = head, fast = head;                                 // Two pointers at head
+                                                                        
+        for(int i = 0; i < k; i++) {                                   // Fast moves k steps ahead
+            if(fast == null) return -1;                                // k > length
+            fast = fast.next;
+        }
+                                                                        
+        while(fast != null && fast.next != null) {                     // Move together
+            slow = slow.next;                                          // Slow at kth from end when fast ends
+            fast = fast.next;
+        }
+                                                                        
+        return (slow != null) ? slow.data : -1;                        // Return result
     }
 }
 
@@ -27,21 +22,19 @@ class Solution {
 
 1→2→3→4→5→6→7→8→9    k=2     →     Output: 8             
 
-Step1: Count total=9      
+Step1: Fast k=2 ahead       
 
 [1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
-                                               ↑curr end 
+ s     f
 
-
-Step2: Move 7 steps (9-2)    
+Step2: Together till fast.next=null       
 
 [1|.]->[2|.]->[3|.]->[4|.]->[5|.]->[6|.]->[7|.]->[8|.]->[9|.]->null
-                            ↑newCur (8th node)
+                          s           f
 
+10→5→100→5    k=5     →     Output: -1     
 
-10→5→100→5    k=5     →     Output: -1  
-
-count=4 < 5 → return -1                              
+Fast null after k steps → -1                          
 
 //////////////////////// QUESTION ////////////////////////////
 
@@ -58,4 +51,3 @@ Constraints:
 1 ≤ number of nodes ≤ 10^6
 1 ≤ node->data, x ≤ 10^6
 1 ≤ k ≤ 10^6
-
