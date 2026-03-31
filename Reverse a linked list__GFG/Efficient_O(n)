@@ -1,0 +1,52 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    Node reverseList(Node head) {
+        Node curr = head;                                              // Current node
+        Node prev = null;                                              // Previous node
+        
+        while(curr != null){                                           // Traverse till end
+            Node next = curr.next;                                     // Store next node
+            curr.next = prev;                                          // Reverse current link
+            prev = curr;                                               // Move prev forward
+            curr = next;                                               // Move curr forward
+        }
+        
+        return prev;                                                   // New head
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+1→2→3→4                                 Output: 4→3→2→1
+
+Iteration 1: next=2, 1→null, prev=1, curr=2     
+
+null←[1|. ]    [2|.]->[3|.]->[4|.]->null
+     p     c
+
+Iteration 2: next=3, 2→1, prev=2, curr=3   
+
+null←[1|. ]←[2|. ]    [3|.]->[4|.]->null
+        p     c
+
+Final: null←1←2←3←4, prev=4, return 4                     
+
+8→9→10→7→2                         Output: 2→7→10→9→8
+
+8                                    Output: 8
+
+//////////////////////// QUESTION ////////////////////////////
+
+Reverse a linked list
+You are given the head of a singly linked list. You have to reverse the linked list and return the head of the reversed list.
+
+Input: 1->2->3->4                         Output: 4 -> 3 -> 2 -> 1
+
+Input: 8->9->10->7->2                     Output: 2 -> 7 -> 10 -> 9 -> 8
+
+Input: 8                                  Output: 8
+
+Constraints:
+1 ≤ number of nodes ≤ 10^5
+1 ≤ node->data ≤ 10^5
