@@ -1,0 +1,202 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node
+{
+    int data;
+    Node next;
+    Node(int key)
+    {
+        data = key;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    public Node reverseKGroup(Node head, int k) {
+    
+        Node curr = head, prevFirst = null, next = null;   // curr: tracks current node, prevFirst: tail of previous group
+        boolean isFirstPass = true;                         // Flag to update head only once
+        
+        while (curr != null) {                              // Process all groups
+            int count = 0;                                  // Counter for k nodes
+            Node First = curr, prev = null;                 // First: stores tail of current group after reversal
+        
+            if (head == null || k == 1) { return head; }    // Base case: empty list or k=1 (no reversal needed)
+        
+                                                            // Reverse k nodes iteratively
+            while (curr != null && count < k) {
+                next = curr.next;                           // Save next node before breaking link
+                curr.next = prev;                           // Reverse: point current to previous
+                prev = curr;                                // Move prev forward to current
+                curr = next;                                // Move curr forward to next
+                count++;                                    // Increment count
+            }        
+            
+                                                            // Connect previous group to current reversed group
+            if (isFirstPass) {                              // First group: update head pointer
+                head = prev;                                // New head is the last node of first group
+                isFirstPass = false;                        // Mark first pass as done
+            }
+            else {                                          // Subsequent groups: link previous tail to current head
+                prevFirst.next = prev;                      // Connect previous group's tail to current group's head
+            }
+        
+            prevFirst = First;                              // Update prevFirst to current group's tail (original first node)
+        }
+       
+        return head;                                        // Return new head of modified list
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> null
+k = 3
+
+ORIGINAL LIST:
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•] -> [6|•] -> [7|•] -> [8|•] -> null
+ ^
+head, curr
+
+
+FIRST ITERATION (Group 1: nodes 1,2,3)
+
+--------------------------------------------------------------------------------
+Initial State:
+--------------------------------------------------------------------------------
+        curr = 1, prevFirst = null, isFirstPass = true
+        First = 1, prev = null, count = 0
+
+
+--------------------------------------------------------------------------------
+Reverse k nodes (count 0 to 2):
+--------------------------------------------------------------------------------
+        count=0: next=2, 1.next=null, prev=1, curr=2
+        count=1: next=3, 2.next=1,  prev=2, curr=3
+        count=2: next=4, 3.next=2,  prev=3, curr=4
+        
+        After reversal:
+        null <- [1|•] <- [2|•] <- [3|•]    [4|•] -> [5|•] -> [6|•] -> [7|•] -> [8|•] -> null
+                 ^                         ^
+               First                     curr
+                 ^
+               prev = 3
+
+
+--------------------------------------------------------------------------------
+Connect groups:
+--------------------------------------------------------------------------------
+        isFirstPass = true → head = prev = 3
+        prevFirst = First = 1
+        
+        List:  3 -> 2 -> 1 -> (will connect next)
+               ^
+             head
+
+
+SECOND ITERATION (Group 2: nodes 4,5,6)
+
+--------------------------------------------------------------------------------
+Initial State:
+--------------------------------------------------------------------------------
+        curr = 4, prevFirst = 1, isFirstPass = false
+        First = 4, prev = null, count = 0
+
+
+--------------------------------------------------------------------------------
+Reverse k nodes:
+--------------------------------------------------------------------------------
+        count=0: next=5, 4.next=null, prev=4, curr=5
+        count=1: next=6, 5.next=4,  prev=5, curr=6
+        count=2: next=7, 6.next=5,  prev=6, curr=7
+        
+        After reversal:
+        null <- [4|•] <- [5|•] <- [6|•]    [7|•] -> [8|•] -> null
+                 ^                         ^
+               First                     curr
+                 ^
+               prev = 6
+
+
+--------------------------------------------------------------------------------
+Connect groups:
+--------------------------------------------------------------------------------
+        isFirstPass = false → prevFirst.next = prev
+        1.next = 6
+        
+        prevFirst = First = 4
+        
+        List:  3 -> 2 -> 1 -> 6 -> 5 -> 4 -> (will connect next)
+
+
+THIRD ITERATION (Remaining: nodes 7,8)
+
+--------------------------------------------------------------------------------
+Initial State:
+--------------------------------------------------------------------------------
+        curr = 7, prevFirst = 4
+        First = 7, prev = null, count = 0
+
+
+--------------------------------------------------------------------------------
+Reverse k nodes (ONLY 2 nodes exist, but code reverses anyway!):
+--------------------------------------------------------------------------------
+        count=0: next=8, 7.next=null, prev=7, curr=8
+        count=1: next=null, 8.next=7, prev=8, curr=null
+        count=2: loop exits (curr = null)
+        
+        After reversal:
+        null <- [7|•] <- [8|•]    null
+                 ^        ^
+               First   curr
+                        ^
+                      prev = 8
+
+
+--------------------------------------------------------------------------------
+Connect groups:
+--------------------------------------------------------------------------------
+        prevFirst.next = prev → 4.next = 8
+        
+        prevFirst = First = 7
+        
+        List:  3 -> 2 -> 1 -> 6 -> 5 -> 4 -> 8 -> 7 -> null
+
+
+FINAL LIST (WRONG - last group reversed even though < k):
+
+[3|•] -> [2|•] -> [1|•] -> [6|•] -> [5|•] -> [4|•] -> [8|•] -> [7|•] -> null
+ ^
+head (3)
+
+
+Output: 3 -> 2 -> 1 -> 6 -> 5 -> 4 -> 8 -> 7  ❌
+
+Expected: 3 -> 2 -> 1 -> 6 -> 5 -> 4 -> 7 -> 8  ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Reverse Nodes in k-Group
+Given the head of a singly linked list and an integer k, reverse the nodes of the list k at a time. Return the modified list.
+If remaining nodes < k, keep them as-is (DO NOT reverse).
+
+Examples:
+
+Input:  [1,2,3,4,5], k = 2
+Output: [2,1,4,3,5]
+
+Input:  [1,2,3,4,5], k = 3
+Output: [3,2,1,4,5]
+
+Input:  [1,2,3,4,5,6,7,8], k = 3
+Output: [3,2,1,6,5,4,7,8]  ← Last 2 nodes stay as-is
+
+Constraints:
+- 1 <= k <= nodes <= 5000
+- 0 <= node->data <= 5000
+
+Time Complexity: O(n)
+Space Complexity: O(1)
