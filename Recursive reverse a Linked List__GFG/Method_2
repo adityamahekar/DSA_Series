@@ -1,0 +1,159 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node next;
+
+    Node(int x) {
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    
+    Node recursiveReverseList(Node curr, Node prev) {     // Helper function for tail-recursive reversal
+        
+        if (curr == null) { return prev; }              // Base case: end of list
+        
+        Node next = curr.next;                          // Save next node
+        curr.next = prev;                               // Reverse current link
+        
+        return recursiveReverseList(next, curr);        // Recurse with moved pointers
+    }
+    
+    // Main function (call this)
+    Node reverseList(Node head) {
+        return recursiveReverseList(head, null);        // Start with prev = null
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: 1 -> 2 -> 3 -> 4 -> null
+
+ORIGINAL LIST (Before Recursion):
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> null
+ ^
+curr
+prev = null
+
+
+RECURSION CALLS (Going Down - Reversing as We Go):
+
+--------------------------------------------------------------------------------
+Call 1: recursiveReverseList(curr=1, prev=null)
+--------------------------------------------------------------------------------
+        next = curr.next = 2
+        curr.next = prev  →  1.next = null
+        
+        [1|•]    [2|•] -> [3|•] -> [4|•] -> null
+         ^        ^
+       prev     next
+       curr
+        
+        Returns: recursiveReverseList(2, 1)
+
+
+--------------------------------------------------------------------------------
+Call 2: recursiveReverseList(curr=2, prev=1)
+--------------------------------------------------------------------------------
+        next = curr.next = 3
+        curr.next = prev  →  2.next = 1
+        
+        null <- [1|•] <- [2|•]    [3|•] -> [4|•] -> null
+                 ^        ^        ^
+               prev    curr      next
+        
+        Returns: recursiveReverseList(3, 2)
+
+
+--------------------------------------------------------------------------------
+Call 3: recursiveReverseList(curr=3, prev=2)
+--------------------------------------------------------------------------------
+        next = curr.next = 4
+        curr.next = prev  →  3.next = 2
+        
+        null <- [1|•] <- [2|•] <- [3|•]    [4|•] -> null
+                          ^        ^       ^
+                        prev    curr     next
+        
+        Returns: recursiveReverseList(4, 3)
+
+
+--------------------------------------------------------------------------------
+Call 4: recursiveReverseList(curr=4, prev=3)  [LAST NODE]
+--------------------------------------------------------------------------------
+        next = curr.next = null
+        curr.next = prev  →  4.next = 3
+        
+        null <- [1|•] <- [2|•] <- [3|•] <- [4|•]    null
+                                   ^        ^       ^
+                                 prev    curr     next
+        
+        Returns: recursiveReverseList(null, 4)
+
+
+--------------------------------------------------------------------------------
+Call 5: recursiveReverseList(curr=null, prev=4)  [BASE CASE]
+--------------------------------------------------------------------------------
+        curr == null → return prev (which is 4)
+        
+        Returns: 4 (NEW HEAD)
+
+
+FINAL REVERSED LIST:
+
+null <- [1|•] <- [2|•] <- [3|•] <- [4|•]
+                                 ^
+                              prev (NEW HEAD)
+
+
+Output: 4 -> 3 -> 2 -> 1 -> null
+
+
+SUMMARY TABLE:
+
+Call    curr    prev    next    Action              Next Call
+----    ----    ----    ----    ------              ---------
+1       1       null    2       1.next = null       recursiveReverseList(2, 1)
+2       2       1       3       2.next = 1          recursiveReverseList(3, 2)
+3       3       2       4       3.next = 2          recursiveReverseList(4, 3)
+4       4       3       null    4.next = 3          recursiveReverseList(null, 4)
+5       null    4       -       Return prev (4)     DONE
+
+
+KEY DIFFERENCE FROM PREVIOUS APPROACH:
+
+• Previous (Head Recursion): Reverse happens while UNWINDING (coming back)
+• This (Tail Recursion): Reverse happens while GOING DOWN (before recursive call)
+
+Space Complexity: O(n) - recursion stack
+Time Complexity: O(n) - single pass
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Reverse a Linked List
+You are given the head of a singly linked list. You have to reverse the linked list and return the head of the reversed list.
+
+Examples:
+
+Input:  1 -> 2 -> 3 -> 4
+Output: 4 -> 3 -> 2 -> 1
+
+Input:  2 -> 7 -> 10 -> 9 -> 8
+Output: 8 -> 9 -> 10 -> 7 -> 2
+
+Input:  8
+Output: 8
+
+Constraints:
+- 1 <= number of nodes <= 10^5
+- 1 <= node->data <= 10^5
+
+Time Complexity: O(n)
+Space Complexity: O(n) - recursion stack
