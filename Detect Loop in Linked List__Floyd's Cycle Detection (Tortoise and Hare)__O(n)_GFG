@@ -1,0 +1,245 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node next;
+
+    Node(int x) {
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    public boolean detectLoop(Node head) {
+        
+        if (head == null) { return false; }         // Base case: empty list has no loop
+        
+        Node slow = head, fast = head;              // Both start at head (Tortoise & Hare)
+        
+        
+        while (fast != null && fast.next != null) { // Ensure fast can move 2 steps
+            slow = slow.next;                       // Move slow by 1 step
+            fast = fast.next.next;                  // Move fast by 2 steps
+            
+            if (slow == fast) {                     // Pointers met → LOOP EXISTS
+                return true;
+            }
+        }
+        
+        
+        return false;                               // Fast reached null → NO LOOP
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+CASE 1: LOOP EXISTS (pos = 2)
+
+Input: 1 -> 2 -> 3 -> 4 -> 5
+                    ^         |
+                    |_________|
+        (tail connects back to node 2)
+
+
+INITIAL STATE:
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•]
+ ^               ^
+slow            fast
+(head)
+
+
+ITERATION 1:
+
+slow moves 1 step:  1 -> 2
+fast moves 2 steps: 1 -> 2 -> 3
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•]
+         ^         ^
+       slow      fast
+
+
+ITERATION 2:
+
+slow moves 1 step:  2 -> 3
+fast moves 2 steps: 3 -> 4 -> 5
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•]
+                   ^                   ^
+                 slow                fast
+
+
+ITERATION 3:
+
+slow moves 1 step:  3 -> 4
+fast moves 2 steps: 5 -> 2 -> 3 (wraps around!)
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•]
+         ^         ^                   ^
+       fast     slow              (fast came from 5)
+
+
+ITERATION 4:
+
+slow moves 1 step:  4 -> 5
+fast moves 2 steps: 3 -> 4 -> 5
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•]
+                              ^
+                         slow/fast
+                         (COLLISION!)
+
+
+RESULT: slow == fast → return true ✓
+
+
+--------------------------------------------------------------------------------
+CASE 2: NO LOOP (pos = 0)
+
+Input: 1 -> 2 -> 3 -> 4 -> 5 -> null
+
+
+INITIAL STATE:
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•] -> null
+ ^
+slow, fast
+
+
+ITERATION 1:
+
+slow = 2, fast = 3
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•] -> null
+         ^         ^
+       slow      fast
+
+
+ITERATION 2:
+
+slow = 3, fast = 5
+
+[1|•] -> [2|•] -> [3|•] -> [4|•] -> [5|•] -> null
+                   ^                   ^
+                 slow                fast
+
+
+ITERATION 3:
+
+slow = 4, fast = null (fast.next.next = null)
+
+Loop condition fails: fast == null → exit while
+
+
+RESULT: return false ✓
+
+
+--------------------------------------------------------------------------------
+CASE 3: LOOP AT HEAD (pos = 1)
+
+Input: 1 -> 2 -> 3 -> 4
+       ^              |
+       |______________|
+       (circular list)
+
+
+INITIAL STATE:
+
+[1|•] -> [2|•] -> [3|•] -> [4|•]
+ ^
+slow, fast
+
+
+ITERATION 1:
+
+slow = 2, fast = 3
+
+[1|•] -> [2|•] -> [3|•] -> [4|•]
+         ^         ^
+       slow      fast
+
+
+ITERATION 2:
+
+slow = 3, fast = 1 (4 -> 1 -> 2, but fast moves 2: 4->1, 1->2... wait, fast at 4, moves to 1, then 2)
+
+Actually: fast at 3, moves: 3->4, 4->1 → fast = 1
+
+[1|•] -> [2|•] -> [3|•] -> [4|•]
+ ^                   ^
+fast               slow
+
+
+ITERATION 3:
+
+slow = 4, fast = 3 (1->2, 2->3)
+
+[1|•] -> [2|•] -> [3|•] -> [4|•]
+                   ^         ^
+                 fast      slow
+
+
+ITERATION 4:
+
+slow = 1 (4->1), fast = 1 (3->4, 4->1)
+
+[1|•] -> [2|•] -> [3|•] -> [4|•]
+ ^
+slow/fast
+(COLLISION!)
+
+
+RESULT: slow == fast → return true ✓
+
+
+SUMMARY TABLE (Case 1):
+
+Iteration    slow    fast    Action
+---------    ----    ----    ------
+0            1       1       Start
+1            2       3       Move both
+2            3       5       Move both
+3            4       2       fast wraps
+4            5       4       Move both
+5            5       5       COLLISION → true
+
+
+WHY THEY ALWAYS MEET IF LOOP EXISTS:
+
+• Fast gains 1 step on slow each iteration (2 - 1 = 1)
+• Inside a loop of size L, fast will eventually lap slow
+• Distance between them decreases by 1 each turn
+• They MUST meet within L iterations after both enter the loop
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Detect Loop in Linked List
+
+Given the head of a singly linked list, determine whether the linked list contains a loop or not.
+
+A loop exists if the last node's next pointer points to any node in the list (including itself) instead of null.
+
+Examples:
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 (loop back to 2)
+Output: true
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> null
+Output: false
+
+Input:  1 -> 2 -> 3 -> 1 (circular)
+Output: true
+
+Constraints:
+- 1 ≤ number of nodes ≤ 10^5
+- 1 ≤ node->data ≤ 10^3
+- 0 ≤ pos ≤ number of nodes (pos = 0 means no loop)
+
+Time Complexity: O(n) - fast pointer traverses at most 2n nodes
+Space Complexity: O(1) - only 2 pointers used
+
+Algorithm: Floyd's Cycle Detection (Tortoise and Hare)
