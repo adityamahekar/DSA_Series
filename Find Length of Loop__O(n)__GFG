@@ -1,0 +1,207 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node next;
+
+    Node(int x) {
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    public int lengthOfLoop(Node head) {
+        
+        if (head == null || head.next == null) { return 0; }    // Base case: empty or single node
+        
+        Node slow = head, fast = head;
+        
+        
+        // Step 1: Detect loop using Floyd's Cycle Detection
+        while (fast != null && fast.next != null) {
+            slow = slow.next;                       // Move slow by 1 step
+            fast = fast.next.next;                  // Move fast by 2 steps
+            
+            if (slow == fast) {                     // Loop detected
+                break;
+            }
+        }
+        
+        
+        // Step 2: Check if loop actually exists
+        if (slow != fast) {                         // No loop found
+            return 0;
+        }
+        
+        
+        // Step 3: Count nodes in the loop
+        Node curr = fast;                           // Start from meeting point
+        int count = 1;                              // Count the starting node
+        
+        while (curr.next != fast) {                 // Traverse until we come back to start
+            curr = curr.next;                       // Move to next node
+            count++;                                // Increment counter
+        }
+        
+        
+        return count;                               // Return loop length
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+CASE 1: LOOP EXISTS (length = 4)
+
+Input: 1 -> 2 -> 3 -> 4 -> 5
+            ^              |
+            |______________|
+        (pos = 2, loop: 2->3->4->5->2)
+
+
+STEP 1: DETECT LOOP
+
+Initial: slow = 1, fast = 1
+
+Iter 1: slow=2, fast=3
+Iter 2: slow=3, fast=5
+Iter 3: slow=4, fast=3 (5->2, 2->3)
+Iter 4: slow=5, fast=5  ← COLLISION at node 5!
+
+
+STEP 2: COUNT LOOP NODES
+
+curr = fast = 5, count = 1
+
+While (curr.next != fast):
+
+Iter 1: curr.next = 2 ≠ 5
+        curr = 2, count = 2
+
+Iter 2: curr.next = 3 ≠ 5
+        curr = 3, count = 3
+
+Iter 3: curr.next = 4 ≠ 5
+        curr = 4, count = 4
+
+Iter 4: curr.next = 5 == 5 → Stop!
+
+
+RESULT: count = 4 ✓
+
+Loop: 2 -> 3 -> 4 -> 5 -> 2 (4 nodes)
+
+
+VISUAL:
+
+        [2] -> [3] -> [4] -> [5]
+         ^                   |
+         |___________________|
+              Loop (length 4)
+
+
+--------------------------------------------------------------------------------
+CASE 2: LOOP EXISTS (length = 3)
+
+Input: 10 -> 20 -> 30 -> 40 -> 50
+                    ^              |
+                    |______________|
+        (pos = 3, loop: 30->40->50->30)
+
+
+STEP 1: DETECT LOOP
+
+Initial: slow = 10, fast = 10
+
+Iter 1: slow=20, fast=30
+Iter 2: slow=30, fast=50
+Iter 3: slow=40, fast=40 (50->30, 30->40) ← COLLISION at node 40!
+
+
+STEP 2: COUNT LOOP NODES
+
+curr = 40, count = 1
+
+While (curr.next != 40):
+
+Iter 1: curr.next=50 ≠ 40
+        curr=50, count=2
+
+Iter 2: curr.next=30 ≠ 40
+        curr=30, count=3
+
+Iter 3: curr.next=40 == 40 → Stop!
+
+
+RESULT: count = 3 ✓
+
+Loop: 30 -> 40 -> 50 -> 30 (3 nodes)
+
+
+--------------------------------------------------------------------------------
+CASE 3: NO LOOP
+
+Input: 1 -> 2 -> 3 -> 4 -> 5 -> null
+
+
+STEP 1: DETECT LOOP
+
+Iter 1: slow=2, fast=3
+Iter 2: slow=3, fast=5
+Iter 3: slow=4, fast=null → Exit loop
+
+STEP 2: CHECK
+
+slow != fast (4 != null) → return 0
+
+
+RESULT: 0 ✓ (No loop exists)
+
+
+SUMMARY TABLE:
+
+Case    Collision Point    Loop Nodes         Count
+----    ---------------    ----------         -----
+1       Node 5             2->3->4->5         4
+2       Node 40            30->40->50         3
+3       None               -                  0
+
+
+WHY THIS WORKS:
+
+1. Floyd's algorithm guarantees slow and fast meet INSIDE the loop
+2. Once they meet, staying at that point and moving 1 step at a time
+   will traverse the entire loop exactly once before returning to start
+3. Counting steps gives exact loop length
+
+Key Insight: After collision, fast (or slow) is guaranteed to be inside 
+the loop. Traversing from there until we return to the same node counts 
+all nodes in the loop exactly once.
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Find Length of Loop
+
+Given the head of a linked list, determine if a loop exists. If yes, return the number of nodes in the loop. Otherwise, return 0.
+
+Examples:
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 (loop back to 2)
+Output: 4
+
+Input:  10 -> 20 -> 30 -> 40 -> 50 (loop back to 30)
+Output: 3
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> null
+Output: 0
+
+Constraints:
+- 1 ≤ number of nodes ≤ 10^5
+- 1 ≤ node->data ≤ 10^4
+- 0 ≤ pos < number of nodes
+
+Time Complexity: O(n) - detection + counting
+Space Complexity: O(1) - only 2-3 pointers used
