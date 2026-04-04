@@ -1,0 +1,166 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*class Node {
+    int data;
+    Node next;
+
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+} */
+
+class Solution {
+    public Node pairwiseSwap(Node head) {
+        
+        if (head == null || head.next == null) { 
+            return head;                                          // Edge case: empty or single node
+        }
+        
+        Node prev = head;                                         // First node of first pair
+        Node cur = head.next.next;                                // Start of second pair
+        head = head.next;                                         // New head will be second node
+        head.next = prev;                                         // Complete first swap: 2->1
+      
+        // Process remaining pairs
+        while (cur != null && cur.next != null) {
+            prev.next = cur.next;                                 // Link previous pair to current
+            prev = cur;                                           // Update prev to current pair's first node
+            
+            Node next = cur.next.next;                            // Save next pair's start
+            cur.next.next = cur;                                  // Swap: second->first
+            cur.next = next;                                      // Link first to next pair
+            cur = next;                                           // Move to next pair
+        }
+        
+        prev.next = cur;                                          // Handle odd node (if exists)
+        
+        return head;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+
+Output: 2 -> 1 -> 4 -> 3 -> 6 -> 5 -> 7
+
+
+--------------------------------- STEP 1: INITIAL SETUP ---------------------------------
+
+head = 1
+
+Check: head != null && head.next != null ✓ (proceed)
+
+prev = 1
+cur = 3 (1.next.next)
+head = 2 (new head)
+head.next = 1 (2->1)
+
+List: 2 -> 1    3 -> 4 -> 5 -> 6 -> 7
+           ^    ^
+         prev  cur
+
+
+--------------------------------- ITERATION 1: cur = 3 ---------------------------------
+
+Check: cur != null && cur.next != null ✓ (3,4 exist)
+
+prev.next = cur.next      → 1.next = 4
+prev = cur                → prev = 3
+next = cur.next.next      → next = 5
+cur.next.next = cur       → 4.next = 3 (swap)
+cur.next = next           → 3.next = 5
+cur = next                → cur = 5
+
+List: 2 -> 1 -> 4 -> 3    5 -> 6 -> 7
+                 ^        ^
+               prev      cur
+
+
+--------------------------------- ITERATION 2: cur = 5 ---------------------------------
+
+Check: cur != null && cur.next != null ✓ (5,6 exist)
+
+prev.next = cur.next      → 3.next = 6
+prev = cur                → prev = 5
+next = cur.next.next      → next = 7
+cur.next.next = cur       → 6.next = 5 (swap)
+cur.next = next           → 5.next = 7
+cur = next                → cur = 7
+
+List: 2 -> 1 -> 4 -> 3 -> 6 -> 5    7
+                         ^          ^
+                       prev        cur
+
+
+--------------------------------- ITERATION 3: cur = 7 ---------------------------------
+
+Check: cur != null && cur.next != null ✗ (7.next = null)
+
+Exit loop
+
+
+--------------------------------- STEP 2: HANDLE ODD NODE ---------------------------------
+
+prev.next = cur  → 5.next = 7
+
+Final List: 2 -> 1 -> 4 -> 3 -> 6 -> 5 -> 7 ✓
+
+
+--------------------------------- VISUAL DIAGRAM ---------------------------------
+
+Original:  1    2    3    4    5    6    7
+           │    │    │    │    │    │    │
+           └─↔─┘    └─↔─┘    └─↔─┘    │
+                                     (odd)
+
+After:     2    1    4    3    6    5    7
+
+
+--------------------------------- SUMMARY TABLE ---------------------------------
+
+Step    prev    cur     Action                      List State
+----    ----    ---     ------                      ----------
+Init    1       3       Swap first pair (2->1)      2->1  3->4->5->6->7
+Iter1   3       5       Swap (4->3), link 1->4      2->1->4->3  5->6->7
+Iter2   5       7       Swap (6->5), link 3->6      2->1->4->3->6->5  7
+Exit    5       7       prev.next = 7               2->1->4->3->6->5->7
+
+
+--------------------------------- KEY POINTS ---------------------------------
+
+✓ Swaps NODES (not data) - changes pointers
+✓ Handles first pair separately to set new head
+✓ Uses prev to link consecutive swapped pairs
+✓ Handles odd-length lists gracefully
+✓ O(n) time - single pass
+✓ O(1) space - only 3 pointers used
+
+Time: O(n)  |  Space: O(1)
+
+STATUS: Your code is CORRECT and optimal! ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Pairwise Swap of Nodes in Linked List
+Given the head of a singly linked list containing positive integers, swap every two adjacent nodes and return the modified head.
+
+Examples:
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Output: 2 -> 1 -> 4 -> 3 -> 6 -> 5 -> 7
+
+Input:  10 -> 20 -> 30 -> 40
+Output: 20 -> 10 -> 40 -> 30
+
+Input:  5
+Output: 5 (no change)
+
+Constraints:
+- 1 ≤ number of nodes ≤ 10⁵
+- 1 ≤ node values ≤ 10⁵
+
+Time Complexity: O(n)
+Space Complexity: O(1)
