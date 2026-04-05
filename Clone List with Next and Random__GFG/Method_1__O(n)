@@ -1,0 +1,209 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node next;
+    Node random;
+
+    Node(int x) {
+        data = x;
+        next = null;
+        random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node cloneLinkedList(Node head) {
+        
+        if (head == null) { return null; }                    // Edge case: empty list
+        
+        HashMap<Node, Node> map = new HashMap<>();            // Map: original -> clone
+        Node curr = head;
+        
+        // Step 1: Create all new nodes and store in map
+        while (curr != null) {
+            map.put(curr, new Node(curr.data));               // Clone node with same data
+            curr = curr.next;
+        }
+        
+        // Step 2: Connect next and random pointers of cloned nodes
+        curr = head;
+        while (curr != null) {
+            Node clone = map.get(curr);                       // Get cloned node
+            clone.next = map.get(curr.next);                  // Set next pointer
+            clone.random = map.get(curr.random);              // Set random pointer
+            curr = curr.next;
+        }
+        
+        return map.get(head);                                 // Return head of cloned list
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input:  head = [[1, 3], [3, 3], [5, NULL], [9, 3]]
+
+Visual Structure:
+Node1(1) -> Node2(3) -> Node3(5) -> Node4(9) -> null
+   |          |          |          |
+   v          v          v          v
+ Node3(5)   Node3(5)    null      Node3(5)
+
+Output: Cloned list with same structure (new nodes)
+
+
+--------------------------------- STEP 1: CREATE CLONES ---------------------------------
+
+Traverse original list and create clones:
+
+Original:  Node1(1) -> Node2(3) -> Node3(5) -> Node4(9)
+
+map = {
+    Node1 -> Clone1(1),
+    Node2 -> Clone2(3),
+    Node3 -> Clone3(5),
+    Node4 -> Clone4(9)
+}
+
+At this point: All clones created, but next/random = null
+
+
+--------------------------------- STEP 2: CONNECT POINTERS ---------------------------------
+
+Iteration 1: curr = Node1
+
+clone = Clone1
+clone.next = map.get(Node1.next) = map.get(Node2) = Clone2
+clone.random = map.get(Node1.random) = map.get(Node3) = Clone3
+
+Clone1: next=Clone2, random=Clone3
+
+
+Iteration 2: curr = Node2
+
+clone = Clone2
+clone.next = map.get(Node2.next) = map.get(Node3) = Clone3
+clone.random = map.get(Node2.random) = map.get(Node3) = Clone3
+
+Clone2: next=Clone3, random=Clone3
+
+
+Iteration 3: curr = Node3
+
+clone = Clone3
+clone.next = map.get(Node3.next) = map.get(Node4) = Clone4
+clone.random = map.get(Node3.random) = map.get(null) = null
+
+Clone3: next=Clone4, random=null
+
+
+Iteration 4: curr = Node4
+
+clone = Clone4
+clone.next = map.get(Node4.next) = map.get(null) = null
+clone.random = map.get(Node4.random) = map.get(Node3) = Clone3
+
+Clone4: next=null, random=Clone3
+
+
+--------------------------------- FINAL CLONED LIST ---------------------------------
+
+Clone1(1) -> Clone2(3) -> Clone3(5) -> Clone4(9) -> null
+    |           |           |           |
+    v           v           v           v
+ Clone3(5)    Clone3(5)    null       Clone3(5)
+
+Output: [[1, 3], [3, 3], [5, NULL], [9, 3]] ✓
+
+
+--------------------------------- VISUAL DIAGRAM ---------------------------------
+
+Original List:
+┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐
+│ Node1   │ -> │ Node2   │ -> │ Node3   │ -> │ Node4   │ -> null
+│ data=1  │    │ data=3  │    │ data=5  │    │ data=9  │
+│ random──┼───>│         │    │         │    │         │
+└────┬────┘    └────┬────┘    └────┬────┘    └────┬────┘
+     │              │              │              │
+     │              │              │              │
+     └──────────────┴──────────────┼──────────────┘
+                                   │
+                                   v
+                                ┌─────────┐
+                                │ Node3   │
+                                │ data=5  │
+                                └─────────┘
+
+
+Cloned List (NEW nodes, same structure):
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│ Clone1   │ -> │ Clone2   │ -> │ Clone3   │ -> │ Clone4   │ -> null
+│ data=1   │    │ data=3   │    │ data=5   │    │ data=9   │
+│ random───┼───>│          │    │          │    │          │
+└─────┬────┘    └─────┬────┘    └─────┬────┘    └─────┬────┘
+      │               │               │               │
+      │               │               │               │
+      └───────────────┴───────────────┼───────────────┘
+                                      │
+                                      v
+                                   ┌──────────┐
+                                   │ Clone3   │
+                                   │ data=5   │
+                                   └──────────┘
+
+
+--------------------------------- SUMMARY TABLE ---------------------------------
+
+Step    curr      clone     clone.next      clone.random
+----    ----      -----     ----------      ------------
+1       Node1     Clone1    Clone2          Clone3
+2       Node2     Clone2    Clone3          Clone3
+3       Node3     Clone3    Clone4          null
+4       Node4     Clone4    null            Clone3
+
+
+--------------------------------- KEY POINTS ---------------------------------
+
+✓ Uses HashMap to map original nodes to clones
+✓ Two passes: (1) Create clones, (2) Connect pointers
+✓ Handles null random pointers correctly (map.get(null) = null)
+✓ Original list remains unchanged
+✓ All pointers in clone point to NEW nodes (not original)
+✓ O(n) time - two passes through list
+✓ O(n) space - HashMap stores n entries
+
+Time: O(n)  |  Space: O(n)
+
+STATUS: Your code is CORRECT! ✅
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Clone List with Next and Random
+
+Problem Statement:
+You are given a special linked list with n nodes where each node has two pointers:
+- next: points to the next node
+- random: points to any random node in the list (or null)
+
+Task: Construct a deep copy (clone) of this linked list. The copy should:
+- Have the same number of new nodes
+- Each new node has the same value as its original
+- Both next and random pointers point to NEW nodes (not original)
+- Original list must remain unchanged
+
+Examples:
+
+Example 1:
+Input:  [[1, 3], [3, 3], [5, NULL], [9, 3]]
+Output: [[1, 3], [3, 3], [5, NULL], [9, 3]]
+
+Example 2:
+Input:  [[1, 3], [2, 1], [3, 5], [4, 3], [5, 2]]
+Output: [[1, 3], [2, 1], [3, 5], [4, 3], [5, 2]]
+
+Constraints:
+- 1 ≤ n ≤ 100
+- 0 ≤ node->data ≤ 1000
