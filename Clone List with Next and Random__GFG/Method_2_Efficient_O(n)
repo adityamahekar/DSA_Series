@@ -18,16 +18,18 @@ class Solution {
     public Node cloneLinkedList(Node head) {
 
         if (head == null) { return null; }                    // Edge case: empty list
-        
+
+        Node curr = head;
+
         // Step 1: Insert clone nodes between original nodes
-        for (Node curr = head; curr != null; curr = curr.next.next) {
+       while(curr != null){{
             Node next = curr.next;
             curr.next = new Node(curr.data);                  // Create clone
             curr.next.next = next;                            // Link to rest
         }
         
         // Step 2: Set random pointers of clone nodes
-        for (Node curr = head; curr != null; curr = curr.next.next) {
+        for (curr = head; curr != null; curr = curr.next.next) {
             curr.next.random = (curr.random != null) ? curr.random.next : null;
         }
         
@@ -35,7 +37,7 @@ class Solution {
         Node head2 = head.next;                               // Head of cloned list
         Node clone = head2;
         
-        for (Node curr = head; curr != null; curr = curr.next) {
+        for (curr = head; curr != null; curr = curr.next) {
             curr.next = curr.next.next;                       // Restore original
             clone.next = (clone.next != null) ? clone.next.next : null;  // Link clones
             clone = clone.next;
