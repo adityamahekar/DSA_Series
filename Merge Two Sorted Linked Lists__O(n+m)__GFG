@@ -1,0 +1,219 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node
+{
+    int data;
+    Node next;
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    Node sortedMerge(Node head1, Node head2) {
+
+        Node head = null, tail = null;
+        
+        if (head1 == null) { return head2; }                // Edge case: list1 empty
+        if (head2 == null) { return head1; }                // Edge case: list2 empty
+        
+        // Initialize head and tail with smaller first node
+        if (head1.data <= head2.data) {
+            head = tail = head1;                            // Pick head1 as start
+            head1 = head1.next;                             // Move head1 forward
+        } else {
+            head = tail = head2;                            // Pick head2 as start
+            head2 = head2.next;                             // Move head2 forward
+        }
+        
+        // Merge remaining nodes by comparing values
+        while (head1 != null && head2 != null) {
+            if (head1.data <= head2.data) {
+                tail.next = head1;                          // Attach smaller node (head1)
+                tail = head1;                               // Update tail
+                head1 = head1.next;                         // Move head1 forward
+            } else {
+                tail.next = head2;                          // Attach smaller node (head2)
+                tail = head2;                               // Update tail
+                head2 = head2.next;                         // Move head2 forward
+            }
+        }
+        
+        // Attach remaining nodes from non-empty list
+        if (head1 != null) { tail.next = head1; }           // List1 has remaining nodes
+        if (head2 != null) { tail.next = head2; }           // List2 has remaining nodes
+        
+        return head;                                        // Return merged list head
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input:  
+List1: 5 -> 10 -> 15 -> 40
+List2: 2 -> 3 -> 20
+
+Output: 2 -> 3 -> 5 -> 10 -> 15 -> 20 -> 40
+
+
+--------------------------------- STEP 1: INITIAL CHECK ---------------------------------
+
+head1 = 5, head2 = 2 (both non-null)
+
+Compare: 5 <= 2? NO
+
+Initialize with head2:
+head = tail = 2
+head2 = 3
+
+List: 2 -> ?
+      ^
+   head,tail
+
+
+--------------------------------- ITERATION 1: head1=5, head2=3 ---------------------------------
+
+Compare: 5 <= 3? NO
+
+tail.next = 3
+tail = 3
+head2 = 20
+
+List: 2 -> 3 -> ?
+           ^
+         tail
+
+
+--------------------------------- ITERATION 2: head1=5, head2=20 ---------------------------------
+
+Compare: 5 <= 20? YES
+
+tail.next = 5
+tail = 5
+head1 = 10
+
+List: 2 -> 3 -> 5 -> ?
+                ^
+              tail
+
+
+--------------------------------- ITERATION 3: head1=10, head2=20 ---------------------------------
+
+Compare: 10 <= 20? YES
+
+tail.next = 10
+tail = 10
+head1 = 15
+
+List: 2 -> 3 -> 5 -> 10 -> ?
+                     ^
+                   tail
+
+
+--------------------------------- ITERATION 4: head1=15, head2=20 ---------------------------------
+
+Compare: 15 <= 20? YES
+
+tail.next = 15
+tail = 15
+head1 = 40
+
+List: 2 -> 3 -> 5 -> 10 -> 15 -> ?
+                          ^
+                        tail
+
+
+--------------------------------- ITERATION 5: head1=40, head2=20 ---------------------------------
+
+Compare: 40 <= 20? NO
+
+tail.next = 20
+tail = 20
+head2 = null
+
+List: 2 -> 3 -> 5 -> 10 -> 15 -> 20 -> ?
+                               ^
+                             tail
+
+
+--------------------------------- STEP 2: EXIT LOOP ---------------------------------
+
+head2 = null → Exit while loop
+
+
+--------------------------------- STEP 3: ATTACH REMAINING ---------------------------------
+
+head1 = 40 (not null)
+tail.next = 40
+
+Final List: 2 -> 3 -> 5 -> 10 -> 15 -> 20 -> 40 -> null ✓
+
+
+--------------------------------- VISUAL DIAGRAM ---------------------------------
+
+List1:     5    10    15    40
+           │     │     │     │
+List2:     2     3     20
+           │     │     │     │
+           └─┬─┬─┴─┬─┬─┴─┬─┬─┘
+             │ │   │ │   │ │
+Merged:      2 3   5 10  15 20 40
+
+
+--------------------------------- SUMMARY TABLE ---------------------------------
+
+Step    head1    head2    Compare      Action              tail
+----    -----    -----    -------      ------              ----
+Init    5        2        5>2          head=2, tail=2      2
+1       5        3        5>3          tail.next=3         3
+2       5        20       5≤20         tail.next=5         5
+3       10       20       10≤20        tail.next=10        10
+4       15       20       15≤20        tail.next=15        15
+5       40       20       40>20        tail.next=20        20
+Exit    40       null     -            tail.next=40        40
+
+
+--------------------------------- KEY POINTS ---------------------------------
+
+✓ In-place merge (reuses existing nodes, no new allocation)
+✓ Maintains sorted order by always picking smaller node
+✓ Handles unequal length lists (attaches remaining)
+✓ Handles empty lists (edge cases at start)
+✓ O(m + n) time - single pass through both lists
+✓ O(1) space - only pointers used
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Merge Two Sorted Linked Lists
+
+Given the heads of two sorted linked lists, merge them into a single sorted linked list and return its head.
+
+Examples:
+
+Example 1:
+Input:  List1: 5 -> 10 -> 15 -> 40
+        List2: 2 -> 3 -> 20
+Output: 2 -> 3 -> 5 -> 10 -> 15 -> 20 -> 40
+
+Example 2:
+Input:  List1: 1 -> 4
+        List2: 1 -> 2
+Output: 1 -> 1 -> 2 -> 4
+
+Constraints:
+- 1 ≤ list1.size, list2.size ≤ 10³
+- 0 ≤ node->data ≤ 10⁵
+
+Difficulty: Medium | Accuracy: 62.91% | Points: 4
+
+Approach: Two-Pointer Merge
+- Compare heads of both lists
+- Attach smaller node to result
+- Move pointer of chosen list forward
+- Attach remaining nodes when one list exhausts
+
+Time: O(m + n) | Space: O(1)
