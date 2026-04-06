@@ -42,9 +42,9 @@ class Solution {
             }
         }
         
-        // Attach remaining nodes from non-empty list
-        if (head1 != null) { tail.next = head1; }           // List1 has remaining nodes
-        if (head2 != null) { tail.next = head2; }           // List2 has remaining nodes
+                                                            // Attach remaining nodes from non-empty list
+        if (head1 == null) { tail.next = head2; }           // List1 has remaining nodes
+        else { tail.next = head1; }                         // List2 has remaining nodes
         
         return head;                                        // Return merged list head
     }
