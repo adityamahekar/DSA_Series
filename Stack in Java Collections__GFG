@@ -1,0 +1,27 @@
+L1: Collection (Single Root)
+    │
+    ├─ L2: List ── L3: Vector ── L4: Stack
+    │
+    └─ L2: Queue ─ L3: Deque ── L4: ArrayDeque
+
+
+
+
+///////////////////////// Code ///////////////////////////////
+
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+
+        // ArrayDeque<Integer> s = new ArrayDeque<>();       <OR>         //   Stack<Integer> s = new Stack<>();
+
+        s.push(10);     // Add 10
+        s.push(20);     // Add 20
+        s.push(30);     // Add 30
+
+        System.out.println(s.pop());     // 30
+        System.out.println(s.peek());    // 20
+
+    }
+}
