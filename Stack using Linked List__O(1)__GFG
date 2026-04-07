@@ -1,0 +1,277 @@
+//////////////////////// CODE ////////////////////////////////
+
+                                                            // Node class
+/* class Node {
+    int data;
+    Node next;
+
+    Node(int new_data) {
+        data = new_data;
+        next = null;
+    }
+} */
+
+                                                            // Stack class
+class myStack {
+
+    Node head;                                              // Head points to top of stack
+    int count;                                              // Track size for O(1) access
+
+    public myStack() {
+                                                            // Initialize your data members
+        head = null;                                        // Empty stack
+        count = 0;                                          // Zero elements
+    }
+
+    public boolean isEmpty() {
+                                                            // Check if the stack is empty
+        return (head == null);                              // True if no nodes
+    }
+
+    public void push(int x) {
+                                                            // Insert x at the top of the stack
+        Node temp = new Node(x);                            // Create new node
+        temp.next = head;                                   // Link new node to current head
+        head = temp;                                        // Update head to new node
+        count++;                                            // Increment size
+    }
+
+    public void pop() {
+                                                              // Remove the top element from the stack
+        if (head == null) { return; }                       // Underflow check
+        
+        head = head.next;                                   // Move head to next node
+        count--;                                            // Decrement size
+    }
+
+    public int peek() {
+                                                            // Return the top element of the stack
+        if (head == null) {                                 // Empty check
+            return -1;                                      // Return -1 if empty
+        }
+        
+        return head.data;                                   // Return data at head
+    }
+
+    public int size() {
+                                                            // Return the current size of the stack
+        return count;                                       // O(1) return
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: q = 7, queries = [[1, 5], [1, 3], [1, 4], [3], [2], [5], [4]]
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+head = null
+count = 0
+
+Stack: []
+
+
+--------------------------------- QUERY 1: [1, 5] → push(5) ---------------------------------
+
+temp = new Node(5)
+temp.next = null
+head = temp
+count = 1
+
+Stack: 5 → null
+       ↑
+     head
+
+
+--------------------------------- QUERY 2: [1, 3] → push(3) ---------------------------------
+
+temp = new Node(3)
+temp.next = head (5)
+head = temp
+count = 2
+
+Stack: 3 → 5 → null
+       ↑
+     head
+
+
+--------------------------------- QUERY 3: [1, 4] → push(4) ---------------------------------
+
+temp = new Node(4)
+temp.next = head (3)
+head = temp
+count = 3
+
+Stack: 4 → 3 → 5 → null
+       ↑
+     head
+
+
+--------------------------------- QUERY 4: [3] → peek() ---------------------------------
+
+Check: head == null? NO
+Return: head.data = 4  ✓ (Output: 4)
+
+Stack unchanged: 4 → 3 → 5 → null
+
+
+--------------------------------- QUERY 5: [2] → pop() ---------------------------------
+
+Check: head == null? NO
+head = head.next (3)
+count = 2
+
+Stack: 3 → 5 → null
+       ↑
+     head
+
+
+--------------------------------- QUERY 6: [5] → size() ---------------------------------
+
+Return: count = 2  ✓ (Output: 2)
+
+
+--------------------------------- QUERY 7: [4] → isEmpty() ---------------------------------
+
+Check: head == null? NO
+Return: false  ✓ (Output: false)
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: [4, 2, false]  ✓
+
+
+================================================================================
+
+
+Example 2: q = 4, queries = [[4], [3], [1, 10], [5]]
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+head = null
+count = 0
+
+Stack: []
+
+
+--------------------------------- QUERY 1: [4] → isEmpty() ---------------------------------
+
+Check: head == null? YES
+Return: true  ✓ (Output: true)
+
+
+--------------------------------- QUERY 2: [3] → peek() ---------------------------------
+
+Check: head == null? YES
+Return: -1  ✓ (Output: -1)
+
+
+--------------------------------- QUERY 3: [1, 10] → push(10) ---------------------------------
+
+temp = new Node(10)
+temp.next = null
+head = temp
+count = 1
+
+Stack: 10 → null
+       ↑
+     head
+
+
+--------------------------------- QUERY 4: [5] → size() ---------------------------------
+
+Return: count = 1  ✓ (Output: 1)
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: [true, -1, 1]  ✓
+
+
+--------------------------------- VISUAL STATE TRACKING ---------------------------------
+
+Query      Operation    Stack (Top→Bottom)    count    Output
+-----      ---------    ------------------    -----    ------
+Init       -            []                    0        -
+push(5)    Insert 5     [5]                   1        -
+push(3)    Insert 3     [3, 5]                2        -
+push(4)    Insert 4     [4, 3, 5]             3        -
+peek()     Return top   [4, 3, 5]             3        4
+pop()      Remove top   [3, 5]                2        -
+size()     Return size  [3, 5]                2        2
+isEmpty()  Check empty  [3, 5]                2        false
+
+
+--------------------------------- KEY IMPROVEMENTS (vs your original) ---------------------------------
+
+✓ Added 'count' variable → size() is now O(1) instead of O(n)
+✓ Added underflow check in pop() → Prevents NullPointerException
+✓ Simplified isEmpty() → Direct boolean return
+✓ Consistent null checks → Safer code
+
+Time Complexity Comparison:
+| Operation | Your Original | Optimized |
+|-----------|---------------|-----------|
+| push()    | O(1)          | O(1)      |
+| pop()     | O(1)*         | O(1)      |
+| peek()    | O(1)          | O(1)      |
+| isEmpty() | O(1)          | O(1)      |
+| size()    | O(n)          | O(1) ✓    |
+
+*Your pop() would crash on empty stack
+
+
+--------------------------------- SUMMARY TABLE ---------------------------------
+
+Operation    Logic                              Time    Space
+---------    -----                              ----    -----
+push(x)      Create node, link to head, update  O(1)    O(1)
+pop()        Move head to next, decrement count O(1)    O(1)
+peek()       Return head.data                   O(1)    O(1)
+isEmpty()    Check head == null                 O(1)    O(1)
+size()       Return count variable              O(1)    O(1)
+
+Total Space: O(n) for n nodes in linked list
+
+
+--------------------------------- KEY POINTS ---------------------------------
+
+✓ Head = Top of stack (LIFO order)
+✓ Push at head = O(1) insertion
+✓ Pop from head = O(1) removal
+✓ No fixed capacity (grows until memory full)
+✓ Count variable makes size() O(1)
+✓ Always check null before dereferencing head
+✓ Dynamic memory allocation (no array bounds)
+
+Time: O(1) per operation | Space: O(n) for n elements
+
+//////////////////////// QUESTION ////////////////////////////
+
+Stack using Linked List
+
+Implement a Stack using a Linked List, this stack has no fixed capacity and can grow dynamically until memory is available.
+1. push(x) - Insert x at top
+2. pop() - Remove top (ignore if empty)
+3. peek() - Return top or -1 if empty
+4. isEmpty() - Return true if empty
+5. size() - Return current element count
+
+Input: q (queries), queries[][]
+- [1, x] → push(x)
+- [2] → pop()
+- [3] → peek()
+- [4] → isEmpty()
+- [5] → size()
+
+Constraints:
+- 1 ≤ q ≤ 10³
+- 0 ≤ x ≤ 10⁵
+
+Your Approach: Singly linked list with head as top
+- Insert/remove at head for O(1) operations
+- Traverse for size() (or use counter for O(1))
+
+Time: O(1) per op (with counter) | Space: O(n)
+
