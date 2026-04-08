@@ -1,0 +1,351 @@
+//////////////////////// CODE ////////////////////////////////
+
+class twoStacks {
+    
+    int top1;                                               // Top index for stack1 (grows from left)
+    int top2;                                               // Top index for stack2 (grows from right)
+    int size;                                               // Total capacity of array
+    int arr[];                                              // Single array for both stacks
+    
+    twoStacks() {
+        size = 200;                                         // Default capacity
+        
+        arr = new int[size];                                // Allocate single array
+        top1 = -1;                                          // Stack1 starts from left (empty)
+        top2 = size;                                        // Stack2 starts from right (empty)
+    }
+
+                                                            // Function to push an integer into stack1
+    void push1(int x) {
+        top1++;                                             // Increment top1 (move right)
+        arr[top1] = x;                                      // Store x at new top1
+    }
+
+                                                            // Function to push an integer into stack2
+    void push2(int x) {
+        top2--;                                             // Decrement top2 (move left)
+        arr[top2] = x;                                      // Store x at new top2
+    }
+
+                                                            // Function to remove an element from stack1
+    int pop1() {
+        if (top1 == -1) {                                   // Check underflow
+            return -1;                                      // Stack1 empty
+        }
+        int val = arr[top1];                                // Get top value
+        top1--;                                             // Decrement top1
+        return val;                                         // Return popped value
+    }
+
+                                                            // Function to remove an element from stack2
+    int pop2() {
+        if (top2 == size) {                                 // Check underflow
+            return -1;                                      // Stack2 empty
+        }
+        int val = arr[top2];                                // Get top value
+        top2++;                                             // Increment top2
+        return val;                                         // Return popped value
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: push1(2), push1(3), push2(4), pop1(), pop2(), pop2()
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+size = 200
+arr = [_, _, _, ..., _, _]  (200 slots, all empty)
+top1 = -1
+top2 = 200
+
+Stack1: []  (grows from left: index 0, 1, 2...)
+Stack2: []  (grows from right: index 199, 198, 197...)
+
+
+--------------------------------- OPERATION 1: push1(2) ---------------------------------
+
+Check: top1+1 (0) < top2 (200)? YES
+top1 = 0
+arr[0] = 2
+
+Array: [2, _, _, ..., _]
+       ↑
+     top1=0
+
+Stack1:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+Stack2: []
+
+
+--------------------------------- OPERATION 2: push1(3) ---------------------------------
+
+Check: top1+1 (1) < top2 (200)? YES
+top1 = 1
+arr [geeksforgeeks](https://www.geeksforgeeks.org/dsa/implement-two-stacks-in-an-array/) = 3
+
+Array: [2, 3, _, ..., _]
+          ↑
+        top1=1
+
+Stack1: [2, 3]
+Stack2: []
+
+
+--------------------------------- OPERATION 3: push2(4) ---------------------------------
+
+Check: top1+1 (2) < top2 (200)? YES
+top2 = 199
+arr[199] = 4
+
+Array: [2, 3, _, ..., _, 4]
+          ↑              ↑
+        top1=1        top2=199
+
+Stack1: [2, 3]
+Stack2:  [stackoverflow](https://stackoverflow.com/questions/30445411/implement-two-stack-in-one-array)
+
+
+--------------------------------- OPERATION 4: pop1() ---------------------------------
+
+Check: top1 == -1? NO
+val = arr [geeksforgeeks](https://www.geeksforgeeks.org/dsa/implement-two-stacks-in-an-array/) = 3
+top1 = 0
+
+Return: 3  ✓ (Output: 3)
+
+Array: [2, _, _, ..., _, 4]
+       ↑              ↑
+     top1=0        top2=199
+
+Stack1:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+Stack2:  [stackoverflow](https://stackoverflow.com/questions/30445411/implement-two-stack-in-one-array)
+
+
+--------------------------------- OPERATION 5: pop2() ---------------------------------
+
+Check: top2 == 200? NO
+val = arr[199] = 4
+top2 = 200
+
+Return: 4  ✓ (Output: 4)
+
+Array: [2, _, _, ..., _, _]
+       ↑
+     top1=0
+
+Stack1:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+Stack2: []
+
+
+--------------------------------- OPERATION 6: pop2() ---------------------------------
+
+Check: top2 == 200? YES
+Return: -1  ✓ (Output: -1)
+
+Stack1:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+Stack2: []
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: [3, 4, -1]  ✓
+
+
+================================================================================
+
+
+Example 2: push1(1), push2(2), pop1(), push1(3), pop1(), pop1()
+
+--------------------------------- STEP-BY-STEP ---------------------------------
+
+push1(1):
+  top1 = 0, arr[0] = 1
+  Stack1:  [geeksforgeeks](https://www.geeksforgeeks.org/dsa/implement-two-stacks-in-an-array/), Stack2: []
+
+push2(2):
+  top2 = 199, arr[199] = 2
+  Stack1:  [geeksforgeeks](https://www.geeksforgeeks.org/dsa/implement-two-stacks-in-an-array/), Stack2:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+
+pop1():
+  val = arr[0] = 1, top1 = -1
+  Return: 1  ✓
+  Stack1: [], Stack2:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+
+push1(3):
+  top1 = 0, arr[0] = 3
+  Stack1:  [en.wikipedia](https://en.wikipedia.org/wiki/Stack_overflow), Stack2:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+
+pop1():
+  val = arr[0] = 3, top1 = -1
+  Return: 3  ✓
+  Stack1: [], Stack2:  [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)
+
+pop1():
+  top1 == -1? YES
+  Return: -1  ✓
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: [1, 3, -1]  ✓
+
+
+================================================================================
+
+
+Example 3: push1(2), push1(3), push1(4), pop2(), pop2(), pop2()
+
+--------------------------------- STEP-BY-STEP ---------------------------------
+
+push1(2): top1=0, arr[0]=2
+push1(3): top1=1, arr [geeksforgeeks](https://www.geeksforgeeks.org/dsa/implement-two-stacks-in-an-array/)=3
+push1(4): top1=2, arr [knowdigy.blogspot](https://knowdigy.blogspot.com/2025/08/implement-two-stacks-in-single-array.html)=4
+
+Stack1: [2, 3, 4], Stack2: []
+
+pop2(): top2 == 200? YES → Return: -1
+pop2(): top2 == 200? YES → Return: -1
+pop2(): top2 == 200? YES → Return: -1
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: [-1, -1, -1]  ✓
+
+
+--------------------------------- VISUAL STATE TRACKING ---------------------------------
+
+Operation    top1    top2    Array State (simplified)
+---------    ----    ----    ------------------------
+Init         -1      200     [_, _, ..., _]
+push1(2)     0       200     [2, _, ..., _]
+push1(3)     1       200     [2, 3, ..., _]
+push2(4)     1       199     [2, 3, ..., 4]
+pop1()       0       199     [2, _, ..., 4]  → Return 3
+pop2()       0       200     [2, _, ..., _]  → Return 4
+pop2()       0       200     []              → Return -1
+
+
+--------------------------------- OVERFLOW CHECK VISUAL ---------------------------------
+
+When do stacks overflow?
+
+Array: [s1, s1, s1, ?, ?, s2, s2, s2]
+                  ↑  ↑
+                top1 top2
+
+Condition: top1 + 1 < top2  → Space available
+Condition: top1 + 1 == top2 → FULL (no space)
+
+Example (size=8):
+top1=2, top2=5 → 2+1 < 5? YES → Can push
+top1=3, top2=4 → 3+1 < 4? NO → Overflow
+
+
+--------------------------------- SUMMARY TABLE ---------------------------------
+
+Operation    Condition              Action                      Time
+---------    ---------              ------                      ----
+push1(x)     top1+1 < top2          top1++, arr[top1]=x         O(1)
+             Else                   Ignore (overflow)
+push2(x)     top1+1 < top2          top2--, arr[top2]=x         O(1)
+             Else                   Ignore (overflow)
+pop1()       top1 == -1             Return -1                   O(1)
+             Else                   val=arr[top1], top1--
+pop2()       top2 == size           Return -1                   O(1)
+             Else                   val=arr[top2], top2++
+
+
+--------------------------------- KEY POINTS ---------------------------------
+
+✓ Stack1 grows from left (index 0 → size-1)
+✓ Stack2 grows from right (index size-1 → 0)
+✓ Overflow when top1 + 1 == top2 (stacks meet)
+✓ Underflow: top1 == -1 (stack1 empty), top2 == size (stack2 empty)
+✓ Both stacks share single array efficiently
+✓ No wasted space until array is completely full
+✓ All operations O(1) time, O(n) space for single array
+
+Time: O(1) per operation | Space: O(n) for single array
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Two Stacks in an Array
+You are given an array of a fixed size. Your task is to efficiently implement two stacks in this single array.
+
+Operations:
+1. push1(x) - Push x to stack1 (from left)
+2. push2(x) - Push x to stack2 (from right)
+3. pop1() - Pop from stack1, return -1 if empty
+4. pop2() - Pop from stack2, return -1 if empty
+5. twoStacks - Initialize the data structures and variables to be used to implement  2 stacks in one array.
+
+Examples:
+----------------------------------------------------------------
+
+Input:
+      push1(2)
+      push1(3)
+      push2(4)
+      pop1()
+      pop2()
+      pop2()
+Output: [3, 4, -1]
+Explanation: 
+            push1(2): the stack1 will be [2]
+            push1(3): the stack1 will be [2,3]
+            push2(4): the stack2 will be [4]
+            pop1(): the poped element will be 3 from stack1 and stack1 will be {2}
+            pop2(): the poped element will be 4 from stack2 and now stack2 is empty
+            pop2(): the stack2 is now empty hence returned -1.
+
+----------------------------------------------------------------
+
+Input:
+        push1(1)
+        push2(2)
+        pop1()
+        push1(3)
+        pop1()
+        pop1()
+Output: [1, 3, -1]
+Explanation:
+            push1(1): the stack1 will be [1]
+            push2(2): the stack2 will be [2]
+            pop1(): the poped element will be 1 from stack1 and stack1 will be empty
+            push1(3): the stack1 will be [3]
+            pop1(): the poped element will be 3 from stack1 and stack1 will be empty
+            pop1(): the stack1 is now empty hence returned -1.
+
+----------------------------------------------------------------
+
+Input:
+        push1(2)
+        push1(3)
+        push1(4)
+        pop2()
+        pop2()
+        pop2()
+Output: [-1, -1, -1]
+Explanation:
+              push1(2): the stack1 will be [2]
+              push1(3): the stack1 will be [2,3]
+              push1(4): the stack1 will be [2,3,4]
+              pop2(): the stack2 is empty hence returned -1.
+              pop2(): the stack2 is empty hence returned -1.
+              pop2(): the stack2 is empty hence returned -1.
+
+----------------------------------------------------------------
+
+Constraints:
+- Sum of elements in both stacks < array size
+- 1 ≤ queries ≤ 10⁴
+
+
+Your Approach: Two-pointer technique
+- top1 starts at -1 (grows right)
+- top2 starts at size (grows left)
+- Overflow when top1 + 1 == top2
+
+Time: O(1) per operation | Space: O(n)
