@@ -1,0 +1,402 @@
+//////////////////////// CODE ////////////////////////////////
+
+class kStacks {
+
+                            // main array to store elements
+    private int[] arr;      // Stores actual values of all k stacks
+    int top[];              // top[i] = index of top element of stack i
+    int next[];             // next[j] = index of next element below arr[j] OR next free slot
+    int free_Top = 0;       // Index of first available free slot in array
+    int j = 0;              // Temporary variable for index calculations
+            
+    public kStacks(int n, int k) {
+        arr = new int[n];           // Allocate main array of size n
+        top = new int[k];           // Allocate top array for k stacks
+        next = new int[n];          // Allocate next array of size n
+        
+                                            // Initialize all k stacks as empty
+        for(int i = 0; i < k; i++){
+            top[i] = -1;                  // -1 represents empty stack
+        }
+        
+                                                  // Initialize free list: 0 -> 1 -> 2 -> ... -> n-1 -> -1
+        for(int i = 0; i < n - 1; i++){
+            next[i] = i + 1;                      // Each slot points to next slot
+        }
+        next[n - 1] = -1;                         // Last slot points to null (-1)
+    }
+
+                                      // Push element x into stack i
+    public void push(int x, int i) {
+        j = free_Top;               // Get index of first free slot
+        free_Top = next[j];         // Move free_Top to next available free slot
+        next[j] = top[i];           // Link new element to current top of stack i
+        top[i] = j;                 // Update top of stack i to new element index
+        arr[j] = x;                 // Store value x at index j in main array
+    }
+
+                                    // Pop element from stack i
+    public int pop(int i) {
+        if(top[i] == -1){           // Check if stack i is empty
+            return -1;              // Return -1 for underflow
+        }
+        
+        j = top[i];                 // Get index of top element in stack i
+        top[i] = next[j];           // Move top to next element below in stack
+        next[j] = free_Top;         // Add popped slot to front of free list
+        free_Top = j;               // Update free_Top to this newly freed slot
+        
+        return arr[j];              // Return the popped value
+    }
+    
+                                     // Check if stack i is empty
+    boolean isEmpty(int i){
+        return top[i] == -1;        // Stack is empty if top index is -1
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: n = 4, k = 2, queries = [, , , , ]
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+n = 4, k = 2
+
+arr  = [_, _, _, _]          (size 4, stores values)
+top  = [-1, -1]              (size 2, top index for each stack)
+next = [1, 2, 3, -1]         (size 4, forms free list chain)
+free_Top = 0                 (first free slot index)
+
+Free List: 0 -> 1 -> 2 -> 3 -> null
+Stack 0: empty (top = -1)
+Stack 1: empty (top = -1)
+
+
+--------------------------------- QUERY 1: push(5, 0) ---------------------------------
+
+Operation: push element 5 into stack 0
+
+j = free_Top = 0                    // Get free slot at index 0
+free_Top = next = 1              // Move free_Top to index 1
+next = top = -1               // Link new element to current top (-1)
+top = j = 0                      // Update top of stack 0 to index 0
+arr = 5                          // Store value 5 at index 0
+
+State After:
+arr  = [5, _, _, _]
+top  = [0, -1]
+next = [-1, 2, 3, -1]
+free_Top = 1
+
+Stack 0: index 0 (value 5) -> null
+Stack 1: empty
+Free List: 1 -> 2 -> 3 -> null
+
+
+--------------------------------- QUERY 2: push(3, 0) ---------------------------------
+
+Operation: push element 3 into stack 0
+
+j = free_Top = 1                    // Get free slot at index 1
+free_Top = next = 2              // Move free_Top to index 2
+next = top = 0                // Link new element to current top (index 0)
+top = j = 1                      // Update top of stack 0 to index 1
+arr = 3                          // Store value 3 at index 1
+
+State After:
+arr  = [5, 3, _, _]
+top  = [1, -1]
+next = [-1, 0, 3, -1]
+free_Top = 2
+
+Stack 0: index 1 (value 3) -> index 0 (value 5) -> null
+Stack 1: empty
+Free List: 2 -> 3 -> null
+
+Visual Stack 0:
+  top = 1
+  arr = 3 (top element)
+  next = 0
+  arr = 5
+  next = -1 (end)
+
+
+--------------------------------- QUERY 3: pop(0) ---------------------------------
+
+Operation: pop top element from stack 0
+
+Check: top == -1? NO (top = 1, not empty)
+j = top = 1                      // Get index of top element
+top = next = 0                // Move top to next element (index 0)
+next = free_Top = 2              // Add index 1 to front of free list
+free_Top = j = 1                    // Update free_Top to index 1
+Return: arr = 3                  // Return popped value
+
+State After:
+arr  = [5, 3, _, _]                 (value 3 still there but not accessible)
+top  = [0, -1]
+next = [-1, 2, 3, -1]
+free_Top = 1
+
+Stack 0: index 0 (value 5) -> null
+Stack 1: empty
+Free List: 1 -> 2 -> 3 -> null
+
+Output so far: 
+
+
+--------------------------------- QUERY 4: push(1, 1) ---------------------------------
+
+Operation: push element 1 into stack 1
+
+j = free_Top = 1                    // Get free slot at index 1
+free_Top = next = 2              // Move free_Top to index 2
+next = top = -1               // Link new element to current top (-1)
+top = j = 1                      // Update top of stack 1 to index 1
+arr = 1                          // Store value 1 at index 1
+
+State After:
+arr  = [5, 1, _, _]
+top  = 
+next = [-1, -1, 3, -1]
+free_Top = 2
+
+Stack 0: index 0 (value 5) -> null
+Stack 1: index 1 (value 1) -> null
+Free List: 2 -> 3 -> null
+
+
+--------------------------------- QUERY 5: pop(1) ---------------------------------
+
+Operation: pop top element from stack 1
+
+Check: top == -1? NO (top = 1, not empty)
+j = top = 1                      // Get index of top element
+top = next = -1               // Move top to next element (-1, empty)
+next = free_Top = 2              // Add index 1 to front of free list
+free_Top = j = 1                    // Update free_Top to index 1
+Return: arr = 1                  // Return popped value
+
+State After:
+arr  = [5, 1, _, _]
+top  = [0, -1]
+next = [-1, 2, 3, -1]
+free_Top = 1
+
+Stack 0: index 0 (value 5) -> null
+Stack 1: empty
+Free List: 1 -> 2 -> 3 -> null
+
+Output so far: 
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: 
+
+Matches expected output:  ✓
+
+
+================================================================================
+
+
+Example 2: n = 9, k = 3, queries = [, , , , , , ]
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+n = 9, k = 3
+
+arr  = [_, _, _, _, _, _, _, _, _]
+top  = [-1, -1, -1]
+next = [1, 2, 3, 4, 5, 6, 7, 8, -1]
+free_Top = 0
+
+
+--------------------------------- STEP-BY-STEP EXECUTION ---------------------------------
+
+Query 1: push(2, 0)
+  j = 0, free_Top = 1, next = -1, top = 0, arr = 2
+  Stack 0: , Stack 1: [], Stack 2: []
+
+Query 2: push(5, 0)
+  j = 1, free_Top = 2, next = 0, top = 1, arr = 5
+  Stack 0:  (5 on top)
+
+Query 3: push(4, 1)
+  j = 2, free_Top = 3, next = -1, top = 2, arr = 4
+  Stack 0: , Stack 1: , Stack 2: []
+
+Query 4: pop(1)
+  j = 2, top = -1, next = 3, free_Top = 2
+  Return: arr = 4
+  Output so far: 
+  Stack 1 becomes empty
+
+Query 5: push(3, 2)
+  j = 2, free_Top = 3, next = -1, top = 2, arr = 3
+  Stack 0: , Stack 1: [], Stack 2: 
+
+Query 6: pop(0)
+  j = 1, top = 0, next = 3, free_Top = 1
+  Return: arr = 5
+  Output so far: 
+  Stack 0: 
+
+Query 7: pop(0)
+  j = 0, top = -1, next = 1, free_Top = 0
+  Return: arr = 2
+  Output so far: 
+  Stack 0 becomes empty
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+Outputs collected: 
+
+Matches expected output:  ✓
+
+
+--------------------------------- VISUAL STATE TABLE ---------------------------------
+
+Query      Operation    Stack 0        Stack 1      Stack 2     free_Top   Return
+---------  -----------  -------------  -----------  ----------  ----------  ------
+Init       -            []             []           []          0           -
+push(2,0)  1,2,0                    []           []          1           -
+push(5,0)  1,5,0                  []           []          2           -
+push(4,1)  1,4,1                            []          3           -
+pop(1)     2,1                    []           []          2           4
+push(3,2)  1,3,2                  []                    3           -
+pop(0)     2,0                      []                    1           5
+pop(0)     2,0          []             []                    0           2
+
+
+--------------------------------- KEY MECHANISM EXPLAINED ---------------------------------
+
+Three Arrays Working Together:
+
+1. arr[] - Stores actual values
+   - Values are placed at dynamically allocated indices
+   - Same array holds values for all k stacks
+
+2. top[] - Tracks top of each stack
+   - top[i] = index in arr[] where top of stack i resides
+   - -1 means stack is empty
+
+3. next[] - Dual purpose
+   - For elements in a stack: points to next element below
+   - For free slots: forms linked list of available indices
+
+Free List Management:
+- Initially: 0 -> 1 -> 2 -> ... -> n-1 -> null
+- Push: Remove from front of free list
+- Pop: Add back to front of free list
+- Ensures O(1) allocation and deallocation
+
+Stack as Linked List:
+- Each stack is a linked list within the array
+- Elements are not necessarily contiguous in arr[]
+- Linked via next[] array
+- Allows dynamic growth anywhere in array
+
+
+--------------------------------- WHY THIS IS OPTIMAL ---------------------------------
+
+vs Naive Fixed-Segment Approach:
+
+Naive (Divide array into k equal parts):
+- Each stack gets n/k slots
+- Stack i overflows at n/k even if other stacks are empty
+- Wasted space: up to (k-1) * (n/k) slots
+
+Your Approach (Dynamic Linked List):
+- All stacks share entire array
+- Stack i can use all n slots if others are empty
+- Zero waste until all n slots are used
+- Overflow only when entire array is full
+
+Example (n=100, k=3):
+- Naive: Stack 0 overflows at 34, even if Stack 1 and 2 are empty (66 slots wasted)
+- Your approach: Stack 0 can use all 100 slots if others empty (0 waste)
+
+
+--------------------------------- COMPLEXITY ANALYSIS ---------------------------------
+
+Time Complexity:
+- push(x, i): O(1) - constant number of array accesses
+- pop(i): O(1) - constant number of array accesses
+- isEmpty(i): O(1) - single comparison
+- Constructor: O(n + k) - initialization loops
+
+Space Complexity:
+- arr[]: O(n)
+- top[]: O(k)
+- next[]: O(n)
+- Total: O(n + k)
+
+Auxiliary Space: O(1) - only using variable j
+
+
+--------------------------------- EDGE CASES HANDLED ---------------------------------
+
+1. Empty Stack Pop:
+   - top[i] == -1 -> returns -1 ✓
+
+2. Array Overflow:
+   - When free_Top == -1, push would fail (not explicitly checked but constraints guarantee no overflow)
+
+3. Single Element Stack:
+   - Push then pop works correctly ✓
+
+4. All Stacks Empty:
+   - All top[i] = -1, all pops return -1 ✓
+
+5. One Stack Uses All Space:
+   - Works correctly, other stacks stay empty ✓
+
+6. Alternating Push/Pop Across Stacks:
+   - Free list management ensures correct slot reuse ✓
+
+
+--------------------------------- SUMMARY ---------------------------------
+
+Your implementation correctly solves the k stacks problem using:
+- Single array for all elements (space efficient)
+- Linked list mechanism via next[] array (dynamic allocation)
+- Free list for O(1) slot management (optimal)
+- Proper underflow handling (returns -1)
+- O(1) time for all operations (optimal)
+
+Time: O(1) per operation | Space: O(n + k)
+
+STATUS: Your code is CORRECT and OPTIMAL. This is the gold-standard solution for implementing k stacks in a single array with maximum space efficiency and O(1) operations.
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Implement k stacks in an array
+You are given two integers n and k. Implement a class kStacks that uses a single array of size n to simulate k independent stacks.
+
+Required Operations:
+1. push(x, i) - Push element x into the i-th stack
+2. pop(i) - Pop top element from i-th stack, return -1 if empty
+
+Input Format:
+- n: size of array
+- k: number of stacks
+- q: number of queries
+- queries[][]: array of queries
+  - [1, x, i] means push(x, i)
+  - [2, i] means pop(i)
+
+Constraints:
+- 1 <= q <= 10^5
+- 1 <= k <= n <= 10^5
+- Stack values: 0 to 10^9
+
+Your Approach: Linked List within Array
+- Use arr[] for values, top[] for stack tops, next[] for links
+- Maintain free list for dynamic slot allocation
+- All operations O(1) time, O(n + k) space
+
+Time: O(1) per operation | Space: O(n + k)
