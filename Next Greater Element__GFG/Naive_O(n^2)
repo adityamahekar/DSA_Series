@@ -1,0 +1,183 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public ArrayList<Integer> nextLargerElement(int[] arr) {
+
+        ArrayList<Integer> list = new ArrayList<>();          // Result list to store Next Greater Element for each element
+        
+        int n = arr.length;                                 // Get array size
+        
+                                                                  // Iterate through each element in the array
+        for(int i = 0; i < n; i++){
+            int j;
+                                                                            // Search for next greater element on the right side (starting from i+1)
+            for(j = i + 1; j < n; j++){
+                if(arr[j] > arr[i]){                  // Found first element greater than current
+                    list.add(arr[j]);                 // Add it to result
+                    break;                            // Stop searching (first greater only)
+                }
+            }
+                                                      // If loop completed without finding greater element (j reached n)
+            if(j == n){
+                list.add(-1);                         // Add -1 for no next greater element
+            }
+        }
+        
+        return list;                                  // Return all Next Greater Elements
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: arr[] = 
+
+--------------------------------- INITIALIZATION ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+idx:    0   1   2   3
+
+n = 4
+list = []
+
+
+--------------------------------- i = 0 ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+idx:    0   1   2   3
+        ↑
+        i
+
+j = 1: 3 > 1? YES → Add 3, break
+
+list = 
+
+
+--------------------------------- i = 1 ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+idx:    0   1   2   3
+           ↑
+           i
+
+j = 2: 2 > 3? NO
+j = 3: 4 > 3? YES → Add 4, break
+
+list = 
+
+
+--------------------------------- i = 2 ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+idx:    0   1   2   3
+              ↑
+              i
+
+j = 3: 4 > 2? YES → Add 4, break
+
+list = 
+
+
+--------------------------------- i = 3 ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+idx:    0   1   2   3
+                 ↑
+                 i
+
+j = 4: j == n, loop doesn't run
+j == n? YES → Add -1
+
+list = [3, 4, 4, -1]
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+arr:  [ 1 | 3 | 2 | 4 ]
+NGE:  [ 3 | 4 | 4 | -1 ]
+
+list = [3, 4, 4, -1]
+
+Matches expected: [3, 4, 4, -1] ✓
+
+
+================================================================================
+
+
+Example 2: arr[] = 
+
+--------------------------------- STEP-BY-STEP ---------------------------------
+
+arr:  [ 6 | 8 | 0 | 1 | 3 ]
+idx:    0   1   2   3   4
+
+i=0: j=1, 8>6? YES → Add 8
+     list = 
+
+i=1: j=2, 8>8? NO
+     j=3, 1>8? NO
+     j=4, 3>8? NO
+     j=5==n → Add -1
+     list = [8, -1]
+
+i=2: j=3, 1>0? YES → Add 1
+     list = [8, -1, 1]
+
+i=3: j=4, 3>1? YES → Add 3
+     list = [8, -1, 1, 3]
+
+i=4: j=5==n → Add -1
+     list = [8, -1, 1, 3, -1]
+
+
+--------------------------------- FINAL OUTPUT ---------------------------------
+
+arr:  [ 6 | 8 | 0 | 1 | 3 ]
+NGE:  [ 8 | -1 | 1 | 3 | -1 ]
+
+list = [8, -1, 1, 3, -1]
+
+Matches expected: [8, -1, 1, 3, -1] ✓
+
+
+--------------------------------- VISUAL TRACE TABLE ---------------------------------
+
+i   Value  j Values Checked    Comparisons           NGE    list
+--  -----  ----------------    ------------------    ----   --------------
+0   1      j=1                 3>1? YES              3      
+1   3      j=2,3               2>3?N, 4>3?YES        4      
+2   2      j=3                 4>2? YES              4      
+3   4      (none)              (j=n)                 -1     [3, 4, 4, -1]
+
+
+--------------------------------- SUMMARY ---------------------------------
+
+Example 1: [3, 4, 4, -1] ✓
+Example 2: [8, -1, 1, 3, -1] ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Next Greater Element
+You are given an array arr[] of integers, the task is to find the next greater element for each element of the array in order of their appearance in the array. Next greater element of an element in the array is the nearest element on the right which is greater than the current element.
+If there does not exist next greater of current element, then next greater element for current element is -1.
+
+Examples
+
+Input: arr[] = [1, 3, 2, 4]
+Output: [3, 4, 4, -1]
+Explanation: The next larger element to 1 is 3, 3 is 4, 2 is 4 and for 4, since it doesn't exist, it is -1.
+
+Input: arr[] = [6, 8, 0, 1, 3]
+Output: [8, -1, 1, 3, -1]
+Explanation: The next larger element to 6 is 8, for 8 there is no larger elements hence it is -1, for 0 it is 1, for 1 it is 3 and then for 3 there is no larger element on right and hence -1.
+
+Input: arr[] = [1, 2, 3, 5]
+Output: [2, 3, 5, -1]
+Explanation: For a sorted array, the next element is next greater element also except for the last element.
+
+Input: arr[] = [5, 4, 3, 1]
+Output: [-1, -1, -1, -1]
+Explanation: There is no next greater element for any of the elements in the array, so all are -1.
+
+Constraints:
+1 ≤ arr.size() ≤ 106
+0 ≤ arr[i] ≤ 109
