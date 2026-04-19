@@ -1,0 +1,98 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    static int largestHist(int arr[], int m) {
+        int res = 0;                                                           // Max area
+        int curr;                                                              // Current area
+        ArrayDeque<Integer> st = new ArrayDeque<>();                           // Stack of indices
+
+        for(int i = 0; i < m; i++){                                           // Traverse histogram
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]){                 // Pop taller bars
+                int tp = st.pop();                                             // Popped bar
+                curr = arr[tp] * (st.isEmpty() ? i : (i - st.peek() - 1));   // Area = height x width
+                res = Math.max(res, curr);                                     // Update max
+            }
+            st.push(i);                                                        // Push current index
+        }
+
+        while(!st.isEmpty()){                                                  // Remaining bars
+            int tp = st.pop();                                                 // Pop bar
+            curr = arr[tp] * (st.isEmpty() ? m : (m - st.peek() - 1));       // Area to end
+            res = Math.max(res, curr);                                         // Update max
+        }
+        return res;                                                            // Return max area
+    }
+
+
+    static int maxArea(int mat[][]) {
+        int n = mat.length;                                                    // Rows
+        int m = mat[0].length;                                                 // Cols
+
+        int max = largestHist(mat[0], m);                                     // First row as histogram
+
+        for(int i = 1; i < n; i++){                                           // Each row
+            for(int j = 0; j < m; j++){                                       // Each col
+                if(mat[i][j] == 1){                                           // If cell is 1
+                    mat[i][j] += mat[i-1][j];                                 // Add height from above
+                }
+            }
+            max = Math.max(max, largestHist(mat[i], m));                      // Max area this row
+        }
+
+        return max;                                                            // Return overall max
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+mat = [[0,1,1,0],        Histogram row 0: [0,1,1,0]  max=1
+       [1,1,1,1],        Histogram row 1: [1,2,2,1]  max=4
+       [1,1,1,1],        Histogram row 2: [2,3,3,2]  max=8 ✓
+       [1,1,0,0]]        Histogram row 3: [3,4,0,0]  max=8
+
+Row 0:  [0, 1, 1, 0]
+         _  █  █  _
+
+Row 1:  [1, 2, 2, 1]
+         █  █  █  █
+         _  █  █  _
+
+Row 2:  [2, 3, 3, 2]
+         █  █  █  █   ← max rectangle
+         █  █  █  █   ← 4x2 = 8
+         _  █  █  _
+
+Output: 8 ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Max Rectangle
+You are given a 2D binary matrix mat[][], where each cell contains either
+0 or 1. Your task is to find the maximum area of a rectangle that can be
+formed using only 1s within the matrix.
+
+Examples:
+
+------------------------------------------------------------------------------------
+Input:  mat[][] = [[0,1,1,0],
+                   [1,1,1,1],
+                   [1,1,1,1],
+                   [1,1,0,0]]
+Output: 8
+Explanation: Largest rectangle with only 1s is from (1,0) to (2,3).
+             Area = 4 x 2 = 8.
+-------------------------------------------------------------------------------------
+
+Input:  mat[][] = [[0,1,1],
+                   [1,1,1],
+                   [0,1,1]]
+Output: 6
+Explanation: Largest rectangle with only 1s is from (0,1) to (2,2).
+             Area = 2 x 3 = 6.
+-------------------------------------------------------------------------------------
+
+Constraints:
+1 <= mat.size(), mat[0].size() <= 1000
+0 <= mat[][]                   <= 1
+
