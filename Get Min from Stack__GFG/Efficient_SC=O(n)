@@ -1,0 +1,94 @@
+//////////////////////// CODE ////////////////////////////////
+
+class SpecialStack {
+
+    ArrayDeque<Integer> st = new ArrayDeque<>();                          // Main stack
+    ArrayDeque<Integer> minSt = new ArrayDeque<>();                       // Min tracking stack
+
+    public SpecialStack() {}
+
+    public void push(int x) {
+        st.push(x);                                                        // Push to main stack
+        if(minSt.isEmpty() || x <= minSt.peek()){                         // Push to min stack if smaller or equal
+            minSt.push(x);
+        }
+    }
+
+    public void pop() {
+        if(st.isEmpty()){ return; }                                        // Empty check
+        int top = st.pop();                                                // Pop main stack
+        if(top == minSt.peek()){                                           // If popped was min
+            minSt.pop();                                                   // Remove from min stack too
+        }
+    }
+
+    public int peek() {
+        if(st.isEmpty()){ return -1; }                                     // Empty check
+        return st.peek();                                                   // Return top
+    }
+
+    boolean isEmpty() {
+        return st.isEmpty();                                               // Check if empty
+    }
+
+    public int getMin() {
+        if(st.isEmpty()){ return -1; }                                     // Empty check
+        return minSt.peek();                                               // Top of min stack is min
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+queries = [push(2), push(3), push(5), peek(), getMin()]
+
+           st          minSt
+push(2):  [2]          [2]
+push(3):  [2|3]        [2]          3 > 2  skip minSt
+push(5):  [2|3|5]      [2]          5 > 2  skip minSt
+
+peek():    return 5 ✓
+getMin():  return 2 ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Get Min from Stack
+Implement a class SpecialStack that supports the following operations:
+
+push(x)  - Insert an integer x into the stack.
+pop()    - Remove the top element from the stack.
+peek()   - Return the top element. If empty, return -1.
+getMin() - Retrieve the minimum element in O(1) time. If empty, return -1.
+isEmpty()- Return true if stack is empty, else false.
+
+queries[][] represents operations:
+1 x : push(x)
+2   : pop()
+3   : peek()
+4   : getMin()
+5   : isEmpty()
+
+Examples:
+
+Input:  q=7, queries = [[1,2],[1,3],[3],[2],[4],[1,1],[4]]
+Output: [3, 2, 1]
+Explanation:
+push(2): stack=[2]
+push(3): stack=[2,3]
+peek():  top=3
+pop():   stack=[2]
+getMin():min=2
+push(1): stack=[2,1]
+getMin():min=1
+
+Input:  q=5, queries = [[1,4],[1,2],[4],[3],[5]]
+Output: [2, 2, false]
+Explanation:
+push(4): stack=[4]
+push(2): stack=[4,2]
+getMin():min=2
+peek():  top=2
+isEmpty():false
+
+Constraints:
+1 <= q          <= 10^5
+0 <= stack val  <= 10^9
