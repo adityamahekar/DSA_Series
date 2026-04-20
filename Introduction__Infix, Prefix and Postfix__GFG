@@ -1,0 +1,58 @@
+=================================================================================
+
+Precedence and Associativity Table
+
+| Level | Operator   | Associativity    |
+| ----- | ---------- | ---------------- |
+| 1     | `^`        | Right to left    |
+| 2     | `*` `/`    | Left to right    |
+| 3     | `+` `-`    | Left to right    |
+
+Rule
+
+- Precedence decides which operator is evaluated first.
+- Associativity decides the order when operators have the same precedence.
+- Parentheses always override both.
+
+===================================================================================
+
+Infix, Prefix, Postfix
+
+| Type    | Form                         | Example            |
+| ------- | ---------------------------- | ------------------ |
+| Infix   | Operator between operands    | `A + B`            |
+| Prefix  | Operator before operands     | `+ A B`            |
+| Postfix | Operator after operands      | `A B +`            |
+
+Example
+-------------------------------------
+
+`2 + 3 * 4 ^ 2`
+`2 + 3 * 16`
+`2 + 48`
+
+Result: `50`
+
+-------------------------------------
+
+`10 + 5 * 2 - 6 / 3`
+`10 + 10 - 2`
+
+Result: `18`
+
+-------------------------------------
+
+`8 - 4 + 2`
+`4 + 2`
+
+Result: `6`
+
+-------------------------------------
+
+`2 ^ 3 ^ 2`
+`2 ^ 9`
+
+Result: `512`
+
+-------------------------------------
+
