@@ -24,7 +24,7 @@ class SpecialStack {
     public void pop() {
         if(st.isEmpty()) return;                                            // Empty check
         int t = st.pop();                                                    // Pop top
-        if(t <= min){                                                        // Was encoded
+        if(t <= 0){                                                        // Was encoded
             res = min;                                                       // Save actual top
             min = min - t;                                                 // Restore prev min
         }
