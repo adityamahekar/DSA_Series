@@ -1,0 +1,107 @@
+//////////////////////// CODE ////////////////////////////////
+
+class SpecialStack {
+
+    ArrayDeque<Integer> st = new ArrayDeque<>();                           // Main stack
+    int min, t, res;                                                        // Min, temp, result
+
+    public SpecialStack() {}
+
+    public void push(int x) {
+        if(st.isEmpty()){                                                   // First element
+            min = x;
+            st.push(x);
+        }
+        else if(x <= min){                                                  // New min found
+            st.push(2*x - min);                                             // Push encoded value
+            min = x;                                                         // Update min
+        }
+        else{
+            st.push(x);                                                     // Push normally
+        }
+    }
+
+    public void pop() {
+        if(st.isEmpty()) return;                                            // Empty check
+        int t = st.pop();                                                    // Pop top
+        if(t <= min){                                                        // Was encoded
+            res = min;                                                       // Save actual top
+            min = 2*min - t;                                                 // Restore prev min
+        }
+    }
+
+    public int peek() {
+        if(st.isEmpty()) return -1;                                         // Empty check
+        t = st.peek();                                                       // Get top
+        return (t <= min) ? min : t;                                        // Decode if encoded
+    }
+
+    boolean isEmpty() {
+        return st.isEmpty();                                                // Check if empty
+    }
+
+    public int getMin() {
+        if(st.isEmpty()) return -1;                                         // Empty check
+        return min;                                                          // Return current min
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+queries = [push(2), push(3), peek(), pop(), getMin(), push(1), getMin()]
+
+           st              min
+push(2):  [2]              2       first element
+push(3):  [2|3]            2       3 > 2 push normally
+peek():    top=3           2       3 > 2 return 3 ✓
+pop():    [2]              2       3 > 2 pop normally
+getMin(): return 2         ✓
+push(1):  [2|0]            1       1<=2 encode: 2*1-2=0 push 0
+getMin(): return 1         ✓
+
+Output: [3, 2, 1] ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Get Min from Stack
+
+Implement a class SpecialStack that supports the following operations:
+
+push(x)  - Insert an integer x into the stack.
+pop()    - Remove the top element from the stack.
+peek()   - Return the top element. If empty, return -1.
+getMin() - Retrieve the minimum element in O(1) time. If empty, return -1.
+isEmpty()- Return true if stack is empty, else false.
+
+queries[][] represents operations:
+1 x : push(x)
+2   : pop()
+3   : peek()
+4   : getMin()
+5   : isEmpty()
+
+Examples:
+
+Input:  q=7, queries = [[1,2],[1,3],[3],[2],[4],[1,1],[4]]
+Output: [3, 2, 1]
+Explanation:
+push(2): stack=[2]
+push(3): stack=[2,3]
+peek():  top=3
+pop():   stack=[2]
+getMin():min=2
+push(1): stack=[2,1]
+getMin():min=1
+
+Input:  q=5, queries = [[1,4],[1,2],[4],[3],[5]]
+Output: [2, 2, false]
+Explanation:
+push(4): stack=[4]
+push(2): stack=[4,2]
+getMin():min=2
+peek():  top=2
+isEmpty():false
+
+Constraints:
+1 <= q          <= 10^5
+0 <= stack val  <= 10^9
