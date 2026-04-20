@@ -13,7 +13,7 @@ class SpecialStack {
             st.push(x);
         }
         else if(x <= min){                                                  // New min found
-            st.push(2*x - min);                                             // Push encoded value
+            st.push(x - min);                                             // Push encoded value
             min = x;                                                         // Update min
         }
         else{
@@ -26,7 +26,7 @@ class SpecialStack {
         int t = st.pop();                                                    // Pop top
         if(t <= min){                                                        // Was encoded
             res = min;                                                       // Save actual top
-            min = 2*min - t;                                                 // Restore prev min
+            min = min - t;                                                 // Restore prev min
         }
     }
 
