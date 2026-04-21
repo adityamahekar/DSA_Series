@@ -1,0 +1,82 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int evaluatePrefix(String[] arr) {
+
+        Stack<Integer> st = new Stack<>();               // Stack for operands
+        
+        for(int i = arr.length - 1; i >= 0; i--){          // Scan right to left
+            String s = arr[i];
+            
+            if(s.equals("^") || 
+               s.equals("*") || s.equals("/") ||
+               s.equals("+") || s.equals("-") ){             // Operator found
+                
+                int a = st.pop();                               // Pop operand1
+                int b = st.pop();                            // Pop operand2
+                
+                switch(s){                                         // Apply operation
+                    case "*": st.push(a * b); break;                   // Multiply
+                    case "+": st.push(a + b); break;                   // Add
+                    case "-": st.push(a - b); break;                           // Subtract
+                    case "^": st.push((int) Math.pow(a, b)); break;                    // Power
+                    case "/": st.push((int) Math.floor((double) a / b)); break;           // Floor division
+                }
+            }
+            else{                                               // Operand found
+                st.push(Integer.parseInt(s));                  // Push number to stack
+            }
+        }
+        return st.pop();                                       // Final result
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: ["+", "*", "/", "+", "100", "200", "2", "5", "7"]
+
+i=8: "7" → st=
+i=7: "5" → st=
+i=6: "2" → st=
+i=5: "200" → st=
+i=4: "100" → st=
+i=3: "+" → pop 100,200 → 300 → st=
+i=2: "/" → pop 2,300 → 150 → st=
+i=1: "*" → pop 150,5 → 750 → st=
+i=0: "+" → pop 750,7 → 757 → st=
+
+Stack trace:
+```
+i=8: st= [runestone](https://runestone.academy/ns/books/published/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html)
+i=7: st=[7,5]
+i=6: st=[7,5,2]
+i=4: st=[7,5,2,200,100]
+i=3: st=[7,5,2,300]  (+ 100 200)
+i=2: st=[7,5,150]    (/ 300 2)
+i=1: st=[7,750]      (* 150 5)
+i=0: st=[757]        (+ 750 7)
+```
+
+Output: 757 ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Prefix Evaluation
+You are given an array of strings arr[] representing a prefix expression. Your task is to evaluate the expression and return an integer representing its value.
+Note: A prefix expression is of the form "operator operand1 operand2" (e.g., + a b).
+And the division operation between two integers always computes the floor value, i.e floor(5 / 3) = 1 and floor(-5 / 3) = -2.
+It is guaranteed that the result of the expression and all intermediate calculations will fit in a 32-bit signed integer.
+
+Examples:
+
+Input: arr[] = ["+", "*", "/", "+", "100", "200", "2", "5", "7"]
+Output: 757
+Explanation: If the expression is converted into an infix expression, it will be ((100 + 200) / 2) * 5 + 7 = 150 * 5 + 7 = 757.
+
+Input: arr[] = ["^", "+", "2", "3", "2"]
+Output: 25
+Explanation: If the expression is converted into an infix expression, it will be (2 + 3) ^ 2 = 25.
+
+Constraints:
+3 ≤ arr.size() ≤ 10³
+arr[i] is either an operator: "+", "-", "*", "/" or "^", or an integer in the range [-10⁴, 10⁴]
