@@ -1,0 +1,78 @@
+////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int evaluatePostfix(String[] arr) {
+       
+        Stack<Integer> st = new Stack<>();                          // Stack for operands
+        
+        for(String s : arr){                                            // Left to right scan
+            
+            if(s.equals("^") || 
+               s.equals("*") || s.equals("/") ||
+               s.equals("+") || s.equals("-") ){                                     // Operator: pop 2 operands
+                
+                int b = st.pop();                                            // Operand2 (right)
+                int a = st.pop();                                                         // Operand1 (left)
+                
+                switch(s){                                                  // Apply operation (a op b)
+                    case "*": st.push(a * b); break;                     // Multiply
+                    case "+": st.push(a + b); break;                    // Add
+                    case "-": st.push(a - b); break;                        // Subtract
+                    case "^": st.push((int) Math.pow(a, b)); break;                      // Power
+                    case "/": st.push((int) Math.floor((double) a / b)); break;      // Floor division    // a = -5 , b = 3   =>   (double)a/b → -5.0 / 3 = -1.666...   =>   Math.floor(-1.666...) → -2.0   =>    (int)-2.0 → -2    
+                }
+            }
+            else{                                               // Operand: push to stack
+                st.push(Integer.parseInt(s));
+            }
+        }
+        return st.pop();                                     // Single result left
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: ["2", "3", "1", "*", "+", "9", "-"]
+
+i=0: "2" → st=
+i=1: "3" → st=
+i=2: "1" → st=
+i=3: "*" → pop 3,1 → 3*1=3 → st=
+i=4: "+" → pop 2,3 → 2+3=5 → st=
+i=5: "9" → st=
+i=6: "-" → pop 5,9 → 5-9=-4 → st=[-4]
+
+Stack trace:
+```
+i=0: st=[2]
+i=2: st=[2,3,1]
+i=3: st=[2,3]     (* 3 1)
+i=4: st=[5]       (+ 2 3)
+i=5: st=[5,9]
+i=6: st=[-4]      (- 5 9)
+```
+
+Output: -4 ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Postfix Evaluation
+You are given an array of strings arr[] that represents a valid arithmetic expression written in Reverse Polish Notation (Postfix Notation). Your task is to evaluate the expression and return an integer representing its value.
+Note: A postfix expression is of the form operand1 operand2 operator (e.g., "a b +"). 
+And the division operation between two integers always computes the floor value, i.e floor(5 / 3) = 1 and floor(-5 / 3) = -2.
+It is guaranteed that the result of the expression and all intermediate calculations will fit in a 32-bit signed integer.
+
+Examples:
+
+Input: arr[] = ["2", "3", "1", "*", "+", "9", "-"]
+Output: -4
+Explanation: If the expression is converted into an infix expression, it will be 2 + (3 * 1) – 9 = 5 – 9 = -4.
+
+Input: arr[] = ["2", "3", "^", "1", "+"]
+Output: 9
+Explanation: If the expression is converted into an infix expression, it will be 2 ^ 3 + 1 = 8 + 1 = 9.
+
+Constraints:
+3 ≤ arr.size() ≤ 10³
+arr[i] is either an operator: "+", "-", "*", "/" or "^", or an integer in the range [-10⁴, 10⁴]
+
