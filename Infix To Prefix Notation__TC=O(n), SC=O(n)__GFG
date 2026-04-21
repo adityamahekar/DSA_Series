@@ -1,0 +1,106 @@
+////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    
+    static int prec(char c){                                // Get operator precedence
+        if(c == '^') return 3;
+        if(c == '*' || c == '/') return 2;
+        if(c == '+' || c == '-') return 1;
+        return -1;
+    }
+    
+    public String infixToPrefix(String s) { 
+        
+        s = new StringBuilder(s).reverse().toString();                      // Reverse string
+        
+        char arr[] = s.toCharArray();                              // Convert to char array
+        
+        for(int i = 0; i < arr.length; i++){                              // Swap parentheses
+            if(arr[i] == '(') arr[i] = ')';
+            else if(arr[i] == ')') arr[i] = '(';
+        }
+        
+       Stack<Character> st = new Stack<>();                                  // Operator stack
+       StringBuilder sb = new StringBuilder();                                // Output buffer
+       
+       for(char c : arr){                                                        // Process each character
+           
+           if(c == '(') st.push(c);                                              // Push opening parenthesis
+           else if(c == ')') {                                                // Pop until matching parenthesis
+               while(!st.isEmpty() && st.peek() != '('){
+                   sb.append(st.pop());
+               }
+               st.pop();
+           }
+           else if(Character.isLetterOrDigit(c)) sb.append(c);                    // Output operand
+           
+           else{                                                                    // Handle operator precedence
+               while(!st.isEmpty() && st.peek() != '(' && 
+                     (prec(c) < prec(st.peek()) ||
+                     (prec(c) == prec(st.peek()) && c == '^'))){
+                   sb.append(st.pop());                                          // Pop higher precedence operators
+               }
+               st.push(c);                                                  // Push current operator
+           }
+       }
+       
+        while(!st.isEmpty()) sb.append(st.pop());                            // Empty remaining stack
+        
+        return sb.reverse().toString();                                  // Final reverse gives prefix
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: "a*(b+c)/d"
+
+1. Reverse: "d/)c+b(*a"
+2. Swap (): "d(+bc*)a/"
+
+i=0: 'd' → output=d, st=[]
+i=1: '(' → st=[(]
+i=2: '+' → st=[( +]
+i=3: 'b' → output=db
+i=4: 'c' → output=dbc
+i=5: ')' → pop + → output=dbc+, st=[(]
+i=6: '*' → st=[*]
+i=7: 'a' → output=dbc a+
+i=8: '/' → pop * → output=dbc a+*, st=[/]
+
+End: pop / → output=dbc a+*/
+Final reverse → /*a+bcd ✓
+
+Stack trace:
+```
+i=0: st=[]        output=d
+i=1: st=[(]       
+i=2: st=[( +]     output=dbc
+i=5: st=[(]       output=dbc+
+i=6: st=[*]       output=dbc a+
+i=8: st=[/]       output=dbc a+*
+End: st=[]        output=dbc a+*/
+```
+
+//////////////////////// QUESTION ////////////////////////////
+
+Infix To Prefix Notation
+You are given a string s representing an infix expression. Convert this infix expression to a prefix expression.
+Infix expression: The expression of the form a op b. When an operator is in between every pair of operands.
+Prefix expression: The expression of the form op a b. When an operator comes before its two operands.
+
+Note: The precedence order is as follows: (^) has the highest precedence and is evaluated from right to left.
+      (* and /) come next with left to right associativity, and (+ and -) have the lowest precedence with left to right associativity.
+
+Examples:
+
+Input: s = "a*(b+c)/d"
+Output: /*a+bcd
+Explanation: The infix expression is a*(b+c)/d. First, inside the brackets, b + c becomes +bc. Now the expression looks like a*(+bc)/d. Next, multiply a with (+bc), so it becomes *a+bc. Finally, divide this result by d, so it becomes /*a+bcd.
+
+Input: s = "(a-b/c)*(a/k-l)"
+Output: *-a/bc-/akl
+Explanation: The infix expression is (a-b/c)*(a/k-l). First, inside the brackets, b/c becomes /bc and a/k becomes /ak.Now the expression looks like (a-/bc) * (/ak-l).Next, handle the subtractions: a-/bc becomes -a/bc, and /ak-l becomes -/akl. Finally, multiply the two results: (-a/bc * -/akl) becomes *-a/bc-/akl.
+
+Constraints:
+3 ≤ s.length() ≤ 5×10³
+s[i] can be an operand (a–z, A–Z, 0–9), an operator (+, -, *, /, ^) or a parenthesis ((, ))
