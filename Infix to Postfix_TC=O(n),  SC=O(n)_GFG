@@ -1,0 +1,86 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    
+    static int prec(char c){                    // Returns operator precedence
+        if(c == '^') return 3;
+        if(c == '*' || c == '/') return 2;      // * / higher than + -
+        if(c == '+' || c == '-') return 1;
+        return -1;
+    }
+    
+    public static String infixToPostfix(String s) {
+       Stack<Character> st = new Stack<>();        // Stack for operators
+       StringBuilder  sb = new StringBuilder();    // Result postfix string
+       
+       for(char c : s.toCharArray()){              // Scan each character
+           
+           if(c == '(') st.push(c);               // Push opening bracket
+           
+           else if(c == ')') {                     // Pop till matching '('
+               while(!st.isEmpty() && st.peek() != '('){
+                   sb.append(st.pop());
+               }
+               st.pop();                           // Remove '('
+           }
+           
+           else if(Character.isLetterOrDigit(c)) sb.append(c);  // Output operand
+           
+           else{                                   // Operator case
+               while(!st.empty() && st.peek() != '(' && 
+                     (prec(c) < prec(st.peek()) ||                 // Lower precedence
+                     (prec(c) == prec(st.peek()) && c != '^'))){   // Left associative
+                   sb.append(st.pop());
+               }
+               st.push(c);                         // Push current operator
+           }
+       }
+       
+       while(!st.isEmpty()) sb.append(st.pop());   // Pop remaining operators
+       
+       return sb.toString();
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: a*(b+c)/d
+
+text
+i | Input | Stack | Output | Action
+--|-------|-------|--------|--------
+0 | a     | []    | a      | operand → output
+1 | *     | [*]   | a      | * pushed (high prec)
+2 | (     | [*(]  | a      | ( pushed
+3 | b     | [*(]  | ab     | operand → output  
+4 | +     | [*(+] | ab     | + pushed (lower prec)
+5 | c     | [*(+] | abc    | operand → output
+6 | )     | [*(]  | abc+   | pop + till (
+7 | /     | [*/]  | abc+   | pop * (÷ ≤ *), push /
+8 | d     | [*/]  | abc+d  | operand → output
+END|       | []    | abc+*d/| pop remaining /
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Infix to Postfix
+You are given a string s representing an infix expression. Convert this infix expression to a postfix expression.
+Infix expression: The expression of the form a op b. When an operator is in between every pair of operands.
+Postfix expression: The expression of the form a b op. When an operator is followed for every pair of operands.
+Note: The precedence order is as follows: ^ has the highest precedence and is evaluated from right to left, * and / come next with left to right associativity, and + and - have the lowest precedence with left to right associativity.
+
+Examples:
+
+text
+Input: s = "a*(b+c)/d"
+Output: abc+*d/
+
+Input: s = "a+b*c+d" 
+Output: abc*+d+
+
+Input: s = "(a+b)*(c+d)"
+Output: ab+cd+*
+
+Constraints:
+1 ≤ s.length ≤ 5×10³
+s[i] can be an operand (a–z, A–Z, 0–9), an operator (+, -, *, /, ^) or a parenthesis ((,))
