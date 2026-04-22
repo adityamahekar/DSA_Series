@@ -1,0 +1,53 @@
+Queue Operations
+
+ArrayDeque Implementation
+=============================================================
+ArrayDeque<Integer> q = new ArrayDeque<>();
+
+=============================================================
+
+// ✅ INSERT (Enqueue) - Add to REAR
+
+q.add(10);        // Throws exception if full (rare)
+q.offer(10);      // Returns false if full (safe)
+q.addLast(10);    // Explicit rear add
+
+=============================================================
+
+// ✅ REMOVE (Dequeue) - Remove from FRONT  
+q.remove();       // Throws exception if empty
+q.poll();         // Returns null if empty (SAFE)
+q.removeFirst();  // Explicit front remove
+=============================================================
+
+// ✅ GET FRONT (Peek Front)
+q.peek();         // Returns null if empty (SAFE)
+q.element();      // Throws if empty
+q.getFirst();     // Returns front element
+=============================================================
+
+// ✅ GET REAR
+q.getLast();      // Returns rear element
+
+=============================================================
+// ✅ CHECK EMPTY
+q.isEmpty();      // Returns true/false
+=============================================================
+// ✅ SIZE
+q.size();         // Number of elements
+
+=============================================================
+PriorityQueue (Min-Heap)
+
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+/////////////////////////////////////////////////////////////////
+
+// Same insert/remove/peek methods as above
+Visual Queue State
+text
+FRONT ← [10, 20, 30, 40] → REAR
+        ↑              ↑
+     poll()         add()
+     peek()         getLast()
+     remove()       
