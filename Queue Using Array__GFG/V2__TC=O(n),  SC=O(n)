@@ -1,0 +1,106 @@
+////////////////////// CODE ////////////////////////////////
+
+class myQueue {
+    int q[];                    // Array storage
+    int f, r, c, n;               // front,rear,count,capacity
+    
+                                 // Constructor
+    public myQueue(int n) {
+        this.n = n;                   // Set capacity
+        q = new int[n];
+        f = 0;                      // Front pointer
+        r = -1;                         // Rear pointer
+        c = 0;                          // Element count
+    }
+
+    public boolean isEmpty() {      // Empty check
+        return c == 0;
+    }
+
+    public boolean isFull() {       // Full check
+        return c == n;
+    }
+
+    public void enqueue(int x) {            // Linear enqueue
+        if(isFull()) return;
+        q[++r] = x;                     // Increment rear
+        c++;
+    }
+             
+    public void dequeue() {                          // Linear dequeue O(n)
+        if(isEmpty()) return;
+        for(int i = 0; i < c-1; i++){                     // Shift elements
+            q[i] = q[i+1];
+        }
+        r--;                                  // Decrement rear
+        c--;
+    }
+
+    public int getFront() {         // Front element
+        if(isEmpty()) return -1;
+        return q[f];
+    }
+
+    public int getRear() {          // Rear element
+        if(isEmpty()) return -1;
+        return q[r];
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+n=3, queries=[,,,,,,]
+
+Initial: f=0,r=-1,c=0 q=[ , , ]
+
+1. enq(5): r=0,c=1 → [5, , ]
+2. enq(3): r=1,c=2 → [5,3, ]
+3. enq(4): r=2,c=3 → 
+4. getFront(): q=5 ✓
+5. deq(): shift → [3,4, ], r=1,c=2
+6. isEmpty(): c=2 → false ✓
+7. getRear(): q=4 ✓
+
+States:
+```
+1: f=0,r=0,c=1 [5, , ]
+3: f=0,r=2,c=3 [5,3,4]
+5: f=0,r=1,c=2 [3,4, ]
+```
+
+Output: [5,false,4] ✓
+
+//////////////////////// QUESTION ////////////////////////////
+
+Queue Using Array
+Implement a Queue using an Array, where the size of the array, n is given.
+
+The Queue must support the following operations:
+(i) enqueue(x): Insert an element x at the rear of the queue.
+(ii) dequeue(): Remove the element from the front of the queue.
+(iii) getFront(): Return front element if not empty, else -1.
+(iv) getRear(): Return rear element if not empty, else -1.
+(v) isEmpty(): Return true if the queue is empty else return false.
+(vi) isFull(): Return true if the queue is full else return false.
+
+There will be a sequence of queries queries[][]:
+
+1 x : Call enqueue(x)
+2: Call dequeue()
+3: Call getFront()
+4: Call getRear()
+5: Call isEmpty()
+6: Call isFull()
+
+Examples:
+
+Input: n = 3, q = 7, queries[][] = [, , , , , , ]
+Output: [5, false, 4]
+
+Input: n = 2, q = 4, queries[][] = [, , , ]
+Output: [-1, true]
+
+Constraints:
+1 ≤ n ≤ 10³
+1 ≤ number of query ≤ 10³
+0 ≤ x ≤ 10⁵
