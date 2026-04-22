@@ -1,11 +1,16 @@
 Queue Operations
 
-ArrayDeque Implementation
 =============================================================
+// ArrayDeque Implementation
+
 ArrayDeque<Integer> q = new ArrayDeque<>();
 
 =============================================================
+// PriorityQueue (Min-Heap)
 
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+=============================================================
 // ✅ INSERT (Enqueue) - Add to REAR
 
 q.add(10);        // Throws exception if full (rare)
@@ -18,6 +23,7 @@ q.addLast(10);    // Explicit rear add
 q.remove();       // Throws exception if empty
 q.poll();         // Returns null if empty (SAFE)
 q.removeFirst();  // Explicit front remove
+
 =============================================================
 
 // ✅ GET FRONT (Peek Front)
@@ -30,16 +36,14 @@ q.getFirst();     // Returns front element
 q.getLast();      // Returns rear element
 
 =============================================================
+
 // ✅ CHECK EMPTY
 q.isEmpty();      // Returns true/false
+
 =============================================================
+
 // ✅ SIZE
 q.size();         // Number of elements
-
-=============================================================
-PriorityQueue (Min-Heap)
-
-PriorityQueue<Integer> pq = new PriorityQueue<>();
 
 /////////////////////////////////////////////////////////////////
 
