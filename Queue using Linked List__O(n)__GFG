@@ -1,0 +1,110 @@
+
+//////////////////////// CODE ////////////////////////////////
+
+// Node class
+class Node {
+    int data;                    // Stores the data value
+    Node next;                   // Points to next node
+
+    Node(int new_data) {
+        data = new_data;         // Assign data value
+        next = null;             // Initialize next as null
+    }
+}
+
+// Queue class using linked list
+class myQueue {
+    int c;                       // Tracks current size
+    Node f, r;                   // f: front pointer, r: rear pointer
+
+    public myQueue() {
+        c = 0;                   // Initialize size to 0
+        f = r = null;            // Both pointers null (empty queue)
+    }
+
+    public boolean isEmpty() {
+        return r == null;        // Empty if rear is null
+    }
+
+    public void enqueue(int x) {
+        Node t = new Node(x);    // Create new node with value x
+        
+        if (r == null) {         // First element case
+            r = f = t;           // Both front & rear point to new node
+        } else {
+            r.next = t;          // Link current rear to new node
+            r = t;               // Update rear to new node
+        }
+        c++;                     // Increment size
+    }
+
+    public void dequeue() {
+        if (f == null) return;   // Empty queue, do nothing
+        
+        f = f.next;              // Move front to next node
+        
+        if (f == null) {         // Queue became empty
+            r = null;            // Set rear to null
+        }
+        c--;                     // Decrement size
+    }
+
+    public int getFront() {
+        if (f == null) return -1;// Empty queue return -1
+        return f.data;           // Return front node data
+    }
+
+    public int size() {
+        return c;                // Return current size counter
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Initial: f→null ←r | size=0
+
+enqueue(5):   f→[5]←r | size=1
+enqueue(3):   f→[5]→[3]←r | size=2  
+enqueue(4):   f→[5]→[3]→[4]←r | size=3
+
+getFront(): 5
+dequeue():     f→[3]→[4]←r | size=2
+size(): 2
+isEmpty(): false
+
+//////////////////////// QUESTION /////////////////////////////
+
+Queue using Linked List
+Implement a Queue using a Linked List. This queue has no fixed capacity and grows dynamically.
+
+**Operations:**
+- `enqueue(x)`: Insert element x at rear
+- `dequeue()`: Remove element from front  
+- `getFront()`: Return front element or -1 if empty
+- `isEmpty()`: Return true if empty
+- `size()`: Return number of elements
+
+**Query Format:**
+```
+1 x : enqueue(x)
+2   : dequeue()
+3   : getFront()
+4   : isEmpty()
+5   : size()
+```
+
+**Example 1:**
+```
+Input: [[1,5],[1,3],[1,4],[3],[2],[5],[4]]
+Output: [5,2,false]
+```
+
+**Example 2:**
+```
+Input: [[4],[3],[1,10],[5]]
+Output: [true,-1,1]
+```
+
+**Constraints:**
+- 1 ≤ queries ≤ 10³
+- 0 ≤ x ≤ 10⁵
