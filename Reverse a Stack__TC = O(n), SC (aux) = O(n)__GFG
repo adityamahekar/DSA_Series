@@ -1,0 +1,52 @@
+//////////////////////// CODE ////////////////////////////////
+class Solution {
+    public static void reverseStack(Stack<Integer> st) {
+        Deque<Integer> deq = new ArrayDeque<>();   // Deque for reversal
+        
+        while(!st.isEmpty()){
+            deq.addFirst(st.pop());                // Pop from stack, add to front of deque
+        }
+        
+        while(!deq.isEmpty()){
+            st.push(deq.removeLast());             // Remove from back of deque, push to stack
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+Initial: st=[1,2,3,4] (top=4)  deq=[]
+
+Step 1: st→deq (addFirst)
+  pop 4: st=[1,2,3]  deq=[4]
+  pop 3: st=[1,2]    deq=[3,4]
+  pop 2: st=[1]      deq=[2,3,4]
+  pop 1: st=[]       deq=[1,2,3,4]
+
+Step 2: deq→st (removeLast)
+  removeLast 4: st=[4]      deq=[1,2,3]
+  removeLast 3: st=[4,3]    deq=[1,2]
+  removeLast 2: st=[4,3,2]  deq=[1]
+  removeLast 1: st=[4,3,2,1] deq=[]
+
+Final: st=[4,3,2,1] (top=1)
+
+//////////////////////// QUESTION /////////////////////////////
+
+Reverse a Stack
+You are given a stack st[]. You have to reverse the stack.
+
+Note: The input array represents the stack from bottom to top (last element is the top). 
+The output is displayed by printing elements from top to bottom after reversal.
+
+Examples:
+Input: st[] = [1, 2, 3, 4]
+Output: [4, 3, 2, 1]
+Explanation: After reversing, the stack elements are in opposite order. Top was 4, now top is 1.
+
+Input: st[] = [3, 2, 1]
+Output: [3, 2, 1]
+Explanation: After reversing, top changes from 1 to 3.
+
+Constraints:
+1 ≤ st.size() ≤ 100
+0 ≤ stack element ≤ 100
