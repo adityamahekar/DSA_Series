@@ -1,0 +1,42 @@
+///////////////////// Deque ///////////////////////////////////////
+
+// Declaration
+Deque<Integer> dq = new ArrayDeque<>();   // or new LinkedList<>()
+
+// --- Insertion (throws exception on failure) ---
+dq.addFirst(e);   // insert at front
+dq.addLast(e);    // insert at rear
+dq.add(e);        // same as addLast(e)
+
+// --- Insertion (returns false on failure, no exception) ---
+dq.offerFirst(e); // insert at front
+dq.offerLast(e);  // insert at rear
+dq.offer(e);      // same as offerLast(e)
+
+// --- Removal (throws exception if empty) ---
+dq.removeFirst(); // remove from front
+dq.removeLast();  // remove from rear
+dq.remove();      // same as removeFirst()
+
+// --- Removal (returns null/false if empty, no exception) ---
+dq.pollFirst();   // remove from front, returns null if empty
+dq.pollLast();    // remove from rear, returns null if empty
+dq.poll();        // same as pollFirst()
+
+// --- Peeking (returns element, throws if empty) ---
+dq.getFirst();    // view front
+dq.getLast();     // view rear
+
+// --- Peeking (returns null if empty) ---
+dq.peekFirst();   // view front, null if empty
+dq.peekLast();    // view rear, null if empty
+dq.peek();        // same as peekFirst()
+
+// --- Stack operations (LIFO) using Deque ---
+dq.push(e);       // same as addFirst(e)
+dq.pop();         // same as removeFirst()
+
+// --- Other ---
+dq.size();        // number of elements
+dq.isEmpty();     // true if empty
+dq.clear();       // remove all elements
