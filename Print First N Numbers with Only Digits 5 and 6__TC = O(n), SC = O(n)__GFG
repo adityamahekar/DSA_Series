@@ -1,0 +1,46 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Main {
+    void printFirstN(int n){
+        Queue<String> q = new LinkedList<>();   // Queue for BFS generation
+        
+        q.add("5");                             // Start with "5"
+        q.add("6");                             // Add "6"
+  
+        for(int i=0; i<n; i++){
+            String curr = q.remove();           // Remove front element
+            
+            q.add(curr + "5");                  // Append '5' and enqueue
+            q.add(curr + "6");                  // Append '6' and enqueue
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Initial: q=["5","6"]
+
+i=0: curr="5" → q=["6","55","56"]
+i=1: curr="6" → q=["55","56","65","66"]
+i=2: curr="55" → q=["56","65","66","555","556"]
+i=3: curr="56" → q=["65","66","555","556","565","566"]
+
+Sequence generated: 5, 6, 55, 56, 65, 66, ...
+
+//////////////////////// QUESTION /////////////////////////////
+
+Print First N Numbers with Only Digits 5 and 6
+Given an integer n, print the first n positive integers that contain only the digits 5 and 6.
+
+Examples:
+Input: n = 6
+Output: 5 6 55 56 65 66
+Explanation: These are the first 6 numbers containing only digits 5 and 6 in increasing order.
+
+Input: n = 4
+Output: 5 6 55 56
+Explanation: First 4 numbers with only digits 5 and 6.
+
+
+Constraints:
+1 ≤ n ≤ 10^5
