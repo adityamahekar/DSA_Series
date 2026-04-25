@@ -1,0 +1,50 @@
+```java
+//////////////////////// CODE ////////////////////////////////
+class Solution {
+    public void reverseQueue(Queue<Integer> q) {
+        if(q.isEmpty()){
+            return;                              // Base case: empty queue
+        }
+        
+        int x = q.remove();                      // Remove front element
+        reverseQueue(q);                         // Recursively reverse remaining
+        q.add(x);                                // Add removed element to rear
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+Initial: q=[5,10,15,20,25]
+
+Call 1: x=5, q=[10,15,20,25] → Call 2
+Call 2: x=10, q=[15,20,25] → Call 3
+Call 3: x=15, q=[20,25] → Call 4
+Call 4: x=20, q=[25] → Call 5
+Call 5: x=25, q=[] → Call 6 (base case: return)
+
+Unwinding:
+Call 5: add 25 → q=[25]
+Call 4: add 20 → q=[25,20]
+Call 3: add 15 → q=[25,20,15]
+Call 2: add 10 → q=[25,20,15,10]
+Call 1: add 5 → q=[25,20,15,10,5]
+
+Final: q=[25,20,15,10,5]
+
+//////////////////////// QUESTION /////////////////////////////
+Queue Reversal
+
+Given a queue q containing integer elements, your task is to reverse the queue.
+
+Examples:
+Input: q[] = [5, 10, 15, 20, 25]
+Output: [25, 20, 15, 10, 5]
+Explanation: After reversing the queue, elements are in opposite order (front becomes rear).
+
+Input: q[] = [1, 2, 3, 4, 5]
+Output: [5, 4, 3, 2, 1]
+Explanation: After reversal, front becomes 5 and rear becomes 1.
+
+Constraints:
+1 ≤ q.size() ≤ 10^3
+0 ≤ q[i] ≤ 10^5
+```
