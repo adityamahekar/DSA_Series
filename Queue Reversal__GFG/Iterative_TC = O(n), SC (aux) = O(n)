@@ -1,0 +1,51 @@
+//////////////////////// CODE ////////////////////////////////
+class Solution {
+    public void reverseQueue(Queue<Integer> q) {
+        ArrayDeque<Integer> st = new ArrayDeque<>();   // Stack using ArrayDeque
+        
+        while(!q.isEmpty()){
+            st.push(q.remove());                       // Remove from queue, push to stack
+        }
+        
+        while(!st.isEmpty()){
+            q.add(st.pop());                           // Pop from stack, add to queue
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+Initial: q=[5,10,15,20,25] (front=5)  st=[]
+
+Step 1: q→st (push)
+  remove 5: q=[10,15,20,25]  st=[5]
+  remove 10: q=[15,20,25]    st=[10,5]
+  remove 15: q=[20,25]       st=[15,10,5]
+  remove 20: q=[25]          st=[20,15,10,5]
+  remove 25: q=[]            st=[25,20,15,10,5]
+
+Step 2: st→q (add)
+  pop 25:  st=[20,15,10,5]  q=[25]
+  pop 20:  st=[15,10,5]     q=[25,20]
+  pop 15:  st=[10,5]        q=[25,20,15]
+  pop 10:  st=[5]           q=[25,20,15,10]
+  pop 5:   st=[]            q=[25,20,15,10,5]
+
+Final: q=[25,20,15,10,5]
+
+//////////////////////// QUESTION /////////////////////////////
+Queue Reversal
+
+Given a queue q containing integer elements, your task is to reverse the queue.
+
+Examples:
+Input: q[] = [5, 10, 15, 20, 25]
+Output: [25, 20, 15, 10, 5]
+Explanation: After reversing the queue, elements are in opposite order (front becomes rear).
+
+Input: q[] = [1, 2, 3, 4, 5]
+Output: [5, 4, 3, 2, 1]
+Explanation: After reversal, front becomes 5 and rear becomes 1.
+
+Constraints:
+1 ≤ q.size() ≤ 10^3
+0 ≤ q[i] ≤ 10^5
