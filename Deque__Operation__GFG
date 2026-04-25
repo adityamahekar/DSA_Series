@@ -1,5 +1,8 @@
 ///////////////////// Deque ///////////////////////////////////////
 
+Deque -----> LinkedList
+        |--> Array
+
 // Declaration
 Deque<Integer> dq = new ArrayDeque<>();   // or new LinkedList<>()
 
