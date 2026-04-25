@@ -1,0 +1,33 @@
+Queue Hierarchy & Operations: 
+
+Queue -----> ArrayDeque
+        |--> LinkedList
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+| Safe Methods (No Exception) | Exception-Throwing Methods |
+|-----------------------------|----------------------------|
+| peek()                      | element()                  |
+| offer(e)                    | add(e)                     |
+| poll()                      | remove()                   |
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+//////////////////////////////////////////////////////////////////////////
+
+class GFG {
+    public static void main(String args[]) {
+        // Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new ArrayDeque<>();
+
+        q.offer(10);
+        q.offer(20);
+        q.offer(30);
+
+        System.out.println(q.size());      // 3
+        System.out.println(q.isEmpty());   // false
+        System.out.println(q);             // [10, 20, 30]
+
+        System.out.println(q.peek());      // 10
+        System.out.println(q.poll());      // 10
+        System.out.println(q.peek());      // 20
+    }
+}
