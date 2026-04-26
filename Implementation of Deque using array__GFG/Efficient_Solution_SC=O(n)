@@ -1,0 +1,113 @@
+//////////////////////// CODE ////////////////////////////////
+
+class myDeque {
+    int cap, size;              // cap: capacity, size: current element count
+    int arr[];                  // circular array for deque storage
+    int front;                  // index pointing to front element
+
+    public myDeque(int n) {
+        cap = n;                // set capacity to n
+        size = 0;               // initialize size to 0
+        arr = new int[cap];     // allocate array of size cap
+        front = 0;              // initialize front index to 0
+    }
+
+    boolean full() {
+        return size == cap;     // return true if deque is full
+    }
+    
+    boolean empty() {
+        return size == 0;       // return true if deque is empty
+    }
+    
+    public void insertFront(int x) {
+        if (full()) return;     // return if deque is full
+        
+        front = (front - 1 + cap) % cap;  // move front backward (circular)
+        arr[front] = x;         // place x at new front position
+        size++;                 // increment element count
+    }
+
+    public void insertRear(int x) {
+        if (full()) return;     // return if deque is full
+        arr[(front + size) % cap] = x;   // place x at rear position
+        size++;                 // increment element count
+    }
+
+    public void deleteFront() {
+        if (empty()) return;    // return if deque is empty
+        front = (front + 1) % cap;       // move front forward (circular)
+        size--;                 // decrement element count
+    }
+
+    public void deleteRear() {
+        if (empty()) return;    // return if deque is empty
+        size--;                 // decrement element count (no index change)
+    }
+
+    public int frontEle() {
+        if (empty()) return -1; // return -1 if deque is empty
+        return arr[front];      // return element at front index
+    }
+
+    public int rearEle() {
+        if (empty()) return -1; // return -1 if deque is empty
+        return arr[(front + size - 1) % cap];  // return element at rear index
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Initial: arr=[_,_,_]  front=0  size=0
+
+insertFront(3):
+  front = (0-1+3)%3 = 2 → arr=[_,_,3]  front=2  size=1
+
+insertRear(5):
+  rear_idx = (2+1)%3 = 0 → arr=[5,_,3]  front=2  size=2
+
+insertFront(6):
+  front = (2-1+3)%3 = 1 → arr=[5,6,3]  front=1  size=3
+
+rearEle():      arr[(1+3-1)%3] = arr[0] = 5
+deleteFront():  front = (1+1)%3 = 2 → arr=[5,6,3]  front=2  size=2
+frontEle():     arr[2] = 3
+
+Output: [5, 3]
+
+//////////////////////// QUESTION /////////////////////////////
+
+Implementation of Deque using circular array
+
+Implement a Deque (Double Ended Queue) using a circular array of size n.
+The Deque must support the following operations:
+(i) insertFront(x): Add element x at the front
+(ii) insertRear(x): Add element x at the rear
+(iii) deleteFront(): Remove element from front
+(iv) deleteRear(): Remove element from rear
+(v) frontEle(): Get front element, return -1 if empty
+(vi) rearEle(): Get rear element, return -1 if empty
+
+Query format:
+1 x : insertFront(x)
+2 x : insertRear(x)
+3   : deleteFront()
+4   : deleteRear()
+5   : frontEle()
+6   : rearEle()
+
+Examples:
+Input: n=3, queries=[[1,3],[2,5],[1,6],[6],[3],[5]]
+Output: [5,3]
+Explanation: insertFront(3), insertRear(5), insertFront(6) → deque=[3,5,6]
+             rearEle()=5, deleteFront(), frontEle()=3
+
+Input: n=2, queries=[[2,4],[3],[6],[5]]
+Output: [-1,-1]
+Explanation: insertRear(4) → [4], deleteFront() → [], rearEle()=-1, frontEle()=-1
+
+Constraints:
+1 ≤ n ≤ 10^3
+1 ≤ number of queries ≤ 10^3
+0 ≤ x ≤ 10^5
+
