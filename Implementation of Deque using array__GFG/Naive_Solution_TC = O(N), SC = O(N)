@@ -1,0 +1,109 @@
+//////////////////////// CODE ////////////////////////////////
+
+class myDeque {
+    int cap, size;              // cap: capacity, size: current elements
+    int arr[];                  // array to store deque elements
+
+    public myDeque(int n) {
+        cap = n;                // set capacity
+        size = 0;               // initialize size to 0
+        arr = new int[cap];     // create array of size n
+    }
+
+    boolean full() {
+        return size == cap;     // full if size equals capacity
+    }
+    
+    boolean empty() {
+        return size == 0;       // empty if size is 0
+    }
+    
+    public void insertFront(int x) {
+        if (full()) return;     // do nothing if full
+        
+        for (int i = size - 1; i >= 0; i--) {
+            arr[i + 1] = arr[i]; // shift all elements right
+        }
+        arr[0] = x;             // insert at front
+        size++;                 // increment size
+    }
+
+    public void insertRear(int x) {
+        if (full()) return;     // do nothing if full
+        arr[size++] = x;        // insert at rear, increment size
+    }
+
+    public void deleteFront() {
+        if (empty()) return;    // do nothing if empty
+        
+        for (int i = 0; i < size - 1; i++) {
+            arr[i] = arr[i + 1]; // shift all elements left
+        }
+        size--;                 // decrement size
+    }
+
+    public void deleteRear() {
+        if (empty()) return;    // do nothing if empty
+        size--;                 // just decrement size
+    }
+
+    public int frontEle() {
+        if (empty()) return -1; // return -1 if empty
+        return arr[0];          // return front element
+    }
+
+    public int rearEle() {
+        if (empty()) return -1; // return -1 if empty
+        return arr[size - 1];   // return rear element
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Initial: arr=[_,_,_]  size=0
+
+insertFront(3):  arr=[3,_,_]  size=1
+insertRear(5):   arr=[3,5,_]  size=2
+insertFront(6):  arr=[6,3,5]  size=3
+rearEle():       5
+deleteFront():   arr=[3,5,_]  size=2
+frontEle():      3
+
+Final output: [5, 3]
+
+//////////////////////// QUESTION /////////////////////////////
+
+Implementation of Deque using array
+
+Implement a Deque (Double Ended Queue) using an array of size n.
+The Deque must support the following operations:
+(i) insertFront(x): Add element x at the front
+(ii) insertRear(x): Add element x at the rear
+(iii) deleteFront(): Remove element from front
+(iv) deleteRear(): Remove element from rear
+(v) frontEle(): Get front element, return -1 if empty
+(vi) rearEle(): Get rear element, return -1 if empty
+
+Query format:
+1 x : insertFront(x)
+2 x : insertRear(x)
+3   : deleteFront()
+4   : deleteRear()
+5   : frontEle()
+6   : rearEle()
+
+Examples:
+
+Input: n=3, queries=[[1,3],[2,5],[1,6],[6],[3],[5]]
+Output: [5,3]
+Explanation: insertFront(3), insertRear(5), insertFront(6) → [6,3,5]
+             rearEle()=5, deleteFront(), frontEle()=3
+
+Input: n=2, queries=[[2,4],[3],[6],[5]]
+Output: [-1,-1]
+Explanation: insertRear(4) → [4], deleteFront() → [], rearEle()=-1, frontEle()=-1
+
+Constraints:
+1 ≤ n ≤ 10^3
+1 ≤ number of queries ≤ 10^3
+0 ≤ x ≤ 10^5
