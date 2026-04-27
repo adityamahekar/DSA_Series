@@ -1,0 +1,107 @@
+
+Collection ← Queue ← Deque ← ArrayDeque
+
+///////////////////////////////////////////////////////////////////
+
+// import required packages
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+// 1. Using diamond operator (Java 7+)
+Deque<Type> deque = new ArrayDeque<>();
+
+// 2. With explicit type on both sides
+Deque<Type> deque = new ArrayDeque<Type>();
+
+// 3. With initial capacity
+Deque<Type> deque = new ArrayDeque<>(initialCapacity);
+
+// 4. Using ArrayDeque as the reference type
+ArrayDeque<Type> deque = new ArrayDeque<>();
+
+///////////////////////////////////////////////////////////////////
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class ArrayDequeExample {
+    public static void main(String[] args) {
+        // Declare and initialize
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        // Add elements
+        deque.add(1);           // at the back
+        deque.addFirst(0);      // at the front
+        deque.addLast(2);       // at the back
+        boolean added = deque.offer(3);  // adds at tail, returns true if success
+        deque.push(4);           // pushes at front (same as addFirst)
+
+        // Remove elements
+        int first = deque.removeFirst(); // removes from front
+        int last = deque.removeLast();   // removes from back
+        int popped = deque.pop();        // pops from front (same as removeFirst)
+
+        // Peek (view without removing)
+        int head = deque.peekFirst();    // views front, null if empty
+        int tail = deque.peekLast();     // views back, null if empty
+        int peekHead = deque.peek();     // same as peekFirst()
+        int elementHead = deque.element(); // same as getFirst(), throws if empty
+
+        // poll() - retrieve and remove head (same as pollFirst(), returns null if empty)
+        Integer polled = deque.poll();   // removes from front safely
+
+        System.out.println(deque);
+        System.out.println("offer result: " + added);
+        System.out.println("popped: " + popped);
+        System.out.println("peekHead: " + peekHead);
+        System.out.println("elementHead: " + elementHead);
+        System.out.println("polled: " + polled);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
++-----------------------+-------------------------------+----------------------------------------+
+| Method Syntax         | Category                      | Operation (Short)                      |
++-----------------------+-------------------------------+----------------------------------------+
+| **ArrayDeque as Queue** (FIFO)                                                                 |
++-----------------------+-------------------------------+----------------------------------------+
+| add(E e)              | Queue: Insert                 | Add at tail; throws on failure         |
+| offer(E e)            | Queue: Insert                 | Add at tail; returns false on failure  |
+| remove()              | Queue: Remove                 | Remove & return head; throws if empty  |
+| poll()                | Queue: Remove                 | Remove & return head; returns null     |
+| element()             | Queue: Peek                   | View head; throws if empty             |
+| peek()                | Queue: Peek                   | View head; returns null if empty       |
++-----------------------+-------------------------------+----------------------------------------+
+| **ArrayDeque as Stack** (LIFO)                                                                 |
++-----------------------+-------------------------------+----------------------------------------+
+| push(E e)             | Stack: Push                   | Push at front (same as addFirst)       |
+| pop()                 | Stack: Pop                    | Pop head (same as removeFirst); throws |
++-----------------------+-------------------------------+----------------------------------------+
+| **ArrayDeque as Deque** (Double-Ended: front & tail)        |
++-----------------------+-------------------------------+----------------------------------------+
+| addFirst(E e)         | Deque: Insert at Front        | Add at front; throws on failure        |
+| addLast(E e)          | Deque: Insert at Tail         | Add at tail; throws on failure         |
+| offerFirst(E e)       | Deque: Insert at Front        | Add at front; returns false on failure |
+| offerLast(E e)        | Deque: Insert at Tail         | Add at tail; returns false on failure  |
+| removeFirst()         | Deque: Remove from Front      | Remove & return head; throws if empty  |
+| removeLast()          | Deque: Remove from Tail       | Remove & return tail; throws if empty  |
+| pollFirst()           | Deque: Remove from Front      | Remove & return head; returns null     |
+| pollLast()            | Deque: Remove from Tail       | Remove & return tail; returns null     |
+| peekFirst()           | Deque: Peek at Front          | View head; returns null if empty       |
+| peekLast()            | Deque: Peek at Tail           | View tail; returns null if empty       |
+| getFirst()            | Deque: Peek at Front          | View head; throws if empty             |
+| getLast()             | Deque: Peek at Tail           | View tail; throws if empty             |
++-----------------------+-------------------------------+----------------------------------------+
+| **Common / Utility Methods**                                                                   |
++-----------------------+-------------------------------+----------------------------------------+
+| size()                | Query                         | Return number of elements              |
+| isEmpty()             | Query                         | Return true if empty                   |
+| contains(Object o)    | Query                         | Return true if contains element        |
+| clear()               | Modify                        | Remove all elements                    |
+| iterator()            | Iterate                       | Forward iterator (head → tail)         |
+| descendingIterator()  | Iterate                       | Backward iterator (tail → head)        |
+| toArray()             | Convert                       | Return Object[] with all elements      |
+| toArray(T[] a)        | Convert                       | Return typed array with all elements   |
++-----------------------+-------------------------------+----------------------------------------+
+
