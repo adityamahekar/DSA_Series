@@ -1,0 +1,109 @@
+////////////////////////////////////////////////////////////////////////////////////
+
+class SpecialQueue {
+    Deque<Integer> dq = new ArrayDeque<>();     // Main queue for FIFO order
+    Deque<Integer> smx = new ArrayDeque<>();    // Monotonic increasing deque for max
+    Deque<Integer> smn = new ArrayDeque<>();    // Monotonic decreasing deque for min
+
+    public SpecialQueue() {
+        // Initialize empty deques for queue + min/max tracking
+    }
+
+    public void enqueue(int x) {
+        // Insert element into the queue
+        dq.offerLast(x);                                    // Add to main queue rear
+        
+        // Maintain smx: strictly increasing (front = max)
+        while(!smx.isEmpty() && smx.peekLast() < x) 
+            smx.pollLast();                                 // Remove smaller elements from rear
+        smx.offerLast(x);                                   // Add current element
+        
+        // Maintain smn: strictly decreasing (front = min)
+        while(!smn.isEmpty() && smn.peekLast() > x) 
+            smn.pollLast();                                 // Remove larger elements from rear
+        smn.offerLast(x);                                   // Add current element
+    }
+
+    public void dequeue() {
+        // Remove element from the queue front
+        if(!dq.isEmpty()) {
+            if(smx.peekFirst() != null && smx.peekFirst().equals(dq.peekFirst()))  // If main queue front == max deque front
+                smx.pollFirst();                                                    // Remove from max deque
+            if(smn.peekFirst() != null && smn.peekFirst().equals(dq.peekFirst()))  // If main queue front == min deque front
+                smn.pollFirst();                                                    // Remove from min deque
+            dq.pollFirst();                                                         // Remove from main queue
+        }
+    }
+
+    public int getFront() {
+        // Get front element without removal
+        return dq.peekFirst();          // Return main queue front
+    }
+
+    public int getMin() {
+        // Get minimum element in O(1)
+        return smn.peekFirst();         // Min always at front of monotonic decreasing deque
+    }
+
+    public int getMax() {
+        // Get maximum element in O(1)
+        return smx.peekFirst();         // Max always at front of monotonic increasing deque
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
+Queries: [1,4] [1,2] [3] [4] [2] [5]
+
+Step 1: enqueue(4)
+dq:  [4]           smx: [4]           smn: [4]
+
+Step 2: enqueue(2)  
+dq:  [4,2]         smx: [4,2]         smn: [4→2]
+
+Step 3: getFront() → 4
+dq:  [4,2]         smx: [4,2]         smn: [2,4→]
+
+Step 4: getMin() → 2
+(same state)
+
+Step 5: dequeue()
+dq:  [2]           smx: [2]           smn: [2]
+
+Step 6: getMax() → 2
+(same state)
+
+////////////////////////////////////////////////////////////////////////////////////
+
+Design MinMax Queue
+Design a SpecialQueue data structure that functions like a normal queue but with additional support for retrieving the minimum and maximum element efficiently.
+
+The SpecialQueue must support:
+- enqueue(x): Insert x at rear
+- dequeue(): Remove front element  
+- getFront(): Return front element
+- getMin(): Return minimum in O(1)
+- getMax(): Return maximum in O(1)
+
+Queries format:
+- 1 x : enqueue(x)
+- 2 : dequeue()
+- 3 : getFront()
+- 4 : getMin()
+- 5 : getMax()
+
+**Example 1:**
+```
+Input: [[1,4],[1,2],[3],[4],[2],[5]]
+Output: [4,2,2]
+```
+
+**Example 2:**
+```
+Input: [[1,3],[4],[1,5],[5]]
+Output: [3,5]
+```
+
+**Constraints:**
+- 1 ≤ queries.size() ≤ 10⁵
+- 0 ≤ values ≤ 10⁹
