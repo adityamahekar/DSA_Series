@@ -1,0 +1,94 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public ArrayList<Integer> maxOfSubarrays(int[] arr, int k) {
+        Deque<Integer> dq = new LinkedList<>();             // Deque to store indices of potential max elements
+        ArrayList<Integer> list = new ArrayList<>();        // Result list for maximum values
+        
+        int n = arr.length;                                 // Array length
+        
+        // Process first k elements (first window)
+        for(int i=0; i<k; i++){
+            while(!dq.isEmpty() && arr[i] >= arr[dq.peekLast()]){
+                dq.removeLast();                            // Remove smaller elements from rear
+            }
+            dq.addLast(i);                                  // Add current element index
+        }
+        
+        // Process remaining elements
+        for(int i=k; i<n; i++){
+            list.add(arr[dq.peek()]);                       // Add max of previous window
+            
+            while(!dq.isEmpty() && dq.peek() <= i-k){
+                dq.removeFirst();                           // Remove indices out of current window
+            }
+            
+            while(!dq.isEmpty() && arr[i] >= arr[dq.peekLast()]){
+                dq.removeLast();                            // Remove smaller elements from rear
+            }
+            
+            dq.addLast(i);                                  // Add current element index
+        }
+        
+        list.add(arr[dq.peek()]);                           // Add max of last window
+        
+        return list;                                        // Return all window maximums
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+arr = [1,2,3,1,4,5,2,3,6], k=3
+
+First window (i=0,1,2):
+  i=0: dq=[0]           (arr[0]=1)
+  i=1: dq=[1]           (arr[1]=2 > 1, remove 0)
+  i=2: dq=[2]           (arr[2]=3 > 2, remove 1)
+       → max = arr[2] = 3
+
+Sliding (i=3 to 8):
+  i=3: add 3, dq=[2], remove out_act: 2≤0? no
+       arr[3]=1 < arr[2]=3 → dq=[2,3]
+       → max = arr[2] = 3
+
+  i=4: add 3, dq=[2,3], remove out: 2≤1? no
+       arr[4]=4 > arr[3]=1, arr[2]=3 → dq=[4]
+       → max = arr[4] = 4
+
+  i=5: add 4, dq=[4], remove out: 4≤2? no
+       arr[5]=5 > arr[4]=4 → dq=[5]
+       → max = arr[5] = 5
+
+  i=6: add 5, dq=[5], remove out: 5≤3? no
+       arr[6]=2 < arr[5]=5 → dq=[5,6]
+       → max = arr[5] = 5
+
+  i=7: add 5, dq=[5,6], remove out: 5≤4? no
+       arr[7]=3 > arr[6]=2, < arr[5]=5 → dq=[5,7]
+       → max = arr[5] = 5
+
+  i=8: add 5, dq=[5,7], remove out: 5≤5? yes → dq=[7]
+       arr[8]=6 > arr[7]=3 → dq=[8]
+       → max = arr[8] = 6
+
+Final: add last window max → [3,3,4,5,5,5,6]
+
+//////////////////////// QUESTION /////////////////////////////
+
+K Sized Subarray Maximum
+Given an array arr[] of positive integers and an integer k, find the maximum value for each contiguous subarray of size k. Return an array of maximum values corresponding to each contiguous subarray.
+
+Examples:
+Input: arr[] = [1, 2, 3, 1, 4, 5, 2, 3, 6], k = 3
+Output: [3, 3, 4, 5, 5, 5, 6]
+Explanation: 
+[1,2,3] max=3, [2,3,1] max=3, [3,1,4] max=4, [1,4,5] max=5,
+[4,5,2] max=5, [5,2,3] max=5, [2,3,6] max=6
+
+Input: arr[] = [5, 1, 3, 4, 2], k = 1
+Output: [5, 1, 3, 4, 2]
+Explanation: When k=1, each element is its own subarray, so output equals input.
+
+Constraints:
+1 ≤ arr.size() ≤ 10^6
+1 ≤ k ≤ arr.size()
+0 ≤ arr[i] ≤ 10^9
