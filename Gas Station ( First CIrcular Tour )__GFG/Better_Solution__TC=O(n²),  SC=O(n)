@@ -1,0 +1,77 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int startStation(int[] gas, int[] cost) {
+        Deque<Integer> dq = new ArrayDeque<>();               // Stack for tracking starts
+        int n = cost.length;                                   // Total stations
+        dq.addLast(0);                                         // Start from index 0
+        
+        for(int start = 0; start < n; start++){                // Try every station
+            int end = start;
+            int cur_gas = 0;                                   // Current tank balance
+            
+            
+            while(true){
+                cur_gas += (gas[end] - cost[end]);             // Net gas at station
+                dq.addLast(end);                               // Track visited
+                
+                if(cur_gas < 0){                               // Failed: not enough gas
+                    dq.removeFirst();                          // Remove this start
+                    break;                                     // Try next start
+                } 
+                
+                end = (end+1)%n;                               // Next station (circular)
+                
+                if(start == end){                              // Completed full circle
+                    return start;                              // Success!
+                }
+            }
+        }
+        
+        return -1;                                             // No valid start found
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+gas[] = [4, 5, 7, 4]
+cost[] = [6, 6, 3, 5]
+
+==================================================================================
+Dry Run:
+
+start=0: station 0 → cur_gas = -2 ✗  break
+start=1: station 1 → cur_gas = -1 ✗  break  
+start=2: station 2 → 3 → 0 → 1 → cur_gas = 4 → 3 → 1 → 0 ✓  return 2
+==================================================================================
+Visual Trace:
+
+0: [4 - 6] = -2 ✗
+1: [5 - 6] = -1 ✗
+2: [7 - 3] = 4 → [4 - 5] = 3 → [4 - 6] = 1 → [5 - 6] = 0 ✓
+   return 2
+
+//////////////////////// QUESTION ////////////////////////////
+
+Gas Station
+There are n gas stations along a circular tour. You are given two integer arrays gas[] and cost[], where gas[i] is the amount of gas available at station i and cost[i] is the gas needed to travel from station i to station (i+1). You have a car with an unlimited gas tank and start with an empty tank at some station. 
+Your task is to return the index of the starting station if it is possible to travel once around the circular route in a clockwise direction without running out of gas at any station; otherwise, return -1.
+Note: If a solution exists, it is guaranteed to be unique.
+
+Examples:
+
+Input: gas[] = [4, 5, 7, 4], cost[]= [6, 6, 3, 5]
+Output: 2
+Explanation: Start at gas station at index 2 and fill up with 7 units of gas. Your tank = 0 + 7 = 7
+Travel to station 3. Available gas = (7 – 3 + 4) = 8.
+Travel to station 0. Available gas = (8 – 5 + 4) = 7.
+Travel to station 1. Available gas = (7 – 6 + 5) = 6.
+Return to station 2. Available gas = (6 – 6) = 0.
+
+Input: gas[] = [3, 9], cost[] = [7, 6]
+Output: -1
+Explanation: There is no gas station to start with such that you can complete the tour.
+
+Constraints:
+1 ≤ n ≤ 10⁶
+1 ≤ gas[i], cost[i] ≤ 10³
