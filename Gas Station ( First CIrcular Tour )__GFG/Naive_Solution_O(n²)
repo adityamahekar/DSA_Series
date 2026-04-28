@@ -1,0 +1,74 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int startStation(int[] gas, int[] cost) {
+
+        int n = cost.length;                                                // Get number of stations
+        
+        for(int start = 0; start < n; start++){                             // Try each station as starting point
+            int end = start;                                                // Current station position
+            int cur_gas = 0;                                                // Current gas in tank
+            
+            while(true){
+                cur_gas += (gas[end] - cost[end]);                          // Add gas at current station, subtract cost to next station
+                
+                if(cur_gas < 0) break;                                      // Ran out of gas, this start won't work
+                
+                end = (end + 1) % n;                                        // Move to next station (circular wrapping)
+                
+                if(start == end){
+                    return start;                                           // Completed full circle, return starting station
+                }
+            }
+        }
+        
+        return -1;                                                          // No valid starting station found
+        
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+start = 0:
+  end=0: cur_gas = 0 + (4-6) = -2  → break (fails immediately)
+
+start = 1:
+  end=1: cur_gas = 0 + (5-6) = -1  → break (fails immediately)
+
+start = 2:
+  end=2: cur_gas = 0 + (7-3) = 4   ✓
+  end=3: cur_gas = 4 + (4-5) = 3   ✓
+  end=0: cur_gas = 3 + (4-6) = 1   ✓
+  end=1: cur_gas = 1 + (5-6) = 0   ✓
+  end=2: start==end → return 2  ✓
+
+Output: 2
+
+//////////////////////// QUESTION ////////////////////////////
+
+Gas Station
+There are n gas stations along a circular tour. You are given two integer arrays gas[] and cost[], 
+where gas[i] is the amount of gas available at station i and cost[i] is the gas needed to travel from station i to station (i+1). 
+You have a car with an unlimited gas tank and start with an empty tank at some station. 
+Your task is to return the index of the starting station if it is possible to travel once around the circular route in a clockwise direction without running out of gas at any station; otherwise, return -1.
+
+Note: If a solution exists, it is guaranteed to be unique.
+
+Examples:
+
+Input: gas[] = [4, 5, 7, 4], cost[]= [6, 6, 3, 5]
+Output: 2
+Explanation: Start at gas station at index 2 and fill up with 7 units of gas. Your tank = 0 + 7 = 7
+Travel to station 3. Available gas = (7 – 3 + 4) = 8.
+Travel to station 0. Available gas = (8 – 5 + 4) = 7.
+Travel to station 1. Available gas = (7 – 6 + 5) = 6.
+Return to station 2. Available gas = (6 – 6) = 0.
+
+Input: gas[] = [3, 9], cost[] = [7, 6]
+Output: -1
+Explanation: There is no gas station to start with such that you can complete the tour.
+
+Constraints:
+1 ≤ n ≤ 106
+1 ≤ gas[i], cost[i] ≤ 103
+
