@@ -2,14 +2,14 @@
 
 class Solution {
     public int startStation(int[] gas, int[] cost) {
-        Deque<Integer> dq = new ArrayDeque<>();               // Stack for tracking starts
+        Deque<Integer> dq = new ArrayDeque<>();               // Tracks visited stations
         int n = cost.length;                                   // Total stations
         dq.addLast(0);                                         // Start from index 0
         
         for(int start = 0; start < n; start++){                // Try every station
             int end = start;
             int cur_gas = 0;                                   // Current tank balance
-            
+            dq.clear();                                        // Reset for each new start
             
             while(true){
                 cur_gas += (gas[end] - cost[end]);             // Net gas at station
@@ -20,14 +20,15 @@ class Solution {
                     break;                                     // Try next start
                 } 
                 
-                end = (end+1)%n;                               // Next station (circular)
+                end = (end+1) % n;                             // Next station (circular)
                 
-                if(start == end){                              // Completed full circle
+                // Check: visited all n stations AND gas is non-negative
+                if(dq.size() == n && cur_gas >= 0){            // ✅ Your requested check
                     return start;                              // Success!
                 }
             }
         }
-        
+    
         return -1;                                             // No valid start found
     }
 }
