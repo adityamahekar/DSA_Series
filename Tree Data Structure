@@ -1,0 +1,165 @@
+
+Tree Data Structure -
+
+===============================================================================================
+
+                    A                    ← Root (no parent)
+                   / \
+                  /   \
+                 B     C                 ← Children of A; Internal nodes
+                / \     \
+               /   \     \
+              D     E     F              ← D, E are children of B; F is child of C
+             / \           \
+            /   \           \
+           G     H           I           ← G, H are children of D; I is child of F
+                                     
+Terminology Illustrated:
+
+Root:           A (topmost node, no parent)
+
+Internal Nodes: A, B, C, D, F (have at least 1 child)
+
+Leaf Nodes:     E, G, H, I (no children, degree = 0)
+
+Parent-Child:
+  - A is parent of B, C
+  - B is parent of D, E
+  - D is parent of G, H
+  - C is parent of F
+  - F is parent of I
+
+Children:
+  - B, C are children of A
+  - D, E are children of B
+  - G, H are children of D
+  - F is child of C
+  - I is child of F
+
+Siblings:
+  - B and C (same parent A)
+  - D and E (same parent B)
+  - G and H (same parent D)
+
+Subtree at B:   B, D, E, G, H (B + all its descendants)
+
+Ancestors of G: A, B, D (path from root to G)
+
+Descendants of A: B, C, D, E, F, G, H, I (all nodes below A)
+
+Degree:
+  - Degree of A = 2 (children: B, C)
+  - Degree of B = 2 (children: D, E)
+  - Degree of D = 2 (children: G, H)
+  - Degree of C = 1 (child: F)
+  - Degree of F = 1 (child: I)
+  - Degree of leaves (E, G, H, I) = 0
+
+Levels:
+  Level 0: A
+  Level 1: B, C
+  Level 2: D, E, F
+  Level 3: G, H, I
+
+Height:
+  - Height of tree = 3 (longest path from root to leaf)
+  - Height of leaf = 0
+
+============================================================================================
+
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Category         | Term / Question                                                   | Definition / Answer                                              |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Basic Concept    | What is a Tree?                                                    | A non-linear, hierarchical data structure with parent-child      |
+|                  |                                                                    | relationships starting from a single root node                   |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Node                                                               | A basic unit that stores data and connects to other nodes via    |
+|                  |                                                                    | edges                                                            |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Root                                                               | The topmost node; has no parent                                  |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Leaf (Terminal Node)                                               | A node with no children                                          |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Parent Node                                                        | A node that is the immediate predecessor of another node         |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Child Node                                                         | A node that is the immediate successor of another node           |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Subtree                                                            | A tree formed by a node and all its descendants                  |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Ancestors                                                          | All nodes on the path from root to a node (parent, grandparent,  |
+|                  |                                                                    | etc.)                                                            |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Descendants                                                        | All nodes reachable by moving downwards from a node (children,   |
+|                  |                                                                    | grandchildren, etc.)                                             |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Degree                                                             | The total number of children a node has                          |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Terminology      | Internal Node                                                      | A node that is not a leaf; has one or more children              |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Key Relationship | Every node (except root)                                           | Has exactly one parent                                           |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Key Relationship | Siblings                                                           | Nodes that share the same parent                                 |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Key Relationship | Root                                                               | Is an ancestor of every node in the tree                         |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Key Relationship | Leaf nodes                                                         | Have no descendants                                              |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Root                                                               | A                                                                |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Internal Nodes                                                     | A, B, D                                                          |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Leaf Nodes                                                         | C, E, F, G, H                                                    |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Parent-Child pairs                                                 | A-B, A-C, B-D, B-E, D-G, D-H                                     |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Subtree at B                                                       | B, D, E, G, H                                                    |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Ancestors of G                                                     | A, B, D                                                          |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Descendants of A                                                   | B, C, D, E, F, G, H                                              |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Degree of A                                                        | 2 (children: B and C)                                            |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Degree of D                                                        | 2 (children: G and H)                                            |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+| Visual Example   | Degree of leaves                                                   | 0                                                                |
++------------------+------------------------------------------------------------------+------------------------------------------------------------------+
+
+
+/////////////////////////////// QUESTION: /////////////////////////////////
+
+1: What is the difference between a leaf node and an internal node?
+=> Leaf nodes have no children (degree = 0), while internal nodes have at least one child.
+
+2: How do ancestors and descendants relate to each other?
+=> Ancestors are all nodes above a given node (path to root). Descendants are all nodes below it.
+
+3: What is the degree of the root node?
+=> The number of its direct children.
+
+4: Can a tree have multiple roots?
+=> No, a tree has exactly one root by definition.
+
+5: What is a subtree?
+=> Any node with all its descendants forms a complete subtree.
+
+6: In a binary tree, what is the maximum degree of a node?
+=> 2 (at most 2 children per node).
+
+7: How do you find ancestors of a node in a tree?
+=> Trace the parent pointers upwards until you reach the root.
+
+8: What are siblings in a tree?
+=> Nodes that share the same parent.
+
+9: Is the root considered an ancestor of itself?
+=> No, ancestors are the proper nodes above it, not including itself.
+
+10: What is the height of a leaf node?
+=> 0 (no children below it).
+
+11: What is the degree of a leaf node?
+=> 0 (leaf nodes have no children).
+
+12: Can a node be both a parent and a child?
+=> Yes, internal nodes are children of their parent and parents of their children.
