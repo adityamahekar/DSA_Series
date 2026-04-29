@@ -1,0 +1,31 @@
+
+class Node{
+  int key;                              // Stores the integer value of the node
+  Node left;                            // Reference to the left child node
+  Node right;                           // Reference to the right child node
+  Node (int k){                         // Constructor that initializes the key
+    key = k;                            // Assigns the passed parameter k to key
+  }
+}
+
+class Test{
+  public static void main(String args[]){
+
+    // Node root = null;                 // Declaring root but not initializing
+
+    Node root = new Node(10);           // Creates root node with key value 10
+    root.left = new Node(20);           // Creates left child of root with key value 20
+    root.right = new Node(30);          // Creates right child of root with key value 30
+    root.left.left = new Node(40);      // Creates left child of root.left with key value 40
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+        10                 ← Root node (key = 10)
+       /  \
+      /    \
+     20     30            ← Left child (20), Right child (30)
+    /
+   /
+  40                       ← Left child of 20 (key = 40)
