@@ -1,0 +1,83 @@
+//////////////////////// CODE ////////////////////////////////
+
+/* class Node {
+    int data;
+    Node left, right;
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+} */
+
+class Tree {
+    
+    void knode(Node root, int k, ArrayList<Integer> list) {
+        
+        if(root == null){ return; }                                         // Base case: null node, return immediately
+        
+        if(k == 0){ list.add(root.data); }                                  // k=0: current node is at target distance, add to list
+        
+        knode(root.left, k-1, list);                                        // Recurse left with k-1
+        knode(root.right, k-1, list);                                       // Recurse right with k-1
+    }
+    
+    ArrayList<Integer> Kdistance(Node root, int k) {
+        
+        ArrayList<Integer> list = new ArrayList<>();                        // Initialize result list
+        
+        knode(root, k, list);                                               // Call helper to find all nodes at distance k
+        
+        return list;                                                        // Return list of nodes
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: k = 2
+        1
+       / \
+      2   3
+     / \
+    4   5
+
+knode(1, 2)
+  ├─ knode(2, 1)
+  │   ├─ knode(4, 0) → add 4
+  │   └─ knode(5, 0) → add 5
+  └─ knode(3, 1)
+      ├─ knode(null, 0) → skip
+      └─ knode(null, 0) → skip
+
+Output: 4 5
+
+//////////////////////// QUESTION ////////////////////////////
+
+K distance from root
+Given a binary tree with n nodes and an integer k. Print all nodes at distance k from the root (root is at distance 0). Nodes should be printed left to right.
+
+Example 1:
+Input: k = 0
+      1
+    /   \
+   3     2
+
+Output: 1
+Explanation: Node 1 is at 0 distance from root.
+
+Example 2:
+Input: k = 3
+          1
+         /
+        2
+         \
+          1
+        /  \
+       5    3
+
+Output: 5 3
+Explanation: Nodes 5 and 3 are at distance 3 from root (path: 1→2→1→5/3).
+
+Constraints:
+• 1 <= n <= 10^4
+• 0 <= k <= 30
+
