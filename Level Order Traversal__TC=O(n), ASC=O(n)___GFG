@@ -1,0 +1,97 @@
+//////////////////////// CODE ////////////////////////////////
+
+/* A binary tree Node
+class Node {
+    public int data;
+    public Node left;
+    public Node right;
+
+    // Constructor
+    public Node(int val) {
+        data = val;
+        left = null;
+        right = null;
+    }
+};
+*/
+
+class Solution {
+    public ArrayList<Integer> levelOrder(Node root) {
+
+        ArrayList<Integer> list = new ArrayList<>();                            // Initialize result list
+        Queue<Node> q = new ArrayDeque<>();                                     // Initialize queue for BFS
+        
+        q.add(root);                                                            // Enqueue root node
+        
+        while(!q.isEmpty()){                                                    // Process until queue is empty
+            Node cur = q.remove();                                              // Dequeue current node
+            list.add(cur.data);                                                 // Add current node's data to result
+            
+            if(cur.left != null){ q.add(cur.left); }                            // Enqueue left child if exists
+            if(cur.right != null){ q.add(cur.right); }                          // Enqueue right child if exists
+        }
+        
+        return list;                                                            // Return level order traversal result     
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: root = [10, 20, 30, N, N, 40, 50]
+
+        10
+       /  \
+      20   30
+          / \
+         40  50
+
+Queue: [10]
+→ remove 10, list=[10], add 20, 30
+Queue: [20, 30]
+→ remove 20, list=[10,20], add nothing
+Queue: [30]
+→ remove 30, list=[10,20,30], add 40, 50
+Queue: [40, 50]
+→ remove 40, list=[10,20,30,40], add nothing
+Queue: [50]
+→ remove 50, list=[10,20,30,40,50], add nothing
+Queue: []
+
+Output: [10, 20, 30, 40, 50]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Level Order Traversal
+Given the root of a Binary Tree, return its Level Order Traversal (BFS).
+Note: Visits nodes level by level, left to right within each level.
+
+Examples:
+
+----------------------------------------------------------------------
+
+Input: root = [1, 2, N, N, 3, N, N]
+
+    1
+   / \
+  2   3
+
+Output: [1, 2, 3]
+
+----------------------------------------------------------------------
+
+Input: root = [10, 20, 30, N, N, 40, 50, N, N, N, N]
+
+      10
+     /  \
+    20   30
+        /  \
+       40   50
+
+Output: [10, 20, 30, 40, 50]
+
+----------------------------------------------------------------------
+
+Constraints:
+• 1 ≤ number of nodes ≤ 3×10^4
+• 0 ≤ node->data ≤ 10^9
+
