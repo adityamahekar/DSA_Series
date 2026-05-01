@@ -1,0 +1,112 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*class Node
+{
+    int data;
+    Node left, right;
+
+    Node(int item)
+    {
+        data = item;
+        left = right = null;
+    }
+}*/
+
+class Solution {
+    public ArrayList<ArrayList<Integer>> levelOrder(Node root) {
+
+        ArrayList<ArrayList<Integer>> list = new ArrayList<>();               // Initialize result list of lists
+        if(root == null){ return list; }                                      // Base case: empty tree
+
+        Queue<Node> q = new LinkedList<>();                                   // Queue for BFS traversal
+
+        q.add(root);                                                          // Enqueue root
+        q.add(null);                                                          // Add null as level separator
+
+        ArrayList<Integer> level = new ArrayList<>();                         // List to store current level nodes
+
+        while(!q.isEmpty()){                                                  // Process until queue empty
+            Node cur = q.remove();                                            // Dequeue current node
+            
+            if(cur == null){                                                  // Level separator reached
+                list.add(level);                                              // Add current level to result
+                level = new ArrayList<>();                                    // Create new level list
+                if (!q.isEmpty()) q.add(null);                                // Add separator if nodes remain
+                continue;
+            }
+            
+            level.add(cur.data);                                              // Add current node to level list
+        
+            if(cur.left != null){ q.add(cur.left); }                          // Enqueue left child if exists
+            if(cur.right != null){ q.add(cur.right); }                        // Enqueue right child if exists
+        }
+        
+        return list;                                                          // Return level order traversal
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \ 
+   40  60
+
+Queue: [10, null]
+→ pop 10, level=[10], add 20, 30
+Queue: [null, 20, 30]
+→ pop null, list=[[10]], level=[], add null
+Queue: [20, 30, null]
+→ pop 20, level=[20], add 40, 60
+Queue: [30, null, 40, 60]
+→ pop 30, level=[20,30], add nothing
+Queue: [null, 40, 60]
+→ pop null, list=[[10],[20,30]], level=[], add null
+Queue: [40, 60, null]
+→ pop 40, level=[40], add nothing
+Queue: [60, null]
+→ pop 60, level=[40,60], add nothing
+Queue: [null]
+→ pop null, list=[[10],[20,30],[40,60]], level=[]
+Queue: []
+
+Output: [[10], [20, 30], [40, 60]]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Level Order Line by Line
+Given root of a binary tree, return its level order traversal with each level in a separate list.
+
+Examples:
+
+Input: root = [1, 2, 3, 4, 5, 6, 7, N, N, N, N, N, 8]
+
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+            \
+             8
+
+Output: [[1], [2, 3], [4, 5, 6, 7], [8]]
+Explanation: Level 0: [1], Level 1: [2,3], Level 2: [4,5,6,7], Level 3: [8]
+
+Input: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \ 
+   40  60
+
+Output: [[10], [20, 30], [40, 60]]
+Explanation: Level 0: [10], Level 1: [20,30], Level 2: [40,60]
+
+Constraints:
+• 1 ≤ number of nodes ≤ 1000
+• 0 ≤ node->data ≤ 100
+
