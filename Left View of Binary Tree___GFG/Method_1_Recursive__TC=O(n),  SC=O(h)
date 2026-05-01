@@ -1,0 +1,102 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int val) {
+        this.data = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+*/
+
+class Solution {
+
+    int Left;                                                      // Tracks maximum level visited so
+     
+    void ListLeft(Node root,int level,ArrayList<Integer> list){
+        if(root == null) return;                                   // Base case: null node, return
+        
+        if(Left < level){                                          // First node at this level
+            list.add(root.data);                                   // Add leftmost node to result
+            Left = level;                                          // Update max level visited
+        }
+        
+        ListLeft(root.left,level+1,list);                          // Traverse left first
+        ListLeft(root.right,level+1,list);                         // Traverse right second
+        
+    }
+    
+    public ArrayList<Integer> leftView(Node root) {
+        ArrayList<Integer> list = new ArrayList<>();               // Initialize result list      
+        Left = 0;                                                  // Reset max level tracker
+
+        ListLeft(root,1,list);                                     // Start traversal from level 1   
+            
+        return list;                                               // Return left view
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: root = [1, 2, 3, 4, 5, N, N]
+
+      1
+     / \
+    2   3
+   / \
+  4   5
+
+ListLeft(1, level=1):
+  Left=0 < 1 → add 1, Left=1
+  ├─ ListLeft(2, level=2):
+  │   Left=1 < 2 → add 2, Left=2
+  │   ├─ ListLeft(4, level=3):
+  │   │   Left=2 < 3 → add 4, Left=3
+  │   └─ ListLeft(5, level=3): skip (Left=3)
+  └─ ListLeft(3, level=2): skip (Left=2)
+
+Output: [1, 2, 4]
+
+//////////////////////// QUESTION  ////////////////////////////
+
+Left View of Binary Tree
+Given the root of a binary tree, return its left view.
+The left view is the set of nodes visible when viewed from the left side.
+Note: If the tree is empty, return an empty list.
+
+Examples:
+
+-----------------------------------------------------------------------------------------
+Input: root = [1, 2, 3, 4, 5, N, N]
+
+      1
+     / \
+    2   3
+   / \
+  4   5
+
+Output: [1, 2, 4]
+Explanation: Leftmost nodes at each level: 1 (level 0), 2 (level 1), 4 (level 2)
+-----------------------------------------------------------------------------------------
+
+Input: root = [1, 2, 3, N, N, 4, N, N, 5, N, N]
+
+      1
+     / \
+    2   3
+       /
+      4
+       \
+        5
+
+Output: [1, 2, 4, 5]
+Explanation: Leftmost nodes at each level: 1, 2, 4, 5
+-----------------------------------------------------------------------------------------
+
+Constraints:
+• 0 ≤ number of nodes ≤ 10^5
+• 0 ≤ node->data ≤ 10^5
