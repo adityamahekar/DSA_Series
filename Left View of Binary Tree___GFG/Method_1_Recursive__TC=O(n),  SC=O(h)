@@ -61,7 +61,7 @@ ListLeft(1, level=1):
 
 Output: [1, 2, 4]
 
-//////////////////////// QUESTION  ////////////////////////////
+//////////////////////// QUESTION ////////////////////////////
 
 Left View of Binary Tree
 Given the root of a binary tree, return its left view.
