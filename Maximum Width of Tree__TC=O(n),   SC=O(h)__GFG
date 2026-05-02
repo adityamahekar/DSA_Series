@@ -1,0 +1,93 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node
+{
+    int data;
+    Node left, right;
+
+    Node(int item)
+    {
+        data = item;
+        left = right = null;
+    }
+} */
+
+class Solution {
+    int maxWidth(Node root) {
+    
+        Queue<Node> q = new LinkedList<>();                                   // Queue for BFS traversal
+        
+        int res = 0;                                                          // Store maximum width found
+        q.add(root);                                                          // Enqueue root
+        
+        while(!q.isEmpty()){                                                  // Process until queue empty
+            int size = q.size();                                              // Nodes at current level
+            res = Math.max(res, size);                                        // Update max width
+            
+            for(int i=0;i<size;i++){
+                Node cur = q.remove();                                        // Dequeue current node
+                
+                if(cur.left != null){ q.add(cur.left);}                       // Enqueue left child
+                if(cur.right != null){ q.add(cur.right);}                     // Enqueue right child
+                
+            }
+        }
+        
+        return res;                                                           // Return maximum width
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: root = [1, 2, 3, 4, 5, 6, 7]
+
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+
+Iteration 1: size=1, res=max(0,1)=1, add 2, 3
+Queue: [2, 3]
+Iteration 2: size=2, res=max(1,2)=2, add 4, 5, 6, 7
+Queue: [4, 5, 6, 7]
+Iteration 3: size=4, res=max(2,4)=4, add nothing
+Queue: []
+
+Output: 4
+
+//////////////////////// QUESTION ////////////////////////////
+
+Maximum Width of Tree
+Given a Binary Tree, find the maximum width.
+Maximum width is defined as the maximum number of nodes at any level.
+
+Examples:
+---------------------------------------------------------------------------------
+Input: root = [1, 2, 3, 4, 5, 6, 7]
+
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+
+Output: 4
+Explanation: Level 1: 1 node, Level 2: 2 nodes, Level 3: 4 nodes → max = 4
+---------------------------------------------------------------------------------
+Input: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \
+   40  60
+
+Output: 2
+Explanation: Level 1: 1 node, Level 2: 2 nodes, Level 3: 2 nodes → max = 2
+---------------------------------------------------------------------------------
+
+Constraints:
+• 1 ≤ number of nodes ≤ 10^5
+• 0 ≤ node->data ≤ 10^5
