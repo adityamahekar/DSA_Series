@@ -1,0 +1,110 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int d)
+    {
+        data = d;
+        left = right = null;
+    }
+}
+*/
+
+class Solution {
+    
+    int height(Node root){
+        if(root == null){ return -1; }                                      // Base case: null node has height -1
+        
+        return Math.max(height(root.left), height(root.right))+1;           // Height = max(left, right) + 1
+    }
+    
+    public boolean isBalanced(Node root) {
+
+        if(root == null){ return true; }                                    // Empty tree is balanced
+        
+        int l = height(root.left);                                          // Get height of left subtree
+        int r = height(root.right);                                         // Get height of right subtree
+        
+        return Math.abs(r-l) <= 1 && isBalanced(root.left) && isBalanced(root.right); // Check diff ≤ 1 and recurse
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: Balanced Tree [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \
+   40  60
+
+isBalanced(10):
+  h(left)=1, h(right)=0, |1-0|=1 ✓
+  ├─ isBalanced(20): h(40)=0, h(60)=0, |0-0|=1 ✓
+  │   ├─ isBalanced(40): leaf → true
+  │   └─ isBalanced(60): leaf → true
+  └─ isBalanced(30): leaf → true
+Output: true
+
+----------------------------------------------------------
+
+Example 2: Unbalanced Tree [1, 2, 3, 4, N, N, N, 5]
+
+      1
+     / \
+    2   3
+   /
+  4
+ /
+5
+
+isBalanced(1):
+  h(left)=2, h(right)=0, |2-0|=2 ✗
+Output: false
+
+//////////////////////// QUESTION ////////////////////////////
+
+Balanced Tree Check
+Given the root of a binary tree, determine if it is height-balanced or not.
+A binary tree is height-balanced if the absolute difference in heights of the left and right subtrees is at most 1 for every node in the tree.
+
+Examples:
+
+----------------------------------------------------------------
+
+Input: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \
+   40  60
+
+Output: true
+Explanation: Height difference ≤ 1 at all nodes
+
+----------------------------------------------------------------
+
+Input: root = [1, 2, 3, 4, N, N, N, 5]
+
+      1
+     / \
+    2   3
+   /
+  4
+ /
+5
+
+Output: false
+Explanation: Node 2 has height difference 2 (exceeds 1)
+
+----------------------------------------------------------------
+
+Constraints:
+• 1 ≤ number of nodes ≤ 1000
+• 1 ≤ node->data ≤ 10^4
+
