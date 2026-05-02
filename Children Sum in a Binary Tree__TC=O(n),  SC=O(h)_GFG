@@ -1,0 +1,106 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node{
+    int data;
+    Node left,right;
+
+    Node(int key)
+    {
+        data = key;
+        left = right = null;
+    }
+}
+*/
+
+class Solution {
+    public boolean isSumProperty(Node root) {
+    
+        if(root == null){ return true; }                                      // Base case: null tree is valid
+        if(root.left == null && root.right == null){
+            return true;                                                      // Leaf node is always valid
+        }
+        
+        
+        int sum = 0;
+        
+        if(root.left != null){ sum += root.left.data;}                        // Add left child data if exists
+        if(root.right != null){ sum += root.right.data;}                      // Add right child data if exists
+        
+        return ((root.data == sum) && isSumProperty(root.left) && isSumProperty(root.right)); // Check current + recurse
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: root = [35, 20, 15, 15, 5, 10, 5]
+Valid Tree
+
+        35
+       /  \
+      20   15
+     / \   / \
+    15  5 10  5
+
+isSumProperty(35): 20+15=35 ✓ → recurse left, right
+isSumProperty(20): 15+5=20 ✓ → recurse left, right
+isSumProperty(15): leaf → true
+isSumProperty(5): leaf → true
+isSumProperty(15): leaf → true
+isSumProperty(5): leaf → true
+isSumProperty(5): leaf → true
+Output: true
+
+Example 2: root = [1, 4, 3, 5]
+Invalid Tree
+
+      1
+     / \
+    4   3
+   /
+  5
+
+isSumProperty(1): 4+3=7 ≠ 1 ✗
+Output: false
+
+//////////////////////// QUESTION ////////////////////////////
+
+Children Sum in a Binary Tree
+Given the root of a binary tree, determine whether the tree satisfies the Children Sum Property.
+In this property, each non-leaf node must have a value equal to the sum of its left and right children's values.
+A NULL child is considered to have a value of 0, and all leaf nodes are valid by default.
+Return true if every node satisfies this condition, otherwise return false.
+
+Examples:
+
+------------------------------------------------------------------------
+
+Input: root = [35, 20, 15, 15, 5, 10, 5]
+
+        35
+       /  \
+      20   15
+     / \   / \
+    15  5 10  5
+
+Output: true
+Explanation: Every node equals sum of its children
+
+------------------------------------------------------------------------
+
+Input: root = [1, 4, 3, 5]
+
+      1
+     / \
+    4   3
+   /
+  5
+
+Output: false
+Explanation: 4+3=7 ≠ 1 (root does not satisfy)
+
+------------------------------------------------------------------------
+
+Constraints:
+• 1 ≤ number of nodes ≤ 10^5
+• 0 ≤ node->data ≤ 10^5
