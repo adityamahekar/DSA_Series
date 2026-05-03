@@ -1,0 +1,109 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+class Node {
+    int data;
+    Node left, right;
+
+    Node() {
+        this.data = 0;
+        this.left = this.right = null;
+    }
+
+    Node(int data) {
+        this.data = data;
+        this.left = this.right = null;
+    }
+}
+*/
+
+class Solution {
+    Node prev = null;                                                      // Tracks previously visited node in inorder
+    
+    Node bToDLL(Node root) {
+
+        if(root == null){ return null;}                                    // Base case: null node
+        
+        Node head = bToDLL(root.left);                                     // Recursively convert left subtree
+        
+        if(prev == null){ head = root; }                                   // First node (leftmost) = head
+        
+        else{
+            root.left = prev;                                              // Link current to previous (prev -> current)
+            prev.right = root;                                             // Link previous to current (current -> prev)
+        }
+        
+        prev = root;                                                       // Update prev to current node
+        
+        bToDLL(root.right);                                                // Recursively convert right subtree
+        
+        return head;                                                       // Return head of DLL
+                
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \
+   40  60
+
+Inorder: 40 → 20 → 60 → 10 → 30
+
+bToDLL(10):
+  bToDLL(20):
+    bToDLL(40): prev=null → head=40, prev=40
+    20.left=40, 40.right=20, prev=20
+    bToDLL(60): 60.left=20, 20.right=60, prev=60
+    → returns head=40
+  10.left=60, 60.right=10, prev=10
+  bToDLL(30): 30.left=10, 10.right=30, prev=30
+  → returns head=40
+
+DLL: 40 ⇄ 20 ⇄ 60 ⇄ 10 ⇄ 30
+Output: [40, 20, 60, 10, 30]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Binary Tree to DLL
+Given the root of a binary tree, convert it to a Doubly Linked List (DLL) in place.
+- Use left pointer as prev and right pointer as next
+- Form DLL using inorder traversal (Left → Root → Right)
+- The leftmost node becomes head
+- Return head of DLL
+
+Examples:
+
+----------------------------------------------------------------
+
+Input: root = [1, 2, 3]
+Output: [2, 1, 3]
+       1
+      / \
+     2   3
+
+Explanation: Inorder: 2 → 1 → 3, DLL: 2 ⇄ 1 ⇄ 3
+
+----------------------------------------------------------------
+
+Input: root = [10, 20, 30, 40, 60]
+
+       10
+      /  \
+     20   30
+    / \
+   40  60
+
+Output: [40, 20, 60, 10, 30]
+Explanation: Inorder: 40 → 20 → 60 → 10 → 30, DLL: 40 ⇄ 20 ⇄ 60 ⇄ 10 ⇄ 30
+
+----------------------------------------------------------------
+
+Constraints:
+• 1 ≤ Number of nodes ≤ 10^5
+• 0 ≤ Data of a node ≤ 10^5
+
