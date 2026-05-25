@@ -1,0 +1,116 @@
+
+//////////////////////// CODE ////////////////////////////////
+
+/*
+Definition for Node
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        this.data = val;
+        left = right = null;
+    }
+}
+*/                     // Node class definition (for reference)
+
+class Solution {
+    
+    boolean findPath(Node root, ArrayList<Node> p, int n){
+        if(root == null){ return false; }                                   // base case
+        
+        p.add(root);                                                         // add current node
+        
+        if(root.data == n){ return true; }                                   // found
+        
+        if(findPath(root.left,p,n) || findPath(root.right,p,n)){ return true; } // search children
+        
+        p.remove(p.size()-1);                                                // backtrack
+        
+        return false;                                                         // not found
+    }
+    
+    Node lca(Node root, int n1, int n2) {
+        
+        ArrayList<Node> path1 = new ArrayList<>();                           // path to n1
+        ArrayList<Node> path2 = new ArrayList<>();                           // path to n2
+        
+        if(findPath(root,path1,n1) == false  ||  findPath(root,path2,n2) == false){
+            return null;                                                     // one node not found
+        }
+        
+        int i;
+        for(i=0;i<path1.size() && i<path2.size();i++){
+            if(path1.get(i) != path2.get(i)){
+                break;                                                       // paths diverge
+            }
+        }
+        
+        return path1.get(i-1);                                                // last common node
+    }
+}                     
+
+//////////////////////// DRY RUN /////////////////////////////
+(root shown top-down; common ancestor marked)
+
+Example 1:
+1
+├── 2   ← LCA of 4 and 5
+|   ├── 4
+|   └── 5
+└── 3
+    ├── 6
+    └── 7
+
+Example 2:
+1
+├── 2
+|   ├── 4
+|   └── 5
+└── 3   ← LCA of 7 and 8
+    ├── 6
+    └── 7
+        └── 8
+
+//////////////////////// QUESTION ////////////////////////////
+
+LCA in Binary Tree
+Given the root of a binary tree with all unique values and two nodes value, n1 and n2. Find the lowest common ancestor of the given two nodes. Both node values are always present in the Binary Tree.
+Note: LCA is the first common ancestor of both the nodes n1 and n2 from bottom of tree.
+
+Examples:
+------------------------------------------------------------------------
+Input: root = , n1 = 4, n2 = 5    
+Output: 2
+Explanation: LCA of 4 and 5 is 2.
+
+Diagram:
+1
+├── 2   ← 2 is LCA
+|   ├── 4
+|   └── 5
+└── 3
+    ├── 6
+    └── 7
+
+------------------------------------------------------------------------
+Input: root = [1, 2, 3, 4, 5, 6, 7, N, N, N, N, 8], n1 = 7, n2 = 8
+Output: 3
+Explanation: LCA of 7 and 8 is 3.
+
+Diagram:
+1
+├── 2
+|   ├── 4
+|   └── 5
+└── 3   ← 3 is LCA
+    ├── 6
+    └── 7
+        └── 8
+
+--------------------------------------------------------------------------
+
+Constraints:
+1 ≤ number of nodes ≤ 105
+1 ≤ node->data ≤ 105
