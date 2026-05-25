@@ -1,0 +1,90 @@
+//////////////////////// CODE ////////////////////////////////
+
+/*
+Definition for Node
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        this.data = val;
+        left = right = null;
+    }
+}
+*/                     // Node class definition
+
+class Solution {
+    Node lca(Node root, int n1, int n2) {
+        
+        if(root == null){
+            return null;
+        }
+        
+        if(root.data == n1 || root.data == n2){
+            return root;
+        }
+        
+        Node lca1 = lca(root.left, n1, n2);
+        Node lca2 = lca(root.right, n1, n2);
+        
+        if(lca1 != null && lca2 != null){
+            return root;          // current node is LCA
+        }
+        
+        if(lca1 != null){
+            return lca1;          // LCA in left subtree
+        }
+        else{
+            return lca2;          // LCA in right subtree
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+Example 1:  
+
+Tree:
+
+      1
+    /   \
+   2     3
+  / \   / \
+ 4   5 6   7
+
+n1 = 4, n2 = 5 → LCA = 2.
+
+--------------------------------------------------
+
+Example 2:  
+Tree:
+
+      1
+    /   \
+   2     3
+  / \   / \
+ 4   5 6   7
+        \
+         8
+
+n1 = 7, n2 = 8 → LCA = 3.
+
+//////////////////////// QUESTION////////////////////////////
+
+LCA in Binary Tree  
+Given the root of a binary tree with all unique values and two node values, n1 and n2. 
+Find the lowest common ancestor (LCA) of the two nodes. Both nodes are always present in the tree.  
+Note: LCA is the first common ancestor of n1 and n2 as you move up from the bottom of the tree.
+
+Examples:  
+Input: root = , n1 = 4, n2 = 5  
+Output: 2  
+Explanation: LCA of 4 and 5 is 2.
+
+Input: root = [1, 2, 3, 4, 5, 6, 7, N, N, N, N, 8], n1 = 7, n2 = 8  
+Output: 3  
+Explanation: LCA of 7 and 8 is 3.
+
+Constraints:  
+1 ≤ number of nodes ≤ 10⁵  
+1 ≤ node->data ≤ 10⁵  
