@@ -1,0 +1,188 @@
+# Minimum Time to Burn a Binary Tree
+
+////////////////////////////////////////////////////////////////////////////
+
+## Question
+
+Given a binary tree and the value of a target node, fire starts burning from
+that target node. Each minute, fire spreads from a burning node to its
+directly connected neighbors — this includes its left child,
+right child, and also its parent (since a tree, when burning, behaves
+like an undirected graph — fire doesn't care about parent/child direction).
+
+Find the minimum time (in minutes) required to burn the entire tree.
+
+Example:
+
+```
+Input Tree:
+          1
+        /   \
+       2     3
+      / \     \
+     4   5     6
+        / \
+       7   8
+
+target = 5
+```
+
+Expected Output: `3`
+(Fire spreads: 5 → {2, 7, 8} → {1, ...} → {3} ... taking 3 minutes to cover
+every node)
+
+////////////////////////////////////////////////////////////////////////////
+
+## Explanation with Figure
+
+A binary tree only stores `left` and `right` pointers — there is no way to
+go from a child back up to its parent. But fire doesn't respect that
+one-way structure; it can spread upward too.
+
+So the trick is:
+
+1. Build a `parent` map using one BFS pass over the tree, so every node
+   also knows how to reach its parent.
+2. Run a second BFS ("multi-source spread") starting from the target
+   node, treating each node as having 3 possible neighbors: `left`,
+   `right`, and `parent`.
+3. Count the number of levels this BFS takes to visit every node —
+   that count is the answer.
+
+This is the exact same pattern as "Rotting Oranges" / "Burning Tree" problems.
+
+### Figure: Tree turned into a graph (dotted lines = new parent links)
+
+```
+                (1)
+               /   \
+              /     \
+            (2)------(3)
+            / \        \
+           /   \        \
+         (4)   (5)------(6)
+               / \
+              /   \
+            (7)   (8)
+
+   solid lines  = original tree edges (child -> parent already broken)
+   the parent map re-adds the missing "child -> parent" edge
+   once added, every node has up to 3 neighbors: left, right, parent
+```
+
+### Figure: BFS spread ("burning") starting from node 5
+
+```
+Time 0:            {5}                         <- fire starts here
+
+Time 1:         {2, 7, 8}                      <- 5's neighbors: parent(2),
+                                                   left(7), right(8)
+
+Time 2:            {1, 4}                      <- 2's neighbors: parent(1),
+                                                   left(4)  [2 & 5 visited]
+
+Time 3:            {3}                         <- 1's neighbor: right(3)
+                                                   [1 already visited]
+
+All 8 nodes visited in 3 rounds  ->  answer = 3
+```
+
+Each "round" of the BFS = 1 minute, and the round only counts if at least
+one new node was reached in it (this avoids an extra `+1` after the fire
+has already finished spreading).
+
+////////////////////////////////////////////////////////////////////////////
+
+## Code
+
+```java
+/* Structure of binary tree node
+class Node {
+    int data;
+    Node left;
+    Node right;
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}*/
+
+class Solution {                                                     // class holding the solution method
+    public int minTime(Node root, int target) {                      // method to find minimum burn time
+
+        Map<Node, Node> parent = new HashMap<>();                    // map to store each node's parent
+
+        Queue<Node> q = new LinkedList<>();                          // queue used for BFS traversal
+
+        Node start = null;                                           // reference to the target node
+
+        q.add(root);                                                 // add root to begin first BFS
+
+        while (!q.isEmpty()) {                                       // loop until all nodes are visited
+
+            Node cur = q.poll();                                     // remove front node from queue
+
+            if (cur.data == target)                                  // check if current node is the target
+                start = cur;                                         // save reference to target node
+
+            if (cur.left != null) {                                  // if left child exists
+                parent.put(cur.left, cur);                           // record cur as parent of left child
+                q.add(cur.left);                                     // enqueue left child
+            }
+
+            if (cur.right != null) {                                 // if right child exists
+                parent.put(cur.right, cur);                          // record cur as parent of right child
+                q.add(cur.right);                                    // enqueue right child
+            }
+        }
+
+        q.add(start);                                                // start second BFS from target node
+
+        Set<Node> visited = new HashSet<>();                         // set to track visited nodes
+
+        visited.add(start);                                          // mark target node as visited
+
+        int time = 0;                                                // counts minutes taken to burn tree
+
+        while (!q.isEmpty()) {                                       // loop until fire stops spreading
+
+            int n = q.size();                                        // number of nodes at current level
+
+            boolean flag = false;                                    // tracks if progress was made this round
+
+            while (n-- > 0) {                                        // process all nodes in current level
+
+                Node cur = q.poll();                                 // remove front node from queue
+
+                if (cur.left != null && visited.add(cur.left)) {     // try spreading to left child
+                    q.add(cur.left);                                 // enqueue newly reached left child
+                    flag = true;                                     // mark progress made
+                }
+
+                if (cur.right != null && visited.add(cur.right)) {   // try spreading to right child
+                    q.add(cur.right);                                // enqueue newly reached right child
+                    flag = true;                                     // mark progress made
+                }
+
+                Node p = parent.get(cur);                            // fetch parent of current node
+                if (p != null && visited.add(p)) {                   // try spreading to parent
+                    q.add(p);                                        // enqueue newly reached parent
+                    flag = true;                                     // mark progress made
+                }
+            }
+
+            if (flag)                                                // only count round if progress made
+                time++;                                              // increment time by one minute
+        }
+
+        return time;                                                 // return total burn time
+    }
+}
+```
+
+////////////////////////////////////////////////////////////////////////////
+
+## Complexity
+
+- Time: `O(N)` — every node is visited a constant number of times.
+- Space: `O(N)` — for the `parent` map, `visited` set, and the queue.
