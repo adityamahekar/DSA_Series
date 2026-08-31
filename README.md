@@ -13,3 +13,21 @@
 
          
 repo
+
+
+```
+//////////////////////// CODE ////////////////////////////////
+<align the commnt at right max end      max no commnt on the top>
+
+//////////////////////// DRY RUN /////////////////////////////
+<no calc or theory for DRY RUN only visual representation  with minimal content
+ no calc and theory in dry run make it simple and easy to understand and short >
+
+//////////////////////// QUESTION////////////////////////////
+
+<With Question  allowed and no Difficulty: MediumAccuracy: 32.95%Submissions: 518K+Points: 4Average Time: 20m >
+dont give any link
+
+in this format given above 
+
+```
