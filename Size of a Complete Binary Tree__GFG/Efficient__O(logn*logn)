@@ -1,0 +1,96 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    public int countNodes(Node root) {
+
+        if (root == null) return 0;                         // Empty tree
+
+        int lh = 0, rh = 0;                                // Left and right heights
+
+        Node cur = root;                                   // Current node
+
+        while (cur != null) {
+            lh++;                                         // Count left height
+            cur = cur.left;                                // Move left
+        }
+
+        cur = root;                                        // Reset to root
+
+        while (cur != null) {
+            rh++;                                         // Count right height
+            cur = cur.right;                               // Move right
+        }
+
+        if (lh == rh) {
+            return (int)Math.pow(2, lh) - 1;               // Perfect tree
+        }
+
+        return 1 + countNodes(root.left) + countNodes(root.right); // Count both subtrees
+    }
+}
+
+
+### //////////////////////// DRY RUN /////////////////////////////
+
+**Example 1**
+
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+
+        ↓
+
+       1
+     /   \
+    2     3
+   / \   / \
+  4   5 6   7
+
+        ↓
+
+      7 nodes
+```
+
+**Example 2**
+
+
+        1
+       / \
+      2   3
+     / \  /
+    4   5 6
+
+        ↓
+
+       1
+     /   \
+    2     3
+   / \   /
+  4   5 6
+
+        ↓
+
+      6 nodes
+
+
+### //////////////////////// QUESTION ////////////////////////////
+
+**Size of a Complete Binary Tree**
+
+You are given the root of a **complete binary tree**. Find the count of nodes.
+
+A complete binary tree has all levels completely filled except possibly the last level, where nodes are filled from **left to right**.
+
+**Note:** Design an algorithm that runs better than **O(n)**.
+
+**Constraints:**
+
+* `0 ≤ N ≤ 5 × 10⁴`
+* `0 ≤ value of nodes ≤ 5 × 10⁴`
+* The tree is guaranteed to be complete.
+
+**Expected Complexity:** Better than `O(n)`
+**Your solution:** `O(log² n)` time, `O(log n)` space.
