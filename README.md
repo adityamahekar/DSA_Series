@@ -28,6 +28,6 @@ repo
 <With Question  allowed and no Difficulty: MediumAccuracy: 32.95%Submissions: 518K+Points: 4Average Time: 20m >
 dont give any link
 
-in this format given above 
+in this format given above and dont add ``` or * for highlight and bold
 
 ```
