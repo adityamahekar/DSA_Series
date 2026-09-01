@@ -1,0 +1,140 @@
+//////////////////////// CODE /////////////////////////////////
+
+class Node {
+    int data;
+    Node left;
+    Node right;
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+class Solution {
+    public ArrayList<Integer> serialize(Node root) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        HELPserialize(root,arr);
+        return arr;
+    }
+
+    public void HELPserialize(Node root, ArrayList<Integer> arr) {
+        if(root == null){
+            arr.add(null);                                     // null marker for missing child
+            return;
+        }
+        arr.add(root.data);                                    // store current node value
+        HELPserialize(root.left,arr);                          // recurse left subtree
+        HELPserialize(root.right, arr);                        // recurse right subtree
+    }
+
+    int idx = 0;
+    public Node deSerialize(ArrayList<Integer> arr) {
+        if(idx == arr.size()){ return null; }                  // safety check for end of array
+
+        Integer val = arr.get(idx);
+        idx++;                                                 // move to next index
+
+        if(val == null){ return null; }                        // null marker means no node here
+
+        Node root = new Node(val);
+        root.left = deSerialize(arr);                          // rebuild left subtree
+        root.right = deSerialize(arr);                         // rebuild right subtree
+
+        return root;
+    }
+};
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Tree:
+        1
+       / \
+      2   3
+
+Serialize (preorder with null markers):
+
+arr = [1, 2, N, N, 3, N, N]
+
+Deserialize (idx moves left to right):
+
+idx0 -> 1        -> root
+idx1 -> 2        -> root.left
+idx2 -> N        -> left.left = null
+idx3 -> N        -> left.right = null
+idx4 -> 3        -> root.right
+idx5 -> N        -> right.left = null
+idx6 -> N        -> right.right = null
+
+Final Tree Rebuilt:
+
+        1
+       / \
+      2   3
+
+Level order output: 1 2 3
+
+--------------------------------------------
+
+arr = [1, 2, N, N, 3, N, N]
+
+|--> deSerialize(idx=0, val=1)
+|       |--> root = 1
+|
+|       |--> deSerialize(idx=1, val=2)
+|       |       |--> root.left = 2
+|       |
+|       |       |--> deSerialize(idx=2, val=N)
+|       |       |       |--> return null
+|       |
+|       |       |--> deSerialize(idx=3, val=N)
+|       |       |       |--> return null
+|       |
+|       |--> After left: node 2 attached
+|
+|       |--> deSerialize(idx=4, val=3)
+|       |       |--> root.right = 3
+|       |
+|       |       |--> deSerialize(idx=5, val=N)
+|       |       |       |--> return null
+|       |
+|       |       |--> deSerialize(idx=6, val=N)
+|       |       |       |--> return null
+|       |
+|       |--> After right: node 3 attached
+|
+|--> return root = 1
+
+Final Tree Rebuilt:
+
+        1
+       / \
+      2   3
+
+Level order output: 1 2 3
+
+//////////////////////// QUESTION////////////////////////////
+
+Serialize and Deserialize a Binary Tree
+
+Given the root of a binary tree. You have to perform Serialization and Deserialization. 
+Serialization is to store a tree in an array so that it can be later restored and deserialization is reading tree back from the array. 
+
+Complete the functions:
+
+serialize() : stores the tree into an array and returns the array.
+deSerialize() : deserializes the array to the tree and returns the root of the tree.
+
+Note: Multiple nodes can have the same data and the node values are always positive integers. Your code will be correct if the tree returned by deSerialize(serialize(input_tree)) is same as the input tree. Driver code will print the level order traversal of the tree returned by deSerialize(serialize(input_tree)).
+
+Examples :
+
+Input: root = [1, 2, 3]
+
+Output: [1, 2, 3]
+
+Input: root = [10, 20, 30, 40, 60, N, N]
+
+Output: [10, 20, 30, 40, 60]
+
+Constraints:
+1 ≤ size of binary tree ≤ 10^4
+1 ≤ node.data ≤ 10^9
