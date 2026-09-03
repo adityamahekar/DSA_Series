@@ -5,6 +5,13 @@ ii) All keys are typically considered as distinct
 iii) Like linked list, it is a linked data structure
 iv) Implemented in C++ as map, set, multimap and multiset. and in Java as TreeSet and Treemap
 
+          (5)
+         /   \
+       (3)   (7)
+       / \   / \
+     (2) (4)(6) (8)
+
+
 # Time Complexity
 
 | Operation        | Sorted Array | Unsorted Array | Linked List | Balanced BST | Hash Table |
