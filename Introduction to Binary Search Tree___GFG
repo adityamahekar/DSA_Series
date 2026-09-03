@@ -1,0 +1,18 @@
+# Binary Search Tree:
+
+i) For every node, keys in left side are smaller and keys in right side are greater
+ii) All keys are typically considered as distinct
+iii) Like linked list, it is a linked data structure
+iv) Implemented in C++ as map, set, multimap and multiset. and in Java as TreeSet and Treemap
+
+# Time Complexity
+
+| Operation        | Sorted Array | Unsorted Array | Linked List | Balanced BST | Hash Table |
+| ---------------- | ------------ | -------------- | ----------- | ------------ | ---------- |
+| Search           | O(log n)     | O(n)           | O(n)        | O(log n)     | O(1) avg   |
+| Insert           | O(n)         | O(1)           | O(1)        | O(log n)     | O(1) avg   |
+| Delete           | O(n)         | O(n)           | O(1)        | O(log n)     | O(1) avg   |
+| Find Closest     | O(log n)     | O(n)           | O(n)        | O(log n)     | O(n)       |
+| Sorted Traversal | O(n)         | O(n log n)     | O(n log n)  | O(n)         | O(n log n) |
+
+
