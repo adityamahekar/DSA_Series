@@ -1,0 +1,68 @@
+//////////////////////// CODE /////////////////////////////////
+class Solution {
+    public boolean search(Node root, int key) {
+
+        if(root == null){
+            return false;                                          // key not found
+        }
+
+        if(root.data == key){
+            return true;                                           // key found
+        }
+
+        else if(root.data > key){
+            return search(root.left,key);                          // go left
+        }
+
+        else{
+            return search(root.right,key);                         // go right
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+Input: root = [8, 3, 10, 1, 6, N, 14], key = 6
+
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+
+search(8,6) -> 6<8 -> go left
+search(3,6) -> 6>3 -> go right
+search(6,6) -> match -> true
+
+Result: true
+
+//////////////////////// QUESTION////////////////////////////
+Search in BST
+
+Given a Binary Search Tree and a node value key, return true if the node with value key is present in the BST; otherwise, return false.
+Examples:
+
+Input: root = [6, 2, 8, N, N, 7, 9], key = 8
+
+        6
+       / \
+      2   8
+         / \
+        7   9
+
+Output: true
+Explanation: 8 is present in the BST as right child of root.
+
+Input: root = [16, 12, 18, 10, N, 17, 19], key = 14
+
+          16
+         /  \
+       12    18
+       /     /  \
+     10     17   19
+
+Output: false
+Explanation: 14 is not present in the BST
+
+Constraints:
+1 ≤ number of nodes ≤ 3*10^4
+1 ≤ node->data, key ≤ 10^9
