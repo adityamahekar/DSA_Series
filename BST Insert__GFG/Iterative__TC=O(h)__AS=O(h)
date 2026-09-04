@@ -1,0 +1,93 @@
+//////////////////////// CODE /////////////////////////////////
+*/
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+} */
+
+
+class Solution {
+    public Node insert(Node root, int key) {
+        
+        if(root == null){
+            return new Node(key);                             // create and return new node
+        }
+        
+        if(root.data < key){
+            root.right = insert(root.right,key);               // key bigger, go right
+        }
+        
+        else if(root.data > key){
+            root.left = insert(root.left,key);                 // key smaller, go left
+        }
+        
+        return root;                                           // return same root back
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input 1: root = [2, 1, 3], key = 4
+
+        2
+       / \
+      1   3
+
+4 > 2 -> go right
+4 > 3 -> go right (null found) -> insert 4 here
+
+        2
+       / \
+      1   3
+           \
+            4
+
+Output: [2, 1, 3, N, N, N, 4]
+
+Input 2: root = [2, 1, 3, N, N, N, 6], key = 4
+
+        2
+       / \
+      1   3
+           \
+            6
+
+4 > 2 -> go right
+4 < 6 -> go left (null found) -> insert 4 here
+
+        2
+       / \
+      1   3
+           \
+            6
+           /
+          4
+
+Output: [2, 1, 3, N, N, N, 6, 4]
+
+//////////////////////// QUESTION////////////////////////////
+
+BST Insert
+
+Given a root of Binary Search Tree (BST) and an integer key, insert a new node with value key into the BST. Return the root of the modified tree after the insertion.
+Note: If the key is already present in the BST, return the root.
+
+Examples :
+
+Input: root = [2, 1, 3], key = 4
+
+Output: [2, 1, 3, N, N, N, 4]
+Explanation: After inserting the node 4, the new tree will be [2, 1, 3, N, N, N, 4].
+
+Input: root = [2, 1, 3, N, N, N, 6], key = 4
+
+Output: [2, 1, 3, N, N, N, 6, 4]
+Explanation: After inserting the node 4, the new tree will be [2, 1, 3, N, N, N, 6, 4].
+
+Constraints:
+1 ≤ size of binary tree ≤ 10^5
+1 ≤ node.data, key ≤ 10^9
