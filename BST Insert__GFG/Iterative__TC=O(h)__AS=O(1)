@@ -1,0 +1,87 @@
+//////////////////////// CODE /////////////////////////////////* Structure of a Binary Search Tree node
+class Node {
+    int data;
+    Node left, right;
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+} */
+class Solution {
+    public Node insert(Node root, int key) {
+        
+        Node temp = new Node(key);                              // new node to insert
+        
+        Node parent = null;
+        Node cur = root;
+        
+        while(cur != null){
+            parent = cur;                                       // track parent
+            
+            if(cur.data < key){
+                cur = cur.right;                                 // move right
+            }
+            else if(cur.data > key){
+                cur = cur.left;                                  // move left
+            }
+            
+            else{
+                return root;                                     // key already exists
+            }
+        }
+        
+        if(parent == null){
+            return temp;                                         // empty tree case
+        }
+        else if(parent.data < key){
+            parent.right = temp;                                 // attach right
+        }
+        else{
+            parent.left = temp;                                  // attach left
+        }
+        
+        return root;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: root = [2, 1, 3], key = 4
+
+        2
+       / \
+      1   3
+
+cur=2 -> go right
+cur=3 -> go right (null) -> stop, parent=3
+
+        2
+       / \
+      1   3
+           \
+            4
+
+Output: [2, 1, 3, N, N, N, 4]
+
+//////////////////////// QUESTION////////////////////////////
+
+BST Insert
+
+Given a root of Binary Search Tree (BST) and an integer key, insert a new node with value key into the BST. Return the root of the modified tree after the insertion.
+Note: If the key is already present in the BST, return the root.
+
+Examples :
+
+Input: root = [2, 1, 3], key = 4
+
+Output: [2, 1, 3, N, N, N, 4]
+Explanation: After inserting the node 4, the new tree will be [2, 1, 3, N, N, N, 4].
+
+Input: root = [2, 1, 3, N, N, N, 6], key = 4
+
+Output: [2, 1, 3, N, N, N, 6, 4]
+Explanation: After inserting the node 4, the new tree will be [2, 1, 3, N, N, N, 6, 4].
+
+Constraints:
+1 ≤ size of binary tree ≤ 10^5
+1 ≤ node.data, key ≤ 10^9
