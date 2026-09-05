@@ -1,0 +1,104 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int findMaxFork(Node root, int k) {
+
+        int res = -1;                                          // stores floor answer
+
+        while(root != null){                                   // loop till leaf
+
+            if(root.data == k){                                // exact match found
+                return root.data;
+            }
+
+            else if(root.data > k){                            // node too big, go left
+                root = root.left;
+            }
+
+            else{                                              // node fits, go right
+                res = root.data;                               // save as possible floor
+                root = root.right;
+            }
+
+        }
+
+        return res;                                            // final floor value
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Tree:                 10
+                     /    \
+                    7      15
+                   / \    /  \
+                  2   8  11   16
+
+k = 14
+
+Start: root = 10, res = -1
+10 <= 14 -> res = 10, move right -> root = 15
+
+15 > 14 -> move left -> root = 11
+
+11 <= 14 -> res = 11, move right -> root = null
+
+Loop ends, root = null
+
+Answer = res = 11
+
+//////////////////////// QUESTION////////////////////////////
+
+Floor in BST
+
+Given the root of a binary search tree and a number k, find the greatest number in the binary search tree that is less than or equal to k.
+Note: If no such node value exists that is smaller than k, then return -1.
+
+Examples:
+
+Example 1:
+
+Tree:                 10
+                     /    \
+                    7      15
+                   / \    /  \
+                  2   8  11   16
+
+k = 14
+Output = 11
+Explanation: The greatest element in the tree which is less than or equal to 14, is 11.
+
+
+Example 2:
+
+Tree:                    5
+                       /    \
+                      2      12
+                    /  \    /   \
+                   1    3  9    21
+                                /  \
+                               19   25
+
+k = 24
+Output = 21
+Explanation: The greatest element in the tree which is less than or equal to 24, is 21.
+
+
+Example 3:
+
+Tree:                    5
+                       /    \
+                      2      12
+                    /  \    /   \
+                   1    3  9    21
+                                /  \
+                               19   25
+
+k = 4
+Output = 3
+Explanation: The greatest element in the tree which is less than or equal to 4, is 3.
+
+Constraints:
+1 ≤ number of nodes ≤ 10^5
+1 ≤ node->data, k ≤ 10^5
+All nodes are unique in the BST
