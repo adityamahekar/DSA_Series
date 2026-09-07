@@ -6,6 +6,17 @@ Balance Factor = left subtree height - right subtree height
 
 For a Balanced Tree (every node): -1 ≤ Balance Factor ≤ 1
 
+//////////////////////// AVL TREE - STEPS /////////////////////////////////
+
+1. Insert the new node using normal BST insertion rule.
+2. Traverse back up from the inserted node to the root, updating heights.
+3. Calculate the Balance Factor at each node.
+4. If Balance Factor is between -1 and +1, node is balanced, move to next node.
+5. If Balance Factor becomes more than +1 or less than -1, tree is unbalanced.
+6. Identify the case: LL, RR, LR or RL.
+7. Apply the required rotation to restore balance.
+8. Update heights after rotation.
+9. Repeat until the root is reached and tree is balanced.
 
 //////////////////////// AVL TREE INSERTION STEPS /////////////////////////////////
 
