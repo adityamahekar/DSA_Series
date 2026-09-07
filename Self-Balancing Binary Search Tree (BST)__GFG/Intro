@@ -2,6 +2,17 @@
 
 Self-Balancing Binary Search Tree (BST)
 
+//////////////////////// APPLICATIONS OF BST /////////////////////////////////
+
+1. Used in searching and sorting algorithms.
+2. Indexing in databases.
+3. Implementing dynamic sets like maps and sets (TreeMap, TreeSet).
+4. Used in file system directory structures.
+5. Priority queues and scheduling systems.
+6. Used to implement auto-complete and dictionary lookups.
+7. Range queries (finding elements between two values).
+8. Used in expression parsing (expression trees).
+
 //////////////////////// ROTATION /////////////////////////////////
 
 A self-balancing BST maintains a balanced structure by performing rotations when the tree becomes unbalanced. Rotations preserve the BST property:
