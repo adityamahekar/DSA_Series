@@ -1,0 +1,85 @@
+//////////////////////// CODE /////////////////////////////////
+
+class Solution {
+    int findCeil(Node root, int x) {
+
+        int res = -1;                          // stores ceil candidate
+
+        while(root != null){
+
+            if(root.data == x){                // exact match found
+                return root.data;
+            }
+
+            if(root.data < x){                  // go right, need bigger
+                root = root.right;
+            }
+
+            else if(root.data > x){             // possible ceil
+                res = root.data;                // update res
+                root = root.left;               // search smaller ceil
+            }
+        }
+
+        return res;                             // return ceil or -1
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Tree:
+              10
+            /    \
+           5      11
+          / \
+         4   7
+              \
+               8
+
+x = 6
+
+root=10   10>6   res=10   go left
+root=5    5<6    go right
+root=7    7>6    res=7    go left
+root=null   stop
+
+Output: 7
+
+//////////////////////// QUESTION////////////////////////////
+
+Ceil in BST
+
+Given a root binary search tree and an integer x , find the Ceil of x in the tree.
+Ceil(x) is a number that is either equal to x or is immediately greater than x. If Ceil could not be found, return -1.
+
+Examples:
+
+Input: root = [5, 1, 7, N, 2, N, N, N, 3], x = 3
+Output: 3
+Explanation: We find 3 in BST, so ceil of 3 is 3.
+
+Tree:
+              5
+            /   \
+           1     7
+            \
+             2
+              \
+               3
+
+Input: root = [10, 5, 11, 4, 7, N, N, N, N, N, 8], x = 6
+Output: 7
+Explanation: We find 7 in BST, so ceil of 6 is 7.
+
+Tree:
+              10
+            /    \
+           5      11
+          / \
+         4   7
+              \
+               8
+
+Constraints:
+1 ≤ Number of nodes ≤ 10^5
+1 ≤ Value of nodes ≤ 10^5
