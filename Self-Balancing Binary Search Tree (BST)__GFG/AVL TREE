@@ -1,0 +1,98 @@
+//////////////////////// AVL TREE DEFINITION /////////////////////////////////
+
+AVL (Adelson-Velsky and Landis) Tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees for any node is at most 1.
+
+Balance Factor = left subtree height - right subtree height
+
+For a Balanced Tree (every node): -1 ≤ Balance Factor ≤ 1
+
+
+//////////////////////// AVL TREE INSERTION STEPS /////////////////////////////////
+
+Insert: 20, 15, 5, 40, 50, 18
+
+//////////////////////// STEP 1: Insert 20, 15 /////////////////////////////////
+
+   20  (BF=+1)
+  /
+ 15  (BF=0)
+
+//////////////////////// STEP 2: Insert 5 (LL case at 20) /////////////////////////////////
+
+Before:
+     20  (BF=+2)
+    /
+   15  (BF=+1)
+  /
+ 5  (BF=0)
+
+Right Rotation at 20 ->
+
+   15  (BF=0)
+  /  \
+ 5    20
+(0)   (0)
+
+//////////////////////// STEP 3: Insert 40 /////////////////////////////////
+
+   15  (BF=-1)
+  /  \
+ 5    20
+(0)   (-1)
+        \
+         40 (0)
+
+Balanced, no rotation.
+
+//////////////////////// STEP 4: Insert 50 (RR case at 20) /////////////////////////////////
+
+Before:
+   15  (BF=-2)
+  /  \
+ 5    20 (BF=-2)
+(0)     \
+         40 (BF=-1)
+           \
+            50 (0)
+
+Left Rotation at 20 ->
+
+   15  (BF=-1)
+  /  \
+ 5    40
+(0)  (BF=0)
+     /  \
+    20   50
+   (0)   (0)
+
+//////////////////////// STEP 5: Insert 18 (RL case at 15) /////////////////////////////////
+
+Before:
+     15  (BF=-2)
+    /  \
+   5    40 (BF=+1)
+  (0)  /  \
+      20   50
+    (BF=+1) (0)
+     /
+    18 (0)
+
+Right Rotation at 40, then Left Rotation at 15 ->
+
+        20  (BF=0)
+       /   \
+      15    40
+    (BF=0) (BF=-1)
+     /  \      \
+    5    18     50
+   (0)   (0)   (0)
+
+//////////////////////// FINAL AVL TREE WITH BALANCE FACTORS /////////////////////////////////
+
+              20 (BF=0)
+             /   \
+      15(BF=0)   40(BF=-1)
+       /   \           \
+   5(0)   18(0)       50(0)
+
+All balance factors lie between -1 and +1, so the tree is a valid AVL Tree.
