@@ -1,0 +1,56 @@
+//////////////////////// RED BLACK TREE - 4 PROPERTIES /////////////////////////////////
+
+1. Every node is either Red or Black.
+2. The root is always Black.
+3. No two adjacent Red nodes (Red node cannot have a Red parent or Red child).
+4. Every path from a node to its descendant null nodes has the same number of Black nodes.
+
+//////////////////////// RED BLACK TREE - BIGGER EXAMPLE /////////////////////////////////
+
+                    50(B)
+                 /         \
+             30(R)          70(R)
+            /     \        /      \
+        20(B)    40(B)  60(B)    80(B)
+        /   \             \         \
+    10(R)  25(R)         55(R)      90(R)
+
+//////////////////////// CHECKING 4 PROPERTIES /////////////////////////////////
+
+1. Every node is Red or Black -> Satisfied.
+2. Root 50 is Black -> Satisfied.
+3. No two adjacent Red nodes:
+   30(R) -> parent 50(B), children 20(B),40(B) -> ok
+   70(R) -> parent 50(B), children 60(B),80(B) -> ok
+   10(R),25(R) -> parent 20(B) -> ok
+   55(R) -> parent 60(B) -> ok
+   90(R) -> parent 80(B) -> ok
+   -> Satisfied.
+4. Black height same on every path (counting Black nodes to null):
+   50-30-20-10-null   = 3
+   50-30-20-25-null   = 3
+   50-30-40-null      = 3
+   50-70-60-55-null   = 3
+   50-70-60-null      = 3
+   50-70-80-null      = 3
+   50-70-80-90-null   = 3
+   -> Satisfied.
+
+This is a valid Red-Black Tree.
+
+//////////////////////// RED BLACK TREE - STEPS /////////////////////////////////
+
+1. Insert the new node using normal BST insertion rule.
+2. Color the newly inserted node Red.
+3. If new node is the root, color it Black.
+4. Check the color of the parent node.
+5. If parent is Black, no violation, insertion done.
+6. If parent is Red, a violation occurs, check the uncle node.
+7. If uncle is Red, recolor parent, uncle to Black and grandparent to Red, move up to grandparent and repeat check.
+8. If uncle is Black or null, perform rotation based on case.
+9. Case LL: Right rotate grandparent, swap colors of parent and grandparent.
+10. Case RR: Left rotate grandparent, swap colors of parent and grandparent.
+11. Case LR: Left rotate parent, then right rotate grandparent, swap colors.
+12. Case RL: Right rotate parent, then left rotate grandparent, swap colors.
+13. Always color the root Black at the end.
+
