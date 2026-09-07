@@ -1,0 +1,94 @@
+//////////////////////// TITLE /////////////////////////////////
+
+Self-Balancing Binary Search Tree (BST)
+
+//////////////////////// ROTATION /////////////////////////////////
+
+A self-balancing BST maintains a balanced structure by performing rotations when the tree becomes unbalanced. Rotations preserve the BST property:
+
+T1 < y < T2 < x < T3
+
+//////////////////////// RIGHT ROTATION /////////////////////////////////
+
+Performed when the left subtree becomes heavy.
+
+Before:
+        x
+       / \
+      y   T3
+     / \
+   T1  T2
+
+After:
+        y
+       / \
+     T1   x
+         / \
+        T2  T3
+
+Right Rotation  ----->
+Left Rotation   <-----
+
+//////////////////////// EXAMPLE /////////////////////////////////
+
+Before Right Rotation:
+          30
+         /  \
+       20    40
+      /  \
+    10    25
+   /
+  5
+
+x = 30
+y = 20
+T1 = 5, 10
+T2 = 25
+T3 = 40
+
+Left side of 30 is heavier, so a right rotation is performed.
+
+After Right Rotation:
+          20
+         /  \
+       10    30
+      /     /  \
+     5     25   40
+
+//////////////////////// IMPORTANT POINTS /////////////////////////////////
+
+1. Right Rotation moves the left child up.
+2. Left Rotation moves the right child up.
+3. Rotations do not violate the BST property.
+4. Used in self-balancing trees such as AVL Tree and Red-Black Tree.
+5. Purpose of rotations is to keep the tree height small.
+6. A balanced tree provides efficient searching, insertion, and deletion.
+
+//////////////////////// TIME COMPLEXITY /////////////////////////////////
+
+Operation   Average    Worst
+Search      O(log n)   O(log n)
+Insertion   O(log n)   O(log n)
+Deletion    O(log n)   O(log n)
+
+//////////////////////// SUMMARY /////////////////////////////////
+
+A right rotation changes:
+        x
+       /
+      y
+
+into:
+      y
+       \
+        x
+
+while maintaining the ordering: T1 < y < T2 < x < T3
+
+This allows a self-balancing BST to restore balance efficiently.
+
+//////////////////////// TYPES /////////////////////////////////
+
+Self Balancing BST 
+          |--> AVL Tree
+          |--> Red Block Tree
