@@ -1,0 +1,58 @@
+//////////////////////// CODE ////////////////////////////////
+
+void printCeiling(int arr[], int n){
+    System.out.println(-1);                              // first element has no left ceil
+
+    for(int i=1;i<n;i++){                                  // traverse from second element
+      int minn = Integer.MAX_VALUE;                          // track smallest valid left value
+
+      for(int j=0;j<i;j++){                                   // check all left elements
+          if(arr[i] <= arr[j]){                                 // left value is >= current
+              minn = Math.min(minn,arr[j]);                       // keep smallest such value
+          }
+      }
+
+      if(minn == Integer.MAX_VALUE){                          // no valid value found
+          System.out.println(-1);                                // print -1
+      }
+      else{
+          System.out.println(minn);                             // print the ceiling value
+      }
+
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+arr = [10, 5, 11, 6, 20, 12]
+
+index:   0    1    2    3    4    5
+value:   10   5    11   6    20   12
+
+i=0 -> print -1
+
+i=1 -> left:[10]         -> 10
+i=2 -> left:[10,5]       -> -1
+i=3 -> left:[10,5,11]    -> 10
+i=4 -> left:[10,5,11,6]  -> -1
+i=5 -> left:[..20]       -> 20
+
+output: -1 10 -1 10 -1 20
+
+//////////////////////// QUESTION ////////////////////////////
+
+Closest Greater or Same Value on Left Side for Every Element in Array
+
+Given an array of integers, find the closest (not considering the distance, but value) greater or the same value on the left of every element. 
+If an element has no greater or same value on the left side, print -1.
+
+Examples
+
+Input: arr[] = [10, 5, 11, 6, 20, 12]
+Output: [-1, 10, -1, 10, -1, 20]
+Explanation: The first element has nothing on the left side, so the answer is -1. The second element 5 has 10 on the left, so the answer is 10. 
+The third element 11 has nothing greater or the same on the left, so the answer is -1. The fourth element 6 has 10 as the closest value wise, so the answer is 10. 
+The fifth element 20 has nothing greater or the same, so the answer is -1. The sixth element 12 has 20 on the left, so the answer is 20.
+
+Constraints:
+1 ≤ arr.size() ≤ 10^6
+1 ≤ arr[i] ≤ 10^6
