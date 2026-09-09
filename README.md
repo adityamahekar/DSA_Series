@@ -23,7 +23,7 @@ repo
 <no calc or theory for DRY RUN only visual representation  with minimal content
  no calc and theory in dry run make it simple and easy to understand and short >
 
-//////////////////////// QUESTION////////////////////////////
+//////////////////////// QUESTION ////////////////////////////
 
 <With Question  allowed and no Difficulty: MediumAccuracy: 32.95%Submissions: 518K+Points: 4Average Time: 20m >
 dont give any link
