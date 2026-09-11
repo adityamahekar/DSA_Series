@@ -1,0 +1,133 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Solution {
+    Node prev = null, first = null, second = null;
+
+    public Node correctBST(Node root) {
+        find(root);                                     // start inorder scan
+
+        int temp = first.data;
+        first.data = second.data;
+        second.data = temp;                             // swap back values
+
+        return root;
+    }
+
+    void find(Node root) {
+        if (root == null) return;
+
+        find(root.left);                                // visit left
+
+        if (prev != null && root.data < prev.data) {     // order broken
+            if (first == null) {
+                first = prev;                             // first bad node
+            }
+            second = root;                                // second bad node
+        }
+
+        prev = root;                                     // move prev ahead
+        find(root.right);                                 // visit right
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input tree
+
+            10
+           /  \
+          5    8
+         / \
+        2   20
+
+Inorder walk: 2, 5, 20, 8, 10
+
+2   prev=null        skip
+5   prev=2           ok
+20  prev=5           ok
+8   prev=20          8 < 20  -> first=20, second=8
+10  prev=8           ok
+
+Swap first and second: 20 <-> 8
+
+Corrected tree
+
+            10
+           /  \
+          5    20
+         / \
+        2    8
+
+//////////////////////// QUESTION ////////////////////////////
+
+Fixing Two Nodes of BST
+
+Given the root of a Binary Search Tree (BST), where exactly two nodes have been swapped by mistake, restore the BST by swapping the values of the misplaced nodes.
+Return the root of the corrected BST.
+
+Note: It is guaranteed that exactly two nodes have been swapped, and restoring their values will make the tree a valid BST. The structure of the tree must remain unchanged.
+
+Examples:
+````````````````````````````````````````````````````````````````
+Input: root = [10, 5, 8, 2, 20]
+
+Output: [10, 5, 20, 2, 8]
+
+Explanation: The nodes 20 and 8 were swapped.
+
+Input tree
+
+            10
+           /  \
+          5    8
+         / \
+        2   20
+
+Output tree
+
+            10
+           /  \
+          5    20
+         / \
+        2    8
+
+````````````````````````````````````````````````````````````````````
+Input: root = [5, 10, 20, 2, 8]
+
+Output: [10, 5, 20, 2, 8]
+
+Explanation: The nodes 10 and 5 were swapped.
+
+Input tree
+
+            5
+           /  \
+         10    20
+        /  \
+       2    8
+
+Output tree
+
+            10
+           /  \
+          5    20
+         / \
+        2    8
+
+``````````````````````````````````````````````````````````````````````
+
+Constraints:
+2 ≤ Number of nodes ≤ 10^5
+1 ≤ root[i] ≤ 10^7
+
