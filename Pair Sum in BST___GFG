@@ -1,0 +1,76 @@
+//////////////////////// CODE /////////////////////////////////
+
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int d) {
+        data = d;
+        left = right = null;
+    }
+}
+
+class Solution {
+    HashSet<Integer> set = new HashSet<>();                                     // stores visited node values
+
+    boolean findTarget(Node root, int target) {                                 // main recursive check function
+        if(root == null){ return false; }                                      // empty node, no pair possible
+
+        if(set.contains(target - root.data)){                                  // complement already seen
+            return true;
+        }
+
+        set.add(root.data);                                                    // mark current value as visited
+
+        return findTarget(root.left,target) || findTarget(root.right, target); // recurse into both subtrees
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+root = [7, 3, 8, 2, 4, N, 9], target = 12
+
+            7
+           / \
+          3   8
+         / \   \
+        2   4   9
+
+Visit 7  →  set = {7}
+Visit 3  →  set = {7,3}
+Visit 2  →  set = {7,3,2}
+Visit 4  →  need 8  →  not in set  →  set = {7,3,2,4}
+Visit 8  →  need 4  →  found in set  →  return True
+
+//////////////////////// QUESTION ////////////////////////////
+
+Pair Sum in BST
+
+Given a Binary Search Tree(BST) and a target. Check whether there's a pair of Nodes in the BST with value summing up to the target.
+
+Example 1:
+
+            7
+           / \
+          3   8
+         / \   \
+        2   4   9
+
+Input: root[] = [7, 3, 8, 2, 4, N, 9], target = 12
+Output: True
+Explanation: In the binary tree above, there are two nodes (8 and 4) that add up to 12.
+
+Example 2:
+
+             9
+            / \
+           5   10
+          / \    \
+         2   6    12
+
+Input: root[] = [9, 5, 10, 2, 6, N, 12], target = 23
+Output: False
+Explanation: In the binary tree above, there are no such two nodes exists that add up to 23.
+
+Constraints:
+1 ≤ |root[i]|, target ≤ 10^6
