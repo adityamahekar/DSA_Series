@@ -1,0 +1,137 @@
+//////////////////////// CODE ////////////////////////////////
+
+void vSumR(Node root, int hd, TreeMap<Integer, Integer> mp){
+    if(root == null) return;                                       // base case
+
+    vSumR(root.left, hd-1, mp);                                     // go left, hd-1
+    int pSum = (mp.get(hd) == null) ? 0 : mp.get(hd);                // old sum at hd
+    mp.put(hd, pSum + root.data);                                    // add node data
+    vSumR(root.right, hd+1, mp);                                    // go right, hd+1
+}
+
+void vSum(Node root){
+    TreeMap<Integer, Integer> mp = new TreeMap<Integer, Integer>();  // hd -> sum
+
+    vSumR(root, 0, mp);                                             // build map
+    for(Map.Entry sum: mp.entrySet()){                              // sorted by hd
+        System.out.print(mp.getValue() + " ");                      // print sum
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Tree:
+              1 (hd=0)
+            /          \
+       2 (hd=-1)      3 (hd=1)
+       /       \
+  4 (hd=-2)   5 (hd=0)
+
+Map after full traversal:
+
+hd = -2  ->  4
+hd = -1  ->  2
+hd =  0  ->  1 + 5 = 6
+hd =  1  ->  3
+
+Output: 4 2 6 3
+
+//////////////////////// QUESTION ////////////////////////////
+
+Vertical Sum of a Binary Tree
+
+Given a binary tree, find the vertical sum of the nodes that are in the same vertical line. 
+Print all the sums in order from the leftmost line to the rightmost line.
+A vertical line is defined by the horizontal distance (hd) of a node from the root. 
+The root has hd = 0, a left child has hd - 1, and a right child has hd + 1. 
+Nodes falling on the same hd belong to the same vertical line, and their data values are summed.
+
+--------------------------------------------------------------------------------------
+
+Example 1
+
+Input Tree:
+
+              1
+            /   \
+           2     3
+          / \   / \
+         4   5 6   7
+
+Horizontal distances:
+
+hd=-2:  4
+hd=-1:  2
+hd= 0:  1, 5, 6
+hd= 1:  3
+hd= 2:  7
+
+Vertical lines view:
+
+hd -2   hd -1   hd 0    hd 1    hd 2
+ 4        2      1       3       7
+                  5       
+                  6
+
+Sums:  4   2   (1+5+6)=12   3   7
+
+Output: 4 2 12 3 7
+
+--------------------------------------------------------------------------------------
+Example 2
+
+Input Tree:
+
+              5
+            /   \
+           7     2
+            \   /
+             6 9
+
+Horizontal distances:
+
+root 5      -> hd 0
+left 7      -> hd -1
+right 2     -> hd 1
+7.right 6   -> hd 0   (since 7 is at hd -1, its right child is -1+1=0)
+2.left 9    -> hd 0   (since 2 is at hd 1, its left child is 1-1=0)
+
+Vertical lines view:
+
+hd -1     hd 0        hd 1
+  7      5, 6, 9        2
+
+Sum at hd -1 = 7
+Sum at hd  0 = 5+6+9 = 20
+Sum at hd  1 = 2
+
+Output: 7 20 2
+
+--------------------------------------------------------------------------------------
+
+Example 3 (skewed tree, only left children)
+
+Input Tree:
+
+        1
+       /
+      2
+     /
+    3
+   /
+  4
+
+Horizontal distances:
+
+1 -> hd 0
+2 -> hd -1
+3 -> hd -2
+4 -> hd -3
+
+Vertical lines view:
+
+hd -3  hd -2  hd -1  hd 0
+  4      3      2     1
+
+Output: 4 3 2 1
+--------------------------------------------------------------------------------------
