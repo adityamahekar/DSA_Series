@@ -1,0 +1,128 @@
+//////////////////////// CODE ////////////////////////////////
+
+/* Structure of binary tree node
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}*/
+
+class Pair{                                                             // node + horizontal distance
+    Node node;                                                          // tree node
+    int hd;                                                             // horizontal distance from root
+    Pair(Node n, int h) { node = n; hd = h; }                           // constructor
+}
+
+class Solution {
+    public ArrayList<ArrayList<Integer>> verticalOrder(Node root) {     // returns columns left to right
+
+        Queue<Pair> q = new LinkedList<Pair>();                         // BFS queue keeps level order
+        Map<Integer, ArrayList<Integer>> mp = new TreeMap<>();          // hd -> nodes, sorted by hd
+        q.add(new Pair(root, 0));                                       // root starts at hd 0
+
+        while(!q.isEmpty()){                                            // process all nodes
+            Pair p = q.poll();                                          // front of queue
+            Node curr = p.node;                                         // current node
+            int hd = p.hd;                                              // its hd
+
+            if(mp.containsKey(hd))                                      // column already exists
+                mp.get(hd).add(curr.data);                              // append to that column
+            else{                                                       // first node of this column
+
+                ArrayList<Integer> al = new ArrayList<Integer>();       // new column list
+                al.add(curr.data);                                      // add node value
+                mp.put(hd, al);                                         // store column
+            }
+
+            if(curr.left != null) q.add(new Pair(curr.left, hd-1));     // left child goes to hd-1
+            if(curr.right != null) q.add(new Pair(curr.right, hd+1));   // right child goes to hd+1
+        }
+        return new ArrayList<>(mp.values());                            // columns in left to right order
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input: [1, 2, 3, 4, 5, N, 6]
+
+Tree with hd in brackets
+
+              1 [0]
+            /       \
+       2 [-1]       3 [1]
+       /    \            \
+  4 [-2]   5 [0]        6 [2]
+
+Queue order (node, hd)
+
+(1,0) -> (2,-1) -> (3,1) -> (4,-2) -> (5,0) -> (6,2)
+
+Map after all nodes
+
+hd -2  ->  [4]
+hd -1  ->  [2]
+hd  0  ->  [1, 5]
+hd  1  ->  [3]
+hd  2  ->  [6]
+
+Output: [[4], [2], [1, 5], [3], [6]]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Vertical Tree Traversal
+
+Given the root of a Binary Tree, find the vertical traversal of the tree starting from the leftmost level to the rightmost level.
+Note: If there are multiple nodes passing through a vertical line, then they should be printed as they appear in level order traversal of the tree.
+
+`````````````````````````````````````````````````````````````````````````````
+
+Examples:
+
+Input: root = [1, 2, 3, 4, 5, 6, 7, N, N, N, 8, N, 9, N, 10, 11, N]
+
+                          1 [0]
+                 /                     \
+            2 [-1]                     3 [1]
+            /     \                  /       \
+       4 [-2]    5 [0]          6 [0]       7 [2]
+                      \               \            \
+                    8 [1]          9 [1]       10 [3]
+                    /
+               11 [0]
+
+Vertical lines (hd) from left to right
+
+ hd -2  |  hd -1  |     hd 0      |    hd 1    |  hd 2  |  hd 3
+  [4]   |   [2]   |  [1,5,6,11]   |  [3,8,9]   |  [7]   |  [10]
+
+Output: [[4], [2], [1, 5, 6, 11], [3, 8, 9], [7], [10]]
+Explanation: The diagram above shows the horizontal distances used to print vertical traversal starting from the leftmost level to the rightmost level.
+
+`````````````````````````````````````````````````````````````````````````````
+
+Input: root = [1, 2, 3, 4, 5, N, 6]
+
+              1 [0]
+            /       \
+       2 [-1]       3 [1]
+       /    \            \
+  4 [-2]   5 [0]        6 [2]
+
+Vertical lines (hd) from left to right
+
+ hd -2  |  hd -1  |  hd 0   |  hd 1  |  hd 2
+  [4]   |   [2]   |  [1,5]  |  [3]   |  [6]
+
+Output: [[4], [2], [1, 5], [3], [6]]
+Explanation: From left to right the vertical order will be [[4], [2], [1, 5], [3], [6]]
+
+`````````````````````````````````````````````````````````````````````````````
+
+Constraints:
+1 ≤ size of binary tree, node.data ≤ 10^5
+
