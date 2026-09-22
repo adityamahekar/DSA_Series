@@ -1,5 +1,7 @@
 //////////////////////// CODE ////////////////////////////////
 
+/*
+Definition for Node
 class Node {
     int data;
     Node left;
@@ -10,10 +12,11 @@ class Node {
         left = right = null;
     }
 }
+*/
 
 class Pair {
-    Node node;
-    int hd;
+    Node node;                  // Tree node
+    int hd;                     // Horizontal distance
 
     Pair(Node n, int h) {
         node = n;
@@ -23,29 +26,40 @@ class Pair {
 
 class Solution {
     public ArrayList<Integer> bottomView(Node root) {
-        ArrayList<Integer> ans = new ArrayList<>();
-        if (root == null) return ans;
 
-        Queue<Pair> q = new LinkedList<>();
-        Map<Integer, Integer> mp = new TreeMap<>();
+        ArrayList<Integer> ans = new ArrayList<>();       // Final answer
 
-        q.add(new Pair(root, 0));
+        if (root == null) return ans;                     // If tree is empty
+
+        Queue<Pair> q = new LinkedList<>();               // BFS queue
+        Map<Integer, Integer> mp = new TreeMap<>();       // HD -> node value
+
+        q.add(new Pair(root, 0));                         // Root has HD 0
 
         while (!q.isEmpty()) {
-            Pair p = q.poll();
-            Node curr = p.node;
-            int hd = p.hd;
 
-            mp.put(hd, curr.data);                                        // overwrite with latest node
+            Pair p = q.poll();                            // Remove front pair
 
-            if (curr.left != null) q.add(new Pair(curr.left, hd - 1));    // go left
-            if (curr.right != null) q.add(new Pair(curr.right, hd + 1));  // go right
+            Node curr = p.node;                           // Current node
+            int hd = p.hd;                                // Current HD
+
+            mp.put(hd, curr.data);                        // Update bottom node
+
+            if (curr.left != null) {
+                q.add(new Pair(curr.left, hd - 1));      // Left: HD - 1
+            }
+
+            if (curr.right != null) {
+                q.add(new Pair(curr.right, hd + 1));     // Right: HD + 1
+            }
         }
 
-        ans.addAll(mp.values());                                         // sorted by hd
-        return ans;
+        ans.addAll(mp.values());                          // Get left to right
+
+        return ans;                                       // Return answer
     }
 }
+
 
 //////////////////////// DRY RUN /////////////////////////////
 
