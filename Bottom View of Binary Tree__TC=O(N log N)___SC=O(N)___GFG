@@ -1,0 +1,105 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class Pair {
+    Node node;
+    int hd;
+
+    Pair(Node n, int h) {
+        node = n;
+        hd = h;
+    }
+}
+
+class Solution {
+    public ArrayList<Integer> bottomView(Node root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<Pair> q = new LinkedList<>();
+        Map<Integer, Integer> mp = new TreeMap<>();
+
+        q.add(new Pair(root, 0));
+
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            Node curr = p.node;
+            int hd = p.hd;
+
+            mp.put(hd, curr.data);                                        // overwrite with latest node
+
+            if (curr.left != null) q.add(new Pair(curr.left, hd - 1));    // go left
+            if (curr.right != null) q.add(new Pair(curr.right, hd + 1));  // go right
+        }
+
+        ans.addAll(mp.values());                                         // sorted by hd
+        return ans;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Tree:
+        1
+       / \
+      2   3
+     / \    \
+    4   5    6
+
+hd:   -2  -1   0   0   1   2
+node:  4   2   1   5   3   6
+
+Bottom View (last node wins at each hd):
+4   2   5   3   6
+
+//////////////////////// QUESTION ////////////////////////////
+
+Bottom View of Binary Tree
+
+You are given the root of a binary tree, and your task is to return its bottom view. The bottom view of a binary tree is the set of nodes visible when the tree is viewed from the bottom.
+
+Note: If there are multiple bottom-most nodes for a horizontal distance from the root, then the latter one in the level order traversal is considered.
+
+Examples:
+
+--------------------------------------------------------------------------------------------------
+
+Input: root = [1, 2, 3, 4, 5, N, 6]
+Output: [4, 2, 5, 3, 6]
+Explanation: The Green nodes represent the bottom view of below binary tree.
+
+        1
+       / \
+      2   3
+     / \    \
+    4   5    6
+
+
+--------------------------------------------------------------------------------------------------
+
+Input: root = [20, 8, 22, 5, 3, 4, 25, N, N, 10, 14, N, N, 28, N]
+Output: [5, 10, 4, 28, 25]
+Explanation: The Green nodes represent the bottom view of below binary tree.
+
+              20
+            /    \
+           8      22
+          / \     / \
+         5   3   4   25
+            / \      /
+          10  14    28
+
+--------------------------------------------------------------------------------------------------
+
+Constraints:
+1 ≤ size of binary tree, node.data ≤ 10^5
