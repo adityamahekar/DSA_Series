@@ -1,0 +1,106 @@
+//////////////////////// CODE ////////////////////////////////
+
+void insert(int x) {                                                     // insert x into the min-heap
+    if (size == capacity) { return; }                                  // heap full, nothing to do
+
+    size++;                                                          // increase size
+    arr[size - 1] = x;                                               // place x at the last position
+
+    for (int i = size - 1; i != 0 && arr[parent(i)] > arr[i]; ) {   // while parent is bigger
+        swap(arr[parent(i)], arr[i]);                               // swap child with parent
+        i = parent(i);                                             // move up to the parent
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Insert 5 into: 10 20 30 40 50 60 70 80
+
+```````````````````````````````````````````````````````````````````
+
+Step 1: add 5 at the end
+
+              10
+          /        \
+        20          30
+       /  \        /  \
+     40    50    60    70
+    /  \
+  80    5
+
+```````````````````````````````````````````````````````````````````
+
+Step 2: 5 < 40, swap
+
+              10
+          /        \
+        20          30
+       /  \        /  \
+      5    50    60    70
+    /  \
+  80    40
+
+```````````````````````````````````````````````````````````````````
+
+Step 3: 5 < 20, swap
+
+              10
+          /        \
+         5          30
+       /  \        /  \
+     20    50    60    70
+    /  \
+  80    40
+
+```````````````````````````````````````````````````````````````````
+
+Step 4: 5 < 10, swap
+
+               5
+          /        \
+        10          30
+       /  \        /  \
+     20    50    60    70
+    /  \
+  80    40
+
+```````````````````````````````````````````````````````````````````
+
+Result: 5 10 30 20 50 60 70 80 40
+
+//////////////////////// QUESTION ////////////////////////////
+
+Binary Heap Insert
+
+Given a min-heap stored in an array with a fixed capacity, implement the insert(x) function that adds the element x to the heap.
+If the heap is full, do nothing. After the insertion, the array must still satisfy the min-heap property, where every parent is smaller than or equal to its children.
+
+```````````````````````````````````````````````````````````````````
+Example:
+Input: heap = 10 20 30 40 50 60 70 80, x = 5
+Output: 5 10 30 20 50 60 70 80 40
+
+Diagram:
+```````````````````````````````````````````````````````````````````
+Before insert:
+
+              10
+          /        \
+        20          30
+       /  \        /  \
+     40    50    60    70
+    /
+  80
+```````````````````````````````````````````````````````````````````
+After insert of 5:
+
+               5
+          /        \
+        10          30
+       /  \        /  \
+     20    50    60    70
+    /  \
+  80    40
+
+```````````````````````````````````````````````````````````````````
+
