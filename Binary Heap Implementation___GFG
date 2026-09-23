@@ -1,0 +1,39 @@
+
+Binary Heap Implementation
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+A **binary heap** is a complete binary tree stored in an array, where every parent is ordered relative to its children. 
+In a **min-heap**, each parent is smaller than or equal to its children, so the smallest element is always at index 0.
+
+For a node at index `i`:
+- Left child: `2*i + 1`
+- Right child: `2*i + 2`
+- Parent: `(i - 1) / 2`
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class MinHeap {                                    // Min-heap: parent <= children, smallest at index 0
+    int arr[];                                     // array that stores the heap elements
+    int size;                                      // current number of elements in the heap
+    int capacity;                                  // maximum number of elements the heap can hold
+
+    MinHeap(int c) {                               // constructor: creates an empty heap of capacity c
+        arr = new int[c];                          // allocate the array
+        size = 0;                                  // heap starts empty
+        capacity = c;                              // store the maximum size
+    }
+
+    int left(int i) {                              // index of the left child of node i
+        return (2 * i + 1);                        // left child formula
+    }
+
+    int right(int i) {                             // index of the right child of node i
+        return (2 * i + 2);                        // right child formula
+    }
+
+    int parent(int i) {                            // index of the parent of node i
+        return (i - 1) / 2;                        // parent formula (integer division)
+    }
+}
+
