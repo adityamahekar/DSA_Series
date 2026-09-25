@@ -1,0 +1,213 @@
+//////////////////////// CODE ////////////////////////////////
+
+====================== Decrease Key ===========================
+
+int arr[];
+int size, capacity;
+
+void decreaseKey(int i, int x){
+    arr[i] = x;                                     // set new smaller value
+
+    while(i != 0 && arr[parent(i)] > arr[i]){         // violates min heap
+        swap(arr[parent(i)], arr[i]);                 // move value up
+        i = parent(i);                                // move to parent index
+    }
+}
+
+====================== Delete ===========================
+
+void deleteKey(int i){
+    decreaseKey(i, INT_MIN);                          // push value to root
+    extractMin();                                     // remove it from heap
+}
+
+====================== Build Heap ===========================
+TC=O(n)
+
+Maximum number of nodes at height h: ⌈ n / 2^(h+1) ⌉
+
+void buildHeap(){
+    for(int i = (size-2)/2; i >= 0; i--){              // start from last internal node
+        minHeapify(i);                                 // fix heap at each node
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Decrease Key : decreaseKey(4, 1) on
+
+              2
+           /     \
+          4       3
+        /   \
+       8     5
+
+set arr[4] = 1
+
+              2
+           /     \
+          4       3
+        /   \
+       8     1
+
+1 < parent(4)=4  -> swap
+
+              2
+           /     \
+          1       3
+        /   \
+       8     4
+
+1 < parent(0)=2 but i==0, stop
+
+
+Delete : deleteKey(3) on
+
+              2
+           /     \
+          4       3
+        /   \
+       8     5
+
+set arr[3] = -inf, bubble up to root
+
+             -inf
+           /     \
+          4       3
+        /   \
+       8     5
+
+extractMin removes root, last leaf(5) moved up, heapify
+
+              3
+           /     \
+          4       5
+        /
+       8
+
+
+Build Heap : arr = [9,4,7,1,3]
+
+Tree view
+
+              9
+           /     \
+          4       7
+        /   \
+       1     3
+
+start i = (5-2)/2 = 1  -> minHeapify(1): 4 vs 1,3 -> swap 4,1
+
+              9
+           /     \
+          1       7
+        /   \
+       4     3
+
+i = 0  -> minHeapify(0): 9 vs 1,7 -> swap 9,1
+
+              1
+           /     \
+          9       7
+        /   \
+       4     3
+
+minHeapify(1) again: 9 vs 4,3 -> swap 9,3
+
+              1
+           /     \
+          3       7
+        /   \
+       4     9
+
+Final min heap
+
+              1
+           /     \
+          3       7
+        /   \
+       4     9
+
+//////////////////////// QUESTION ////////////////////////////
+
+Given an array of N integers, build a Min Heap from the array in place, meaning rearrange the elements of the array so that the array represents a valid Min Heap.
+
+You are also given helper functions parent, left and right that give the parent, left child and right child index of a given index, and a minHeapify function that fixes the heap property at a given index assuming its subtrees are already valid heaps. Use these to build the heap in O(n) time.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example 1
+Input
+arr = [9,4,7,1,3]
+
+Before
+
+              9
+           /     \
+          4       7
+        /   \
+       1     3
+
+Output
+[1,3,7,4,9]
+
+After
+
+              1
+           /     \
+          3       7
+        /   \
+       4     9
+
+Explanation
+Starting from the last internal node and calling minHeapify on each node up to the root produces a valid min heap
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example 2
+Input
+arr = [5,3,8,4,1,2]
+
+Before
+
+              5
+           /     \
+          3       8
+        /   \    /
+       4     1  2
+
+Output
+[1,3,2,4,5,8]
+
+After
+
+              1
+           /     \
+          3       2
+        /   \    /
+       4     5  8
+
+Explanation
+Repeated heapify calls from the last internal node upward rearrange the array into min heap order
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example 3
+Input
+arr = [1]
+
+Before
+
+              1
+
+Output
+[1]
+
+After
+
+              1
+
+Explanation
+A single element array is already a valid heap
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
