@@ -1,0 +1,96 @@
+//////////////////////// CODE ////////////////////////////////
+
+int arr[];                                         // heap stored as array
+int size, capacity;                                // current size, max size
+
+void minHeapify(int i){
+    int lt = left(i), rt = right(i);               // get children indices
+    int smallest = i;                              // assume root is smallest
+
+    if(lt < size && arr[lt] < arr[smallest])       smallest = lt;    // left smaller
+    if(rt < size && arr[rt] < arr[smallest])       smallest = rt;    // right smaller
+
+    if(smallest != i){                             // root not smallest
+        swap(arr[i], arr[smallest]);               // fix violation
+        minHeapify(smallest);                      // recurse down
+    }
+}
+
+int extractMin(){
+    if(size == 0)  return INT_MAX;                 // empty heap case
+    if(size == 1){ size--; return arr[0]; }        // single element case
+
+    swap(arr[0], arr[size-1]);                     // move min to end
+    size--;                                        // shrink heap size
+    minHeapify(0);                                 // restore heap order
+    return arr[size];                              // return old min
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+arr = [2,4,3,8,5,9,7]
+Initial heap
+          2  
+       /     \
+      4       3  
+    /   \    /  \
+   8     5  9    7
+
+Step1 swap root and last (2 <-> 7)
+          7  
+       /     \
+      4       3  
+    /   \    /  
+   8     5  9        2 (parked outside)
+
+Step2 minHeapify(0): 7 vs 4,3 -> swap with 3
+          3  
+       /     \
+      4       7  
+    /   \    /  
+   8     5  9
+
+Step3 minHeapify(2): 7 vs 9 only -> stop, already smallest
+Final heap
+          3  
+       /     \
+      4       7  
+    /   \    /  
+   8     5  9
+
+extracted min = 2
+
+
+//////////////////////// QUESTION ////////////////////////////
+
+Given a Binary Heap of size N in an array arr, write a program to implement the minHeapify function and the extractMin function of a Min Heap.
+minHeapify should take the heap array and an index i as input and fix the heap property at that index, assuming the subtrees below it are already valid min heaps.
+extractMin should remove and return the minimum element (the root) from the heap, then rearrange the remaining elements so that the heap property is restored, and reduce the size of the heap by one.
+If the heap is empty, extractMin should return a value indicating that no element could be extracted.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Example 1
+Input
+arr = [3,4,8,11,13,15,20]
+Output
+3
+Explanation
+The heap already satisfies min heap property, so extractMin removes root 3 and returns it, heap gets rearranged to [4,11,8,20,13,15]
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example 2
+Input
+arr = [2,4,3,8,5,9,7]
+Output
+2
+Explanation
+Root 2 is extracted, last element moved to root and minHeapify is called to restore heap order, resulting heap is [3,4,7,8,5,9]
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Example 3
+Input
+arr = []
+Output
+-1
+Explanation
+Heap is empty so extractMin cannot remove anything and returns -1 to indicate this
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
