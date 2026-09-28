@@ -1,0 +1,126 @@
+//////////////////////// CODE ////////////////////////////////
+Min Heap
+
+class Test{
+  public static void main(String args[]){
+      PriorityQueue<Integer> pq = new PriorityQueue<Integer>();       // min heap by default
+
+      pq.add(10);                                                     // insert 10
+      pq.add(20);                                                     // insert 20
+      pq.add(15);                                                     // insert 15
+
+      System.out.println(pq.peek());                                  // smallest element, no removal
+      System.out.println(pq.poll());                                  // remove and return smallest
+      System.out.println(pq.peek());                                  // new smallest element
+
+  }
+}
+
+==============================================================================================
+
+Max Heap
+
+class Test{
+  public static void main(String args[]){
+      PriorityQueue<Integer> pq = new PriorityQueue<Integer>(Collections.reverseOrder());   // max heap
+
+      pq.add(10);                                                     // insert 10
+      pq.add(20);                                                     // insert 20
+      pq.add(15);                                                     // insert 15
+
+      System.out.println(pq.peek());                                  // largest element, no removal
+      System.out.println(pq.poll());                                  // remove and return largest
+      System.out.println(pq.peek());                                  // new largest element
+
+  }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+MIN HEAP
+
+add 10      add 20      add 15
+
+  10          10          10
+             /           /  \
+            20          20   15
+
+peek  ->  10
+poll  ->  10        15 moves up
+
+  15
+ /
+20
+
+peek  ->  15
+
+Output:
+10
+10
+15
+
+=====================================================================
+
+MAX HEAP
+
+add 10      add 20      add 15
+
+  10          20          20
+             /           /  \
+            10          10   15
+
+peek  ->  20
+poll  ->  20        15 moves up
+
+  15
+ /
+10
+
+peek  ->  15
+
+Output:
+20
+20
+15
+
+//////////////////////// QUESTION ////////////////////////////
+
+Min Heap and Max Heap using PriorityQueue
+
+Write a program to implement a Min Heap and a Max Heap using PriorityQueue. Insert the elements 10, 20 and 15, then print the top element, 
+remove the top element and print it, and finally print the new top element.
+
+Diagram:
+
+MIN HEAP (smallest on top)
+
+      10
+     /  \
+   20    15
+
+MAX HEAP (largest on top)
+
+      20
+     /  \
+   10    15
+
+Examples:
+
+Min Heap
+Output: 10 10 15
+
+Max Heap
+Output: 20 20 15
+
+
+┌──────────────────────────────┐
+│  Time Complexity             │
+│                              │
+│  add   ->  O(log n)          │
+│  peek  ->  O(1)              │
+│  poll  ->  O(log n)          │
+│                              │
+│  Space Complexity            │
+│                              │
+│  O(n)                        │
+└──────────────────────────────┘
