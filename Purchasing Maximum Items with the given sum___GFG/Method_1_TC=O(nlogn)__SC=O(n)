@@ -1,0 +1,81 @@
+//////////////////////// CODE ////////////////////////////////
+
+class GFG {
+
+    static int maxItems(int[] cost, int sum) {
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>();             // min heap
+
+        for (int x : cost) {
+            pq.add(x);                                                 // push every cost
+        }
+
+        int count = 0;                                                 // items bought
+
+        while (!pq.isEmpty() && sum >= pq.peek()) {                    // cheapest affordable
+            sum -= pq.poll();                                          // pay for cheapest
+            count++;                                                   // one more item
+        }
+
+        return count;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+cost = [20, 10, 5, 30, 100]     sum = 35
+
+STEP 1 : add all to heap
+PQ  = [5, 10, 20, 30, 100]
+
+STEP 2 : buy cheapest while affordable
+poll 5    sum = 30    count = 1
+PQ  = [10, 20, 30, 100]
+
+poll 10   sum = 20    count = 2
+PQ  = [20, 30, 100]
+
+poll 20   sum = 0     count = 3
+PQ  = [30, 100]
+
+STEP 3 : peek = 30 > sum = 0  ->  stop
+
+OUTPUT : 3
+
+//////////////////////// QUESTION ////////////////////////////
+
+Purchasing Maximum Items with the given sum
+
+Given an array cost[] where cost[i] is the price of the i-th item, and an integer sum representing the total money you have. 
+Your task is to find the maximum number of items you can buy such that the total cost does not exceed sum.
+
+Examples:
+
+Input: cost[] = [20, 10, 5, 30, 100], sum = 35
+Output: 3
+Explanation: Buy the items with cost 5, 10 and 20. Total = 35, which is within the sum. No 4th item can be bought.
+
+Diagram:
+
+sorted cost :  [ 5 ] [ 10 ] [ 20 ] [ 30 ] [ 100 ]
+                 |      |      |      x       x
+                buy    buy    buy    skip    skip
+
+money left  :   35  ->  30  ->  20  ->  0
+
+Input: cost[] = [1, 12, 5, 111, 200, 1000, 10], sum = 50
+Output: 4
+Explanation: Buy the items with cost 1, 5, 10 and 12. Total = 28, which is within the sum. Next cheapest is 111, which cannot be bought.
+
+Diagram:
+
+sorted cost :  [ 1 ] [ 5 ] [ 10 ] [ 12 ] [ 111 ] [ 200 ] [ 1000 ]
+                |      |      |      |       x        x        x
+               buy    buy    buy    buy    skip     skip     skip
+
+money left  :   50  ->  49  ->  44  ->  34  ->  22
+
+Constraints:
+1 ≤ cost.size() ≤ 10^5
+1 ≤ cost[i] ≤ 10^5
+1 ≤ sum ≤ 10^5
