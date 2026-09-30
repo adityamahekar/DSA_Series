@@ -16,6 +16,8 @@ repo
 
 
 ```
+TC=O(nlogn)__SC=O(n)
+
 //////////////////////// CODE ////////////////////////////////
 <align the commnt at right max end      max no commnt on the top>
 
