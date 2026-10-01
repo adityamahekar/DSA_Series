@@ -1,0 +1,105 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public ArrayList<Integer> kLargest(int[] arr, int k) {
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>();      // min-heap, smallest on top
+
+        for(int x : arr){
+            pq.add(x);                                          // push every element
+
+            if(pq.size() > k)                                   // heap crossed size k
+                pq.poll();                                      // drop the smallest
+        }
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        while(!pq.isEmpty())
+            ans.add(pq.poll());                                 // comes out in increasing order
+
+        Collections.reverse(ans);                               // make it decreasing
+
+        return ans;
+    }
+}
+
+//////////////////////// DIAGRAM /////////////////////////////
+
+FLOW
+
+  arr --> add x --> size > k ? --yes--> poll smallest --+
+              ^           |                             |
+              |           no                            |
+              +-----------+-----------------------------+
+
+  after loop: heap holds the k largest
+  poll all --> increasing --> reverse --> decreasing
+
+HEAP RULE (min-heap)
+
+        small
+        /   \
+     big     big        root is always the smallest, so it is the one kicked out
+
+//////////////////////// DRY RUN /////////////////////////////
+
+arr = [1, 23, 12, 9, 30, 2, 50], k = 3
+
+x=1, 23, 12  (heap grows, nothing removed)
+
+        1
+       / \
+     23   12
+
+x=9  add 9, size 4, remove 1
+
+   [1, 9, 12, 23]  --remove 1-->      9
+                                     / \
+                                   23   12
+
+x=30  add 30, size 4, remove 9
+
+   [9, 12, 23, 30]  --remove 9-->     12
+                                     /  \
+                                   23    30
+
+x=2  add 2, size 4, remove 2
+
+   [2, 12, 23, 30]  --remove 2-->     12
+                                     /  \
+                                   23    30
+
+x=50  add 50, size 4, remove 12
+
+   [12, 23, 30, 50]  --remove 12-->   23
+                                     /  \
+                                   50    30
+
+FINAL HEAP  [23, 30, 50]
+
+   poll  -->  23, 30, 50
+   reverse -->  50, 30, 23
+
+//////////////////////// QUESTION ////////////////////////////
+
+k Largest Elements
+
+Given an array arr[] of positive integers and an integer k, Your task is to return k largest elements in decreasing order.
+
+Examples:
+
+Input: arr[] = [12, 5, 787, 1, 23], k = 2
+Output: [787, 23]
+Explanation: 1st largest element in the array is 787 and second largest is 23.
+
+Input: arr[] = [1, 23, 12, 9, 30, 2, 50], k = 3
+Output: [50, 30, 23]
+Explanation: Three Largest elements in the array are 50, 30 and 23.
+
+Input: arr[] = [12, 23], k = 1
+Output: [23]
+Explanation: 1st Largest element in the array is 23.
+
+Constraints:
+1 ≤ arr[i] ≤ 10^6
+1 ≤ k ≤ arr.size()
