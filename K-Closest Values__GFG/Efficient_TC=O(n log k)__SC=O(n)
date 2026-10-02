@@ -1,0 +1,104 @@
+(Note: the heap never holds more than k elements, so each of the n elements costs O(log k), not O(log n). The sorted list takes O(n) space.)
+
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    void inorder(Node root, ArrayList<Integer> arr) {
+        if (root == null)                                         // base case
+            return;
+
+        inorder(root.left, arr);                                  // visit left
+        arr.add(root.data);                                       // sorted order
+        inorder(root.right, arr);                                 // visit right
+    }
+
+    class Pair {
+        int diff;                                                 // distance from target
+        int index;                                                // index in sorted list
+
+        Pair(int diff, int index) {
+            this.diff = diff;
+            this.index = index;
+        }
+    }
+
+    public ArrayList<Integer> getKClosest(Node root, int target, int k) {
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        inorder(root, arr);                                       // BST to sorted list
+
+        int n = arr.size();
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(             // max heap on diff
+            (a, b) -> b.diff - a.diff
+        );
+
+        for (int i = 0; i < k; i++) {                             // fill first k
+            pq.add(new Pair(
+                Math.abs(arr.get(i) - target), i
+            ));
+        }
+
+        for (int i = k; i < n; i++) {                             // check the rest
+
+            int diff = Math.abs(arr.get(i) - target);
+
+            if (pq.peek().diff > diff) {                          // strict > keeps smaller on tie
+                pq.poll();                                        // drop farthest
+                pq.add(new Pair(diff, i));                        // add closer one
+            }
+        }
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        while (!pq.isEmpty()) {                                   // collect k closest
+            result.add(arr.get(pq.poll().index));
+        }
+
+        return result;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+target = 17, k = 3
+
+Sorted : 4   8   10  12  14  20  22
+Diff   : 13  9   7   5   3   3   5
+
+Heap after first 3  : [4, 8, 10]
+12 comes  -> remove 4  : [8, 10, 12]
+14 comes  -> remove 8  : [10, 12, 14]
+20 comes  -> remove 10 : [12, 14, 20]
+22 comes  -> skip      : [12, 14, 20]
+
+Output : [12, 14, 20]
+
+//////////////////////// QUESTION ////////////////////////////
+
+K-Closest Values
+
+Given the root of a Binary Search Tree (BST), a target value, and an integer k, find the k values in the BST that are closest to the target.
+
+- If two values have the same absolute difference from the target, choose the smaller value.
+- The target may or may not be present in the BST.
+- You may return the values in any order.
+
+Examples:
+
+Input: root = [20, 8, 22, 4, 12, N, N, N, N, 10, 14], target = 17, k = 3
+
+Output: [12, 14, 20]
+Explanation: The absolute difference from 17 is 3 for both 14 and 20. Since 14 is smaller, it is chosen first.
+The next closest values are 12 and 22, both with an absolute difference of 5. Since 12 is smaller, the three closest values are 14, 20, and 12.
+
+Input: root = [5, 4, 8, 1], target = 5, k = 2
+
+Output: [4, 5]
+Explanation: The absolute difference from 5 is 0 for 5 and 1 for 4. Therefore, the two closest values are 5 and 4.
+
+Constraints:
+1 ≤ number of nodes, k ≤ 10^4
+1 ≤ node->data, target ≤ 10^4
