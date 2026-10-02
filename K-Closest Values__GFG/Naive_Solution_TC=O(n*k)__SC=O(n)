@@ -1,0 +1,88 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    void inorder(Node root, ArrayList<Integer> arr) {
+        if (root == null)                                         // base case
+            return;
+
+        inorder(root.left, arr);                                  // visit left
+        arr.add(root.data);                                       // sorted order
+        inorder(root.right, arr);                                 // visit right
+    }
+
+    public ArrayList<Integer> getKClosest(Node root, int target, int k) {
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        inorder(root, arr);                                       // BST to sorted list
+
+        int n = arr.size();
+
+        boolean[] visited = new boolean[n];                       // picked marker
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < k; i++) {                             // pick k values
+
+            int minDiff = Integer.MAX_VALUE;                      // best diff so far
+            int minDiff_Idx = -1;                                 // best index
+
+            for (int j = 0; j < n; j++) {
+
+                if (!visited[j] &&                                // skip picked
+                    Math.abs(arr.get(j) - target) < minDiff) {    // strict < keeps smaller on tie
+
+                    minDiff = Math.abs(arr.get(j) - target);      // update diff
+                    minDiff_Idx = j;                              // update index
+                }
+            }
+
+            list.add(arr.get(minDiff_Idx));                       // add closest
+            visited[minDiff_Idx] = true;                          // mark picked
+        }
+
+        return list;
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+target = 17, k = 3
+
+Sorted : 4   8   10  12  14  20  22
+Diff   : 13  9   7   5   3   3   5
+
+Pick 1 : 14
+Pick 2 : 20
+Pick 3 : 12
+
+Output : [14, 20, 12]
+
+//////////////////////// QUESTION ////////////////////////////
+
+K-Closest Values
+
+Given the root of a Binary Search Tree (BST), a target value, and an integer k, find the k values in the BST that are closest to the target.
+
+- If two values have the same absolute difference from the target, choose the smaller value.
+- The target may or may not be present in the BST.
+- You may return the values in any order.
+
+Examples:
+
+Input: root = [20, 8, 22, 4, 12, N, N, N, N, 10, 14], target = 17, k = 3
+
+Output: [12, 14, 20]
+Explanation: The absolute difference from 17 is 3 for both 14 and 20. Since 14 is smaller, it is chosen first. 
+The next closest values are 12 and 22, both with an absolute difference of 5. Since 12 is smaller, the three closest values are 14, 20, and 12.
+
+Input: root = [5, 4, 8, 1], target = 5, k = 2
+
+Output: [4, 5]
+Explanation: The absolute difference from 5 is 0 for 5 and 1 for 4. Therefore, the two closest values are 5 and 4.
+
+Constraints:
+1 ≤ number of nodes, k ≤ 10^4
+1 ≤ node->data, target ≤ 10^4
+
