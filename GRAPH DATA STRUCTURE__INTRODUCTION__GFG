@@ -1,0 +1,103 @@
+
+GRAPH DATA STRUCTURE - INTRODUCTION 
+=======================================================
+
+A graph G = (V, E) has vertices V = {v1, v2, v3, v4, v5} and edges E.
+
+ - Undirected graph : edge has no direction   (v1 --- v2)
+ - Directed graph   : edge has a direction    (v1 ---> v2)
+
+
+1. WALK
+-------
+A sequence of vertices where consecutive vertices are joined by an edge.
+Vertices and edges CAN repeat.
+
+   v1 --- v2 --- v3 --- v4 --- v5
+
+ Walk : v1 -> v2 -> v3 -> v2 -> v3 -> v4 -> v5
+        (v2 and v3 repeat - allowed)
+
+
+2. PATH
+-------
+A walk with NO repeated vertices.
+
+   v1 --- v2 --- v3 --- v4 --- v5
+
+ Path     : v1 -> v2 -> v3 -> v4 -> v5      (valid)
+ Not path : v1 -> v2 -> v3 -> v2            (v2 repeats, only a walk)
+
+ Every path is a walk, but not every walk is a path.
+
+
+3. CYCLIC GRAPH
+---------------
+A graph that contains a cycle: a path that starts and ends at the
+same vertex.
+
+ a) Undirected cyclic
+
+        v1 --- v2
+        |       |
+        |       |
+        v4 --- v3 --- v5
+
+    Cycle : v1 - v2 - v3 - v4 - v1
+
+ b) Directed cyclic
+
+        v1 ---> v2 ---> v3
+                ^        |
+                |        v
+                +------- v4 ---> v5
+
+    Cycle : v2 -> v3 -> v4 -> v2
+
+
+4. ACYCLIC GRAPH
+----------------
+A graph with NO cycle.
+
+ a) Undirected Acyclic Graph (Tree)
+    Connected, no cycle. Edges = vertices - 1 = 4.
+
+              v1
+             /  \
+           v2    v3
+          /  \
+        v4    v5
+
+    Edges : v1-v2, v1-v3, v2-v4, v2-v5
+
+ b) Directed Acyclic Graph (DAG)
+    Directed edges, no directed cycle. You can never come back to a
+    vertex by following the arrows.
+
+            +--> v2 --+
+            |         v
+           v1         v4 ---> v5
+            |         ^
+            +--> v3 --+
+
+    Edges : v1->v2, v1->v3, v2->v4, v3->v4, v4->v5
+    Topological order : v1, v2, v3, v4, v5
+
+    Uses : task scheduling, course prerequisites, build systems.
+
+
+QUICK COMPARISON
+----------------
+
+Term  | Repeat vertices? | Repeat edges? | Closed (start = end)?
+------|------------------|---------------|----------------------
+Walk  | Yes              | Yes           | Optional
+Path  | No               | No            | No
+Cycle | Only start = end | No            | Yes
+
+Graph type                       | Direction | Has cycle?
+---------------------------------|-----------|-----------
+Undirected cyclic                | No        | Yes
+Undirected acyclic (tree/forest) | No        | No
+Directed cyclic                  | Yes       | Yes
+DAG                              | Yes       | No
