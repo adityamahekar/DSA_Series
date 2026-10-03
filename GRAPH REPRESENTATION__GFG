@@ -1,0 +1,110 @@
+GRAPH REPRESENTATION:
+
+====================================================================================================
+
+ADJACENCY MATRIX:
+
+====================================================================================================
+
+1. IDEA
+
+A graph with V vertices is stored as a V x V table.
+
++-------------+-----------------------------------------------+
+| Cell value  | Meaning                                       |
++-------------+-----------------------------------------------+
+| m[i][j] = 1 | Edge from i to j                              |
+| m[i][j] = 0 | No edge                                       |
+| m[i][j] = w | Weighted graph: weight is stored instead of 1 |
++-------------+-----------------------------------------------+
+
+====================================================================================================
+
+2. DIAGRAM
+
+Graph:
+
+        B
+       / \
+      A   D ---- E
+       \ /
+        C
+
+Adjacency matrix:
+
+        A  B  C  D  E
+      +---------------+
+    A | 0  1  1  0  0 |
+    B | 1  0  0  1  0 |
+    C | 1  0  0  1  0 |
+    D | 0  1  1  0  1 |
+    E | 0  0  0  1  0 |
+      +---------------+
+
+Row D = [0 1 1 0 1], so D is adjacent to B, C and E.
+
+====================================================================================================
+
+3. ARBITRARY VERTEX NAMES
+
+The matrix only understands numbers, so keep two lookups:
+
++---------------+-----------+--------------+
+| Lookup        | Structure | Example      |
++---------------+-----------+--------------+
+| name -> index | Hash map  | "Delhi" -> 0 |
+| index -> name | Array     | 0 -> "Delhi" |
++---------------+-----------+--------------+
+
+Steps: convert the name to an index, work on the matrix,
+then convert back when printing.
+
+Cost: one extra O(1) average lookup per operation.
+
+====================================================================================================
+
+4. PROPERTIES
+
++------------------+----------------------------------------------------+
+| Property         | Detail                                             |
++------------------+----------------------------------------------------+
+| Space            | O(V^2): good for dense graphs, wasteful for sparse |
+| Undirected graph | Matrix is symmetric                                |
+| Directed graph   | Need not be symmetric                              |
+| Self-loop        | A 1 on the diagonal                                |
+| Degree           | Sum of the row (directed: row = out, column = in)  |
+| Speed            | Edge lookup is fast, neighbour listing is slow     |
++------------------+----------------------------------------------------+
+
+====================================================================================================
+
+5. TIME COMPLEXITY
+
++---------------------------------+------------------------------------+
+| Operation                       | Time                               |
++---------------------------------+------------------------------------+
+| Check if u, v are adjacent      | O(1)                               |
+| Find all vertices adjacent to u | O(V)                               |
+| Find degree of u                | O(V)                               |
+| Add an edge                     | O(1)                               |
+| Remove an edge                  | O(1)                               |
+| Add a vertex                    | O(V) amortized                     |
+| Remove a vertex                 | O(V^2) naive, O(V) with swap trick |
+| Space                           | O(V^2)                             |
++---------------------------------+------------------------------------+
+
+Swap trick: copy the last vertex's row and column into the
+removed slot, then shrink the matrix by one.
+
+====================================================================================================
+
+6. MATRIX VS LIST
+
++------------+------------------+----------------+
+|            | Adjacency Matrix | Adjacency List |
++------------+------------------+----------------+
+| Space      | O(V^2)           | O(V + E)       |
+| Edge check | O(1)             | O(deg)         |
+| Neighbours | O(V)             | O(deg)         |
+| Best for   | Dense graphs     | Sparse graphs  |
++------------+------------------+----------------+
