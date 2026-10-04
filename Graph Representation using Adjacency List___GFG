@@ -1,0 +1,119 @@
+
+Graph Representation using Adjacency List:
+
+========================================================================================================
+
+1. Introduction
+
+An adjacency list stores a graph as a collection of lists. Every vertex keeps a list of the vertices that are directly connected to it.
+It uses less memory than an adjacency matrix when the graph is sparse.
+
+Sample graph used in this document:
+
+- Vertices: A, B, C, D, E
+- Edges (undirected): A-B, A-C, B-D, C-D, D-E
+
+========================================================================================================
+
+2. Graph Diagram
+
+    +-----+
+    |  A  |
+    +-----+
+     /   \
+    /     \
+ +-----+ +-----+
+ |  B  | |  C  |
+ +-----+ +-----+
+     \     /
+      \   /
+     +-----+
+     |  D  |
+     +-----+
+        |
+        |
+     +-----+
+     |  E  |
+     +-----+
+
+
+========================================================================================================
+
+3. Adjacency List Diagram
+
+    A --> [B] --> [C] --> NULL
+    B --> [A] --> [D] --> NULL
+    C --> [A] --> [D] --> NULL
+    D --> [B] --> [C] --> [E] --> NULL
+    E --> [D] --> NULL
+
+
+========================================================================================================
+
+4. Hash Diagram
+
+The adjacency list can be stored in a hash map. The key is the vertex and the value is the list of its neighbours. The hash function maps each key to a bucket index, which gives average O(1) lookup of a vertex.
+
+    Hash Function: index = hash(vertex) % table_size
+
+    +-------+-----+      +-----+      +-----+      +-----+
+    | Index | Key |      |     |      |     |      |     |
+    +-------+-----+      +-----+      +-----+      +-----+
+    |   0   |  A  | ---> |  B  | ---> |  C  | ---> NULL
+    +-------+-----+      +-----+      +-----+
+    |   1   |  B  | ---> |  A  | ---> |  D  | ---> NULL
+    +-------+-----+      +-----+      +-----+
+    |   2   |  C  | ---> |  A  | ---> |  D  | ---> NULL
+    +-------+-----+      +-----+      +-----+      +-----+
+    |   3   |  D  | ---> |  B  | ---> |  C  | ---> |  E  | ---> NULL
+    +-------+-----+      +-----+      +-----+      +-----+
+    |   4   |  E  | ---> |  D  | ---> NULL
+    +-------+-----+      +-----+
+
+Collision handling: if two vertices hash to the same bucket, they are chained together in that bucket (separate chaining).
+
+========================================================================================================
+
+5. Operation Time Complexity
+
+V = number of vertices, E = number of edges, deg(v) = number of neighbours of vertex v.
+
+    +-------------------------------+------------------+------------------+
+    | Operation                     | Adjacency List   | Adjacency Matrix |
+    +-------------------------------+------------------+------------------+
+    | Add Vertex                    | O(1)             | O(V^2)           |
+    +-------------------------------+------------------+------------------+
+    | Add Edge                      | O(1)             | O(1)             |
+    +-------------------------------+------------------+------------------+
+    | Remove Edge                   | O(deg(v))        | O(1)             |
+    +-------------------------------+------------------+------------------+
+    | Remove Vertex                 | O(V + E)         | O(V^2)           |
+    +-------------------------------+------------------+------------------+
+    | Check Edge (u, v)             | O(deg(u))        | O(1)             |
+    +-------------------------------+------------------+------------------+
+    | Get Neighbours of a vertex    | O(deg(v))        | O(V)             |
+    +-------------------------------+------------------+------------------+
+    | Traversal (BFS / DFS)         | O(V + E)         | O(V^2)           |
+    +-------------------------------+------------------+------------------+
+    | Space Complexity              | O(V + E)         | O(V^2)           |
+    +-------------------------------+------------------+------------------+
+
+========================================================================================================
+
+6. Advantages and Disadvantages
+
+Advantages:
+- Memory efficient for sparse graphs, O(V + E).
+- Fast iteration over the neighbours of a vertex.
+- Adding a vertex or an edge is quick.
+
+Disadvantages:
+- Checking whether an edge exists takes O(deg(v)) time.
+- Slower than a matrix for dense graphs.
+
+========================================================================================================
+
+7. When to Use
+
+- Use an adjacency list when the graph is sparse (E is much smaller than V^2).
+- Use an adjacency matrix when the graph is dense or constant-time edge lookup is needed.
