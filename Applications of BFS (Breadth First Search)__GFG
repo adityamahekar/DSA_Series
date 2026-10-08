@@ -1,0 +1,13 @@
+
+Applications of BFS (Breadth First Search)
+
+1. Finding the shortest path in an unweighted graph
+2. Finding connected components
+3. Finding all nodes at a given distance
+4. Checking whether a graph is bipartite
+5. Finding the minimum number of moves in a puzzle
+6. Web crawling and searching
+7. Social network friend suggestions
+8. GPS and route finding
+9. Network broadcasting
+10. Level-order traversal of a tree
