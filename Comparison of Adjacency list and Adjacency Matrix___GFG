@@ -1,0 +1,24 @@
+
+------------------------------------------------------------------------
+| Feature              | Adjacency List       | Adjacency Matrix       |
+|----------------------|----------------------|------------------------|
+| Storage              | List of neighbors    | 2D matrix              |
+| Space Complexity     | O(V + E)             | O(V²)                  |
+| Edge Search          | O(V)                 | O(1)                   |
+| Add Edge             | O(1)                 | O(1)                   |
+| Remove Edge          | O(V)                 | O(1)                   |
+| Memory Usage         | Less                 | More                   |
+| Best For             | Sparse graphs        | Dense graphs           |
+| Implementation       | More complex         | Simple                 |
+| Main Advantage       | Saves memory         | Fast edge checking     |
+| Main Disadvantage    | Slower edge searching| High memory usage      |
+------------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+|             Operation           | Adjacency List | Adjacency Matrix |
+|---------------------------------|----------------|------------------|
+| Check if edge u → v exists      | O(degree(u))   | O(1)             |
+| Find all adjacent vertices of u | O(degree(u))   | O(V)             |
+| Add an edge u → v               | O(1)           | O(1)             |
+| Remove an edge u → v            | O(degree(u))   | O(1)             |
+-----------------------------------------------------------------------
