@@ -1,0 +1,14 @@
+Applications of DFS (Depth First Search):
+
+1. Finding connected components in a graph.
+2. Detecting cycles in a graph.
+3. Topological sorting of a directed acyclic graph (DAG).
+4. Finding paths between two vertices.
+5. Solving mazes and puzzles.
+6. Finding connected regions in a grid.
+7. Detecting whether a graph is connected.
+8. Finding strongly connected components.
+9. Finding articulation points and bridges.
+10. Backtracking problems such as N-Queens.
+11. Checking whether a graph is bipartite.
+12. Performing graph traversal and tree traversal.
