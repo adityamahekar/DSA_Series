@@ -1,0 +1,110 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    int parent[];                                           // parent[i] = parent of node i; root points to itself
+
+    int find(int x) {                                       // returns the root of the group that x belongs to
+
+        if (parent[x] != x) parent[x] = find(parent[x]);   // go up; path compression flattens the tree
+        return parent[x];                                  // x's root
+    }
+
+    public boolean isCycle(int V, int[][] edges) {
+
+        parent = new int[V];                               // make the parent array
+
+        for (int i = 0; i < V; i++) parent[i] = i;         // every node starts alone, as its own parent
+
+        for (int[] e : edges) {                            // walk through each edge
+
+            int ru = find(e[0]), rv = find(e[1]);          // find the root of both endpoints
+
+            if (ru == rv) return true;                     // same root = same group = already connected = cycle
+
+            parent[ru] = rv;                               // different groups, so merge them (union)
+        }
+
+        return false;                                      // no edge closed a loop, so no cycle
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+V = 4,  edges = [[0,1], [0,2], [1,2], [2,3]]
+
+-------------------------------------------------------------------------------------------------
+
+start
+
+   0     1     2     3          each node is its own root
+
+-------------------------------------------------------------------------------------------------
+
+edge (0,1)
+
+   0 and 1 in different sets  ->  join
+
+         1
+         |
+         0
+
+-------------------------------------------------------------------------------------------------
+
+edge (0,2)
+
+   1 and 2 in different sets  ->  join
+
+         2
+         |
+         1
+         |
+         0
+
+-------------------------------------------------------------------------------------------------
+
+edge (1,2)
+
+   find(1) = 2 , find(2) = 2  ->  same set  ->  CYCLE
+
+-------------------------------------------------------------------------------------------------
+
+return true
+
+//////////////////////// QUESTION ////////////////////////////
+
+Undirected Graph Cycle
+
+Given an undirected graph with V vertices and E edges, represented as a 2D vector edges[][], where each entry edges[i] = [u, v] denotes an edge between vertices u and v,
+determine whether the graph contains a cycle or not.
+
+Note: The graph can have multiple component.
+
+Examples:
+
+-------------------------------------------------------------------------------------------------
+
+Input: V = 4, E = 4, edges[][] = [[0, 1], [0, 2], [1, 2], [2, 3]]
+Output: true
+Explanation: 1 -> 2 -> 0 -> 1 is a cycle.
+
+        0
+       / \
+      1---2
+          |
+          3
+
+-------------------------------------------------------------------------------------------------
+
+Input: V = 4, E = 3, edges[][] = [[0, 1], [1, 2], [2, 3]]
+Output: false
+Explanation: No cycle in the graph.
+
+  0---1---2---3
+
+-------------------------------------------------------------------------------------------------
+
+Constraints:
+1 ≤ V, E ≤ 10^5
+0 ≤ edges[i][0], edges[i][1] < V
+
