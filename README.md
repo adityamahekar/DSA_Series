@@ -26,7 +26,7 @@ TC=O(nlogn)__SC=O(n)
  no calc and theory in dry run make it simple and easy to understand and short >
 
 //////////////////////// QUESTION ////////////////////////////
-
+   give diagram for examples 
 <With Question  allowed and no Difficulty: MediumAccuracy: 32.95%Submissions: 518K+Points: 4Average Time: 20m >
 dont give any link
 
