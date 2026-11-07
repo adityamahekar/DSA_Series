@@ -1,41 +1,40 @@
 
 //////////////////////////////// CODE ////////////////////////////////
 
-
 class Solution {
-    void dfs1(int u, vector<vector<int>>& g, vector<int>& vis, stack<int>& st) {    // step 1 dfs
+    void dfs1(int u, ArrayList<ArrayList<Integer>> g, int[] vis, Stack<Integer> st) {    // step 1 dfs
         vis[u] = 1;
-        for (int v : g[u]) if (!vis[v]) dfs1(v, g, vis, st);
-        st.push(u);                                                                 // push after all neighbours done
+        for (int v : g.get(u)) if (vis[v] == 0) dfs1(v, g, vis, st);
+        st.push(u);                                                                      // push after all neighbours done
     }
 
-    void dfs2(int u, vector<vector<int>>& rg, vector<int>& vis) {                   // step 3 dfs on reverse graph
+    void dfs2(int u, ArrayList<ArrayList<Integer>> rg, int[] vis) {                      // step 3 dfs on reverse graph
         vis[u] = 1;
-        for (int v : rg[u]) if (!vis[v]) dfs2(v, rg, vis);
+        for (int v : rg.get(u)) if (vis[v] == 0) dfs2(v, rg, vis);
     }
 
-public:
-    int kosaraju(int V, vector<vector<int>>& adj) {
-        vector<int> vis(V, 0);
-        stack<int> st;
-        for (int i = 0; i < V; i++)                                                 // step 1 start
-            if (!vis[i]) dfs1(i, adj, vis, st);
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj) {
+        int[] vis = new int[V];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < V; i++)                                                      // step 1 start
+            if (vis[i] == 0) dfs1(i, adj, vis, st);
 
-        vector<vector<int>> radj(V);                                                // step 2 reverse edges
+        ArrayList<ArrayList<Integer>> radj = new ArrayList<>();                          // step 2 reverse edges
+        for (int i = 0; i < V; i++) radj.add(new ArrayList<>());
         for (int u = 0; u < V; u++)
-            for (int v : adj[u]) radj[v].push_back(u);
+            for (int v : adj.get(u)) radj.get(v).add(u);
 
-        fill(vis.begin(), vis.end(), 0);                                            // reuse vis
+        Arrays.fill(vis, 0);                                                             // reuse vis
         int scc = 0;
-        while (!st.empty()) {
-            int u = st.top(); st.pop();
-            if (vis[u]) continue;                                                   // already in some SCC
-            scc++;                                                                  // new component found
+        while (!st.isEmpty()) {
+            int u = st.pop();
+            if (vis[u] == 1) continue;                                                   // already in some SCC
+            scc++;                                                                       // new component found
             dfs2(u, radj, vis);
         }
         return scc;
     }
-};
+}
 
 //////////////////////// DRY RUN /////////////////////////////
 
@@ -43,24 +42,34 @@ public:
 // STEP 1: DFS on original graph, push node on stack after its DFS finishes
 // STEP 2: Build reverse graph (reverse every edge)
 // STEP 3: Pop from stack, DFS on reverse graph -> every fresh DFS call = one SCC
+// needs java.util.*  (ArrayList, Stack, Arrays)
+
+---------------------------------------------------------------------
+
 V = 5, edges: 0->1, 1->2, 2->0, 2->3, 3->4, 4->3
 
       0 ---> 1
       ^      |
       |      v
       +----- 2 ---> 3 <---> 4
+
 ---------------------------------------------------------------------
+
 STEP 1 : DFS on original graph, push on finish
 
   visit  0 -> 1 -> 2 -> 3 -> 4
   push   4, 3, 2, 1, 0
 
   stack (top at right)   | 4 | 3 | 2 | 1 | 0 |
+
 --------------------------------------------------------------------
+
 STEP 2 : reverse every edge
 
   1->0   2->1   0->2   3->2   4->3   3->4
+
 --------------------------------------------------------------------
+
 STEP 3 : pop stack, DFS on reverse graph
 
   pop 0 -> visits 0, 2, 1   => SCC 1 = {0, 1, 2}
@@ -73,13 +82,15 @@ STEP 3 : pop stack, DFS on reverse graph
 
 //////////////////////// QUESTION ////////////////////////////
 
-Kosaraju 
+Kosaraju
+
 Given a Directed Graph with V vertices (numbered from 0 to V-1) and E edges, find the number of strongly connected components in the graph.
 A strongly connected component (SCC) is a maximal group of vertices in which every vertex can reach every other vertex of the same group through a directed path.
 
 ============================================================================
 
 Example 1
+
 Input: V = 5, adj = [[1], [2], [0, 3], [4], [3]]
 Output: 2
 
@@ -93,6 +104,7 @@ SCC 1 = {0, 1, 2}, SCC 2 = {3, 4}
 ============================================================================
 
 Example 2
+
 Input: V = 4, adj = [[1], [2], [3], []]
 Output: 4
 
@@ -103,6 +115,7 @@ No cycle anywhere, so every vertex is its own SCC.
 ============================================================================
 
 Example 3
+
 Input: V = 3, adj = [[1, 2], [2], [0]]
 Output: 1
 
