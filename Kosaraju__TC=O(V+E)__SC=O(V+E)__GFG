@@ -1,0 +1,117 @@
+
+//////////////////////////////// CODE ////////////////////////////////
+
+
+class Solution {
+    void dfs1(int u, vector<vector<int>>& g, vector<int>& vis, stack<int>& st) {    // step 1 dfs
+        vis[u] = 1;
+        for (int v : g[u]) if (!vis[v]) dfs1(v, g, vis, st);
+        st.push(u);                                                                 // push after all neighbours done
+    }
+
+    void dfs2(int u, vector<vector<int>>& rg, vector<int>& vis) {                   // step 3 dfs on reverse graph
+        vis[u] = 1;
+        for (int v : rg[u]) if (!vis[v]) dfs2(v, rg, vis);
+    }
+
+public:
+    int kosaraju(int V, vector<vector<int>>& adj) {
+        vector<int> vis(V, 0);
+        stack<int> st;
+        for (int i = 0; i < V; i++)                                                 // step 1 start
+            if (!vis[i]) dfs1(i, adj, vis, st);
+
+        vector<vector<int>> radj(V);                                                // step 2 reverse edges
+        for (int u = 0; u < V; u++)
+            for (int v : adj[u]) radj[v].push_back(u);
+
+        fill(vis.begin(), vis.end(), 0);                                            // reuse vis
+        int scc = 0;
+        while (!st.empty()) {
+            int u = st.top(); st.pop();
+            if (vis[u]) continue;                                                   // already in some SCC
+            scc++;                                                                  // new component found
+            dfs2(u, radj, vis);
+        }
+        return scc;
+    }
+};
+
+//////////////////////// DRY RUN /////////////////////////////
+
+// Kosaraju = 3 steps
+// STEP 1: DFS on original graph, push node on stack after its DFS finishes
+// STEP 2: Build reverse graph (reverse every edge)
+// STEP 3: Pop from stack, DFS on reverse graph -> every fresh DFS call = one SCC
+V = 5, edges: 0->1, 1->2, 2->0, 2->3, 3->4, 4->3
+
+      0 ---> 1
+      ^      |
+      |      v
+      +----- 2 ---> 3 <---> 4
+---------------------------------------------------------------------
+STEP 1 : DFS on original graph, push on finish
+
+  visit  0 -> 1 -> 2 -> 3 -> 4
+  push   4, 3, 2, 1, 0
+
+  stack (top at right)   | 4 | 3 | 2 | 1 | 0 |
+--------------------------------------------------------------------
+STEP 2 : reverse every edge
+
+  1->0   2->1   0->2   3->2   4->3   3->4
+--------------------------------------------------------------------
+STEP 3 : pop stack, DFS on reverse graph
+
+  pop 0 -> visits 0, 2, 1   => SCC 1 = {0, 1, 2}
+  pop 1 -> visited, skip
+  pop 2 -> visited, skip
+  pop 3 -> visits 3, 4      => SCC 2 = {3, 4}
+  pop 4 -> visited, skip
+
+  answer = 2
+
+//////////////////////// QUESTION ////////////////////////////
+
+Kosaraju 
+Given a Directed Graph with V vertices (numbered from 0 to V-1) and E edges, find the number of strongly connected components in the graph.
+A strongly connected component (SCC) is a maximal group of vertices in which every vertex can reach every other vertex of the same group through a directed path.
+
+============================================================================
+
+Example 1
+Input: V = 5, adj = [[1], [2], [0, 3], [4], [3]]
+Output: 2
+
+      0 ---> 1
+      ^      |
+      |      v
+      +----- 2 ---> 3 <---> 4
+
+SCC 1 = {0, 1, 2}, SCC 2 = {3, 4}
+
+============================================================================
+
+Example 2
+Input: V = 4, adj = [[1], [2], [3], []]
+Output: 4
+
+      0 ---> 1 ---> 2 ---> 3
+
+No cycle anywhere, so every vertex is its own SCC.
+
+============================================================================
+
+Example 3
+Input: V = 3, adj = [[1, 2], [2], [0]]
+Output: 1
+
+      0 ---> 1
+      |      |
+      v      v
+      +----> 2
+             |
+             v
+      (2 ---> 0 closes the loop)
+
+All three vertices reach each other, so one single SCC {0, 1, 2}.
