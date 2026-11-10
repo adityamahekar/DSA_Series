@@ -1,0 +1,146 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    static ArrayList<Integer> articulationPoints(int V, int[][] edges) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();    // adjacency list
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+            adj.get(e[1]).add(e[0]);                              // undirected
+        }
+        int[] disc = new int[V];                                  // discovery time
+        int[] low = new int[V];                                   // lowest reachable disc
+        boolean[] isAP = new boolean[V];
+        int[] timer = {0};                                        // shared clock
+        Arrays.fill(disc, -1);                                    // -1 = unvisited
+        for (int i = 0; i < V; i++) {                             // graph may be disconnected
+            if (disc[i] == -1) {
+                dfs(i, -1, adj, disc, low, isAP, timer);          // fresh root per component
+            }
+        }
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            if (isAP[i]) res.add(i);
+        }
+        if (res.isEmpty()) res.add(-1);                           // no cut vertex
+        return res;
+    }
+
+    private static void dfs(int u, int parent,
+                            ArrayList<ArrayList<Integer>> adj, int[] disc,
+                            int[] low, boolean[] isAP, int[] timer) {
+        disc[u] = low[u] = timer[0]++;                            // entry time
+        int children = 0;                                         // DFS tree children
+        for (int v : adj.get(u)) {
+            if (v == parent) continue;                            // never go back to parent
+            if (disc[v] == -1) {                                  // tree edge
+                children++;
+                dfs(v, u, adj, disc, low, isAP, timer);
+                low[u] = Math.min(low[u], low[v]);                // pull up child low
+                if (parent != -1 && low[v] >= disc[u]) {          // no back edge escapes subtree
+                    isAP[u] = true;
+                }
+            } else {                                              // back edge
+                low[u] = Math.min(low[u], disc[v]);               // use disc of v, not low
+            }
+        }
+        if (parent == -1 && children > 1) {                       // root rule
+            isAP[u] = true;
+        }
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1  V = 5, edges = [[0,1],[1,4],[4,3],[4,2],[2,3]]
+
+Graph
+
+        0
+        |
+        1
+        |
+        4
+       / \
+      3---2
+
+DFS tree from 0   (disc / low)
+
+        0  (0/0)
+        |
+        1  (1/1)  <- AP
+        |
+        4  (2/2)  <- AP
+        |
+        3  (3/2)
+        |
+        2  (4/2)
+
+        back edge  2 - - -> 4
+
+Answer: [1, 4]
+
+=======================================================================
+
+Example 2  V = 4, edges = [[0,1],[0,2]]
+
+Graph
+
+        0
+       / \
+      1   2
+
+DFS tree from 0   (disc / low)
+
+        0  (0/0)  <- AP   (2 children)
+       / \
+    1(1/1) 2(2/2)
+
+Answer: [0]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Articulation Point
+
+Given an undirected graph with V vertices. The graph is represented as a 2D array edges[][], where each element edges[i] = [u, v] indicates an undirected edge between vertices u and v.
+Return all the articulation points (or cut vertices) in the graph. 
+An articulation point is a vertex whose removal, along with all its connected edges, increases the number of connected components in the graph.
+The given graph may be disconnected, i.e., it may consist of more than one connected component.
+If no such point exists, return {-1}.
+
+Examples :
+
+=======================================================================
+
+Input: V = 5, edges[][] = [[0, 1], [1, 4], [4, 3], [4, 2], [2, 3]]
+
+Output: [1, 4]
+
+        0
+        |
+        1        <- remove 1
+        |
+        4        <- remove 4
+       / \
+      3---2
+
+Removing vertex 1 splits {0} away from the rest.
+Removing vertex 4 splits {0,1} away from {2,3}.
+
+=======================================================================
+
+Input: V = 4, edges[][] = [[0, 1], [0, 2]]
+
+Output: [0]
+
+        0        <- remove 0
+       / \
+      1   2
+
+Removing vertex 0 leaves 1 and 2 alone, so components become 3.
+
+Constraints:
+
+1 <= V, edges.size() <= 10^4
+0 <= edges[i][j] < V
+edges[i].size() = 2
