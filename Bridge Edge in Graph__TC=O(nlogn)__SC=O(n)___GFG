@@ -1,0 +1,130 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public boolean isBridge(int V, int[][] edges, int c, int d) {
+        List<int[]>[] adj = new ArrayList[V];                                     // adj list holds (neighbour, edge id)
+        for (int i = 0; i < V; i++) adj[i] = new ArrayList<>();                   // create every bucket
+        int targetEdge = -1;                                                      // id of the edge c-d
+        for (int i = 0; i < edges.length; i++) {                                  // one pass over all edges
+            int u = edges[i][0], v = edges[i][1];                                 // endpoints of edge i
+            adj[u].add(new int[]{v, i});                                          // store neighbour + edge id
+            adj[v].add(new int[]{u, i});                                          // same edge, other side
+            if (targetEdge == -1 && ((u == c && v == d) || (u == d && v == c))) { // found c-d edge
+                targetEdge = i;                                                   // remember its index
+            }
+        }
+        if (targetEdge == -1) return false;                                       // edge does not exist
+        boolean[] visited = new boolean[V];                                       // DFS visited array
+        Deque<Integer> stack = new ArrayDeque<>();                                // iterative DFS stack
+        visited[c] = true;                                                        // start DFS from c
+        stack.push(c);                                                            // push source
+        while (!stack.isEmpty()) {                                                // keep going till stack empty
+            int u = stack.pop();                                                  // take next vertex
+            for (int[] e : adj[u]) {                                              // walk all neighbours of u
+                int v = e[0], id = e[1];                                          // neighbour and its edge id
+                if (id == targetEdge) continue;                                   // pretend c-d is deleted
+                if (!visited[v]) {                                                // only unvisited ones
+                    visited[v] = true;                                            // mark before pushing
+                    stack.push(v);                                                // push it
+                }
+            }
+        }
+        return !visited[d];                                                       // d unreachable => it is a bridge
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: V = 4, edges = [0-1, 1-2, 2-3], c = 1, d = 2
+
+   normal graph:      0 ---- 1 ---- 2 ---- 3
+
+   delete edge 1-2:   0 ---- 1   X   2 ---- 3
+
+   DFS from 1 :  visited = {1, 0}
+                 d = 2 is not visited
+
+   answer : true
+
+----------------------------------------------------------------------------
+
+Example 2: V = 5, edges = [0-1, 0-3, 1-2, 2-0, 3-4], c = 0, d = 2
+
+   normal graph:          1
+                        /   \
+                       0 --- 2
+                       |
+                       3
+                       |
+                       4
+
+   delete edge 0-2:       1
+                        /   \
+                       0     2
+                       |
+                       3
+                       |
+                       4
+
+   DFS from 0 :  visited = {0, 1, 2, 3, 4}
+                 d = 2 is visited
+
+   answer : false
+
+//////////////////////// QUESTION ////////////////////////////
+
+Bridge Edge in Graph
+
+Given an undirected graph with V vertices numbered from 0 to V-1 and edges represented by 2d array edges[][], 
+where edges[i]=[u,v] represents the edge between the vertices u and v. Determine whether a specific edge between two vertices (c, d) is a bridge.
+
+Note:
+
+- An edge is called a bridge if removing it increases the number of connected components of the graph.
+- if there's only one path between c and d (which is the edge itself), then that edge is a bridge.
+
+Examples :
+
+----------------------------------------------------------------------------
+
+Input: V = 4, edges[][] = [[0, 1], [1, 2], [2, 3]], c = 1, d = 2
+
+Output: true
+Explanation: From the graph, we can clearly see that blocking the edge 1-2 will result in disconnection of the graph.
+Hence, it is a Bridge.
+
+   0 ---- 1 == 2 ---- 3
+          ^^
+        query edge
+
+   all three edges are bridges (green in picture)
+
+----------------------------------------------------------------------------
+
+Input: V = 5, edges[][] = [[0, 1], [0, 3], [1, 2], [2, 0], [3, 4]], c = 0, d = 2
+
+Output: false
+Explanation:
+
+Blocking the edge between nodes 0 and 2 won't affect the connectivity of the graph.
+So, it's not a Bridge Edge. All the Bridge Edges in the graph are marked with a green line in the above image.
+
+            1
+          /   \
+         0 === 2        ===  query edge 0-2 (inside a cycle)
+         |
+         3              bridge edges : 0-3 and 3-4
+         |
+         4
+
+----------------------------------------------------------------------------
+
+Constraints:
+
+1 <= V <= 105
+1 <= edges.size() <= 2*105
+edges[i][j] <= V
+0 <= c, d < V
+edges[i].size() = 2
+
+Idea in one line: delete the c-d edge and run a DFS from c; if d is still reachable, the edge is not a bridge, otherwise it is.
