@@ -1,0 +1,193 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public ArrayList<ArrayList<Integer>> findSCC(ArrayList<ArrayList<Integer>> adj) {
+        int n = adj.size();                                      // Number of vertices
+        boolean[] visited = new boolean[n];                     // Visited nodes
+        int[] order = new int[n];                               // Finishing order
+        int k = 0;                                               // Order index
+        int[] nodeStk = new int[n + 1];                         // DFS node stack
+        int[] idxStk = new int[n + 1];                          // Neighbor index stack
+
+        for (int s = 0; s < n; s++) {                           // Visit all nodes
+            if (visited[s]) continue;                           // Skip visited nodes
+            visited[s] = true;                                  // Mark starting node
+            int top = 0;                                         // Stack top
+            nodeStk[0] = s;                                     // Push starting node
+            idxStk[0] = 0;                                      // Initial index
+
+            while (top >= 0) {                                  // Iterative DFS
+                int v = nodeStk[top];                           // Current node
+                int idx = idxStk[top];                          // Neighbor index
+                ArrayList<Integer> nb = adj.get(v);             // Get neighbors
+                boolean descended = false;                     // Track DFS descent
+
+                while (idx < nb.size()) {                       // Check neighbors
+                    int u = nb.get(idx++);                      // Get next neighbor
+                    if (!visited[u]) {                          // Check unvisited
+                        visited[u] = true;                      // Mark visited
+                        idxStk[top] = idx;                      // Save index
+                        top++;                                  // Move stack top
+                        nodeStk[top] = u;                       // Push neighbor
+                        idxStk[top] = 0;                        // Reset index
+                        descended = true;                       // Mark descent
+                        break;                                  // Continue DFS
+                    }
+                }
+
+                if (!descended) {                               // No neighbors left
+                    order[k++] = v;                             // Store finish order
+                    top--;                                      // Pop node
+                }
+            }
+        }
+
+        ArrayList<ArrayList<Integer>> radj = new ArrayList<>(n); // Reverse graph
+        for (int i = 0; i < n; i++) radj.add(new ArrayList<>()); // Create lists
+
+        for (int v = 0; v < n; v++) {                           // Visit all nodes
+            for (int u : adj.get(v)) {                          // Visit every edge
+                radj.get(u).add(v);                             // Reverse the edge
+            }
+        }
+
+        int[] comp = new int[n];                                // Component IDs
+        java.util.Arrays.fill(comp, -1);                        // Mark unassigned
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();  // Store SCCs
+        int[] stk = new int[n];                                 // DFS stack
+
+        for (int i = n - 1; i >= 0; i--) {                      // Reverse finish order
+            int s = order[i];                                   // Get starting node
+            if (comp[s] != -1) continue;                        // Skip assigned nodes
+
+            int cid = res.size();                               // New component ID
+            ArrayList<Integer> cur = new ArrayList<>();         // Current SCC
+            comp[s] = cid;                                      // Assign component
+            int top = 0;                                        // Stack top
+            stk[0] = s;                                         // Push starting node
+
+            while (top >= 0) {                                  // DFS on reverse graph
+                int v = stk[top--];                             // Pop current node
+                cur.add(v);                                     // Add to SCC
+
+                for (int u : radj.get(v)) {                     // Check neighbors
+                    if (comp[u] == -1) {                        // Check unassigned
+                        comp[u] = cid;                          // Assign component
+                        stk[++top] = u;                         // Push neighbor
+                    }
+                }
+            }
+
+            java.util.Collections.sort(cur);                    // Sort SCC vertices
+            res.add(cur);                                       // Store SCC
+        }
+
+        res.sort((a, b) -> {                                    // Lexicographical sort
+            int m = Math.min(a.size(), b.size());               // Smaller list size
+
+            for (int i = 0; i < m; i++) {                       // Compare elements
+                int c = Integer.compare(a.get(i), b.get(i));   // Compare vertices
+                if (c != 0) return c;                           // Return difference
+            }
+
+            return Integer.compare(a.size(), b.size());        // Compare list sizes
+        });
+
+        return res;                                             // Return sorted SCCs
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1:
+
+Input: adj = [[1], [2], [0, 3], [4], [3, 5], []]
+
+Original Graph:
+
+       0 ───→ 1
+       ↑      |
+       |      ↓
+       2 ←────┘
+       |
+       ↓
+       3 ───→ 4
+              |
+              ↓
+              5
+
+Pass 1: DFS finishing order
+
+5 → 4 → 3 → 2 → 1 → 0
+
+Pass 2: Reverse graph DFS
+
+0 → 1 → 2       SCC 1
+
+3 → 4           SCC 2
+
+5               SCC 3
+
+Final Output:
+
+[[0, 1, 2], [3, 4], [5]]
+
+===============================================================
+
+Example 2:
+
+Input: adj = [[1], [2], [0]]
+
+Original Graph:
+
+       0 ───→ 1
+       ↑      |
+       |      ↓
+       2 ←────┘
+
+Pass 1: DFS finishing order
+
+2 → 1 → 0
+
+Pass 2: Reverse graph DFS
+
+       0
+      / \
+     2 ← 1
+
+Final Output:
+
+[[0, 1, 2]]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Strongly Connected Components
+Given a directed graph with V vertices labeled from 0 to V - 1, represented by an adjacency list adj, find all strongly connected components (SCCs) in the graph.
+A strongly connected component is a maximal set of vertices such that every vertex is reachable from every other vertex in the same set.
+
+Note: Return all SCCs as a list of lists.
+
+- Sort the vertices within each component in ascending order.
+- Sort the list of components in lexicographical order.
+
+-----------------------------------------------------------
+Example 1:
+
+Input:
+adj[][] = [[1], [2], [0, 3], [4], [3, 5], []]
+
+Output:
+[[0, 1, 2], [3, 4], [5]]
+------------------------------------------------------------
+Example 2:
+
+Input:
+adj[][] = [[1], [2], [0]]
+
+Output:
+[[0, 1, 2]]
+-----------------------------------------------------------
+Constraints:
+
+1 ≤ adj.size() ≤ 10⁵
+adj[i][j] < adj.size()
