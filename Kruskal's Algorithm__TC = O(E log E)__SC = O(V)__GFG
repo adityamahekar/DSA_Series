@@ -1,0 +1,170 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    static int kruskalsMST(int V, int[][] edges) {
+        Arrays.sort(edges, (a, b) -> a[2] - b[2]); // Sort by weight
+
+        int[] parent = new int[V];                 // Parent array
+        int[] rank = new int[V];                   // Rank array
+
+        for (int i = 0; i < V; i++) {
+            parent[i] = i;                         // Initialize parent
+        }
+
+        int sum = 0;                               // MST weight
+        int count = 0;                             // Selected edges
+
+        for (int[] edge : edges) {
+            int u = edge[0];                       // First vertex
+            int v = edge[1];                       // Second vertex
+            int w = edge[2];                       // Edge weight
+
+            int pu = find(parent, u);              // Find parent of u
+            int pv = find(parent, v);              // Find parent of v
+
+            if (pu != pv) {                        // Check for cycle
+                sum += w;                          // Add edge weight
+                union(parent, rank, pu, pv);       // Merge both sets
+                count++;                           // Increment edge count
+
+                if (count == V - 1) break;         // Stop after MST
+            }
+        }
+
+        return sum;                                // Return MST weight
+    }
+
+    static int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);   // Path compression
+        }
+        return parent[x];                         // Return root
+    }
+
+    static void union(int[] parent, int[] rank, int u, int v) {
+        if (rank[u] < rank[v]) {
+            parent[u] = v;                        // Attach u to v
+        }
+        else if (rank[u] > rank[v]) {
+            parent[v] = u;                        // Attach v to u
+        }
+        else {
+            parent[v] = u;                        // Merge both sets
+            rank[u]++;                            // Increase rank
+        }
+    }
+}
+
+//////////////////////// DRY RUN ////////////////////////////////
+
+Example 1:
+
+Input: V = 3, edges = [[0,1,5], [1,2,3], [0,2,1]]
+
+Original Graph:
+
+             1
+            / \
+          5/   \3
+          /     \
+         0-------2
+              1
+
+Sorted Edges:
+
+0 ---- 2 : 1   ✓
+1 ---- 2 : 3   ✓
+0 ---- 1 : 5   ✗
+
+MST Formation:
+
+Step 1: Select 0 -- 2 (1)
+
+         0-------2
+              1
+
+Step 2: Select 1 -- 2 (3)
+
+             1
+              \
+               \ 3
+                \
+         0-------2
+              1
+
+Step 3: Skip 0 -- 1 (5)
+
+Final MST:
+
+             1
+              \
+               \ 3
+                \
+         0-------2
+              1
+
+Output: 4
+
+----------------------------------------------------------------------
+Example 2:
+
+Input: V = 2, edges = [[0,1,5]]
+
+Original Graph:
+
+         0 -------- 1
+                5
+
+MST Formation:
+
+         0 -------- 1
+                5
+
+Output: 5
+
+//////////////////////// QUESTION ////////////////////////////////
+
+Kruskal's Algorithm
+Given a weighted, undirected, and connected graph with V vertices and edges represented as an edge list edges[][], 
+where edges[i] = [u, v, w] denotes an undirected edge between u and v with weight w. Find the sum of the weights of the edges in the Minimum Spanning Tree (MST) of the graph using Kruskal's Algorithm.
+
+-----------------------------------------------------------------------
+Input 1:
+
+V = 3
+edges[][] = [[0, 1, 5], [1, 2, 3], [0, 2, 1]]
+
+Graph:
+
+             1
+            / \
+          5/   \3
+          /     \
+         0-------2
+              1
+
+Output: 4
+
+Explanation: The spanning tree resulting in a weight of 4.
+
+-----------------------------------------------------------------------------
+Input 2:
+
+V = 2
+edges[][] = [[0, 1, 5]]
+
+Graph:
+
+         0 -------- 1
+                5
+
+Output: 5
+
+Explanation: Only one spanning tree is possible which has a weight of 5.
+---------------------------------------------------------------------------
+Constraints:
+
+2 ≤ V ≤ 10³
+V-1 ≤ edges.size() ≤ (V*(V-1))/2
+0 ≤ u, v < V
+1 ≤ w ≤ 10³
