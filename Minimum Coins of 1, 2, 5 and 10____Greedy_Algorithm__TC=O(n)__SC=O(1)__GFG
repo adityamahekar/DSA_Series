@@ -1,0 +1,92 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+    public int findMin(int n) {
+        int[] arr = {10, 5, 2, 1};
+        int p = n;
+        int res = 0;
+
+        for(int i = 0; i < arr.length; i++) {       // Traverse denominations
+            if(arr[i] <= p) {                       // Check coin value
+                int c = p / arr[i];                 // Count coins
+                res = res + c;                      // Add to result
+                p %= arr[i];                        // Update remaining value
+            }
+
+            if(p == 0) {                            // Check completion
+                break;
+            }
+        }
+        return res;                                 // Return minimum coins
+    }
+}
+
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1: n = 39
+
+Coins | Remaining | Count
+
+10 × 3| 9         | 3
+
+5 × 1 | 4         | 4
+
+2 × 2 | 0         | 6
+
+Output: 6
+
+10
+
+10
+
+10
+
+5
+
+2
+
+2
+
+==================================================
+
+Example 2: n = 121
+
+Coins   | Remaining | Count
+
+10 × 12 | 1         | 12
+
+1 × 1   | 0         | 13
+
+Output: 13
+
+10 × 12 + 1 × 1
+
+//////////////////////// QUESTION ////////////////////////////
+
+Minimum Coins of 1, 2, 5 and 10
+
+Given an integer n representing a target value and an infinite supply of coins of denominations 1, 2, 5, and 10, find the minimum number of coins required to make the value n.
+
+--------------------------------------------------------------------------------------------
+Examples:
+--------------------------------------------------------------------------------------------
+Input: n = 39
+
+Output: 6
+
+Explanation: 39 can be formed using 3 coins of 10 rupees, 1 coin of 5 rupees and 2 coins of 2 rupees so minimum coins required are 6.
+----------------------------------------------------------------------------------------------
+
+Input: n = 121
+
+Output: 13
+
+Explanation: 121 can be formed using 12 coins of 10 rupees and 1 coin of 1 rupee.
+
+-------------------------------------------------------------------------------------------------
+Constraints:
+
+1 ≤ n ≤ 10⁶
+
+Note: The given code uses a greedy approach. Its time complexity is O(1), since the denomination array always contains exactly 4 elements, and its auxiliary space complexity is O(1).
