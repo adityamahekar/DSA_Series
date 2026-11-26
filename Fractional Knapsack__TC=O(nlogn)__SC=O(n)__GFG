@@ -1,0 +1,89 @@
+//////////////////////// CODE ////////////////////////////////
+
+Note: items must be sorted by value/weight first — that is what the O(nlogn) is for.
+
+class Solution {                                                                  // class starts
+    public double fractionalKnapsack(int[] val, int[] wt, int capacity) {         // returns max value
+        int n = val.length;                                                       // number of items
+        Integer[] idx = new Integer[n];                                           // index array for sorting
+        for (int i = 0; i < n; i++) idx[i] = i;                                   // fill indices 0..n-1
+        Arrays.sort(idx, (a, b) -> Double.compare((double) val[b] / wt[b],        // sort by value/weight
+                (double) val[a] / wt[a]));                                        // descending ratio
+        double res = 0.0;                                                         // total value collected
+        int c = capacity;                                                         // remaining capacity
+        for (int i : idx) {                                                       // pick highest ratio first
+            if (wt[i] <= c) {                                                     // whole item fits
+                c -= wt[i];                                                       // reduce capacity
+                res += val[i];                                                    // add full value
+            } else {                                                              // item does not fit fully
+                res += (double) val[i] * c / wt[i];                               // take only the fraction
+                break;                                                            // bag is full, stop
+            }                                                                     // end if-else
+        }                                                                         // end loop
+        return res;                                                               // maximum value
+    }                                                                             // end method
+}                                                                                 // end class
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1:  val = [60, 100, 120]   wt = [10, 20, 30]   capacity = 50
+
+ratio:      6          5          4        ->  already sorted: item1, item2, item3
+
+Bag (50):  |##########|####################|####################..........|
+             item1         item2                  item3
+             wt 10         wt 20                  wt 20 of 30
+             +60           +100                   +80
+                                                   ------
+                                                   = 240.000000
+
+=======================================================================================
+
+Example 2:  val = [500]   wt = [30]   capacity = 10
+
+ratio:      500/30 = 16.67      ->  only one item
+
+Bag (10):  |##########|
+             item1: 10 of 30 taken
+             +166.666...        = 166.670000
+
+//////////////////////// QUESTION ////////////////////////////
+
+Fractional Knapsack
+
+Given two arrays, val[] and wt[], representing the values and weights of items, and an integer capacity representing the maximum weight a knapsack can hold, determine the maximum total value that can be achieved by putting items in the knapsack. You are allowed to break items into fractions if necessary.
+Return the maximum value as a double, rounded to 6 decimal places.
+
+Examples :
+---------------------------------------------------------------------------------------
+
+Input: val[] = [60, 100, 120], wt[] = [10, 20, 30], capacity = 50
+Output: 240.000000
+Explanation: By taking items of weight 10 and 20 kg and 2/3 fraction of 30 kg. Hence total price will be 60+100+(2/3)(120) = 240
+---------------------------------------------------------------------------------------
+
+Input: val[] = [500], wt[] = [30], capacity = 10
+Output: 166.670000
+Explanation: Since the item's weight exceeds capacity, we take a fraction 10/30 of it, yielding value 166.670000.
+---------------------------------------------------------------------------------------
+
+Constraints:
+
+val.size() <= 105
+1 <= val[i], wt[i] <= 104
+1 <= capacity <= 109
+wt.size() = val.size()
+
+=======================================================================================
+Diagram for the examples:
+---------------------------------------------------------------------------------------
+
+Example 1
+item1  wt 10  val 60   ratio 6   [##########]  full
+item2  wt 20  val 100  ratio 5   [####################]  full
+item3  wt 30  val 120  ratio 4   [####################..........]  20 of 30
+
+---------------------------------------------------------------------------------------
+
+Example 2
+item1  wt 30  val 500  ratio 16.67  [##########....................]  10 of 30
