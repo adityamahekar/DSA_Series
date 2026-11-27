@@ -1,0 +1,157 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {                                                                  // greedy + DSU
+
+    private int[] parent;                                                         // parent[i] = latest free slot <= i
+
+    private int find(int x){                                                      // latest free slot
+        if(parent[x] == x) return x;                                              // slot free
+        return parent[x] = find(parent[x]);                                       // path compression
+    }
+
+    public ArrayList<Integer> jobSequencing(int[] deadline, int[] profit) {       // entry
+        int n = deadline.length;                                                  // job count
+
+        Integer[] order = new Integer[n];                                         // indices to sort
+
+        for (int i = 0; i < n; i++) order[i] = i;                                 // 0..n-1
+
+        Arrays.sort(order, (a, b) -> Integer.compare(profit[b], profit[a]));      // profit desc
+
+        int maxDeadline = 0;                                                      // biggest deadline
+        for (int d : deadline) maxDeadline = Math.max(maxDeadline, d);            // scan it
+
+        parent = new int[maxDeadline + 1];                                        // slots 0..maxDeadline
+
+        for (int i = 0; i <= maxDeadline; i++) parent[i] = i;                     // all slots free
+
+        int count = 0, totalProfit = 0;                                           // answers
+
+        for (int i : order) {                                                     // richest job first
+            int slot = find(deadline[i]);                                         // latest free slot
+
+            if (slot > 0) {                                                       // got a slot
+
+                count++;                                                          // job taken
+                totalProfit += profit[i];                                         // add profit
+                parent[slot] = find(slot - 1);                                    // mark slot used
+            }
+        }
+
+        return new ArrayList<>(List.of(count, totalProfit));                      // [jobs, profit]
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Example 1
+
+deadline [4, 1, 1, 1]
+profit   [20, 10, 40, 30]
+
+          sort by profit ↓
+          
+          J3  40  d1
+          J4  30  d1
+          J1  20  d4
+          J2  10  d1
+          
+          slot     1     2     3     4
+                  [J3]  [  ]  [  ]  [J1]
+                   40               20
+          
+          J3 → d1 → slot 1 → take
+          J4 → d1 → full → skip
+          J1 → d4 → slot 4 → take
+          J2 → d1 → full → skip
+          
+          count 2   profit 60
+
+--------------------------------------------------------------------------------
+
+Example 2
+
+deadline [2, 1, 2, 1, 1]
+profit   [100, 19, 27, 25, 15]
+
+        sort by profit ↓
+        
+        J1  100  d2
+        J3   27  d2
+        J4   25  d1
+        J2   19  d1
+        J5   15  d1
+        
+        slot     1     2
+                [J3]  [J1]
+                 27    100
+        
+        J1 → d2 → slot 2 → take
+        J3 → d2 → slot 1 → take
+        J4 → d1 → full → skip
+        J2 → d1 → full → skip
+        J5 → d1 → full → skip
+        
+        count 2   profit 127
+
+--------------------------------------------------------------------------------
+
+Example 3
+
+deadline [3, 1, 2, 2]
+profit   [50, 10, 20, 30]
+
+      sort by profit ↓
+      
+      J1  50  d3
+      J4  30  d2
+      J3  20  d2
+      J2  10  d1
+      
+      slot     1     2     3
+              [J3]  [J4]  [J1]
+               20    30    50
+      
+      J1 → d3 → slot 3 → take
+      J4 → d2 → slot 2 → take
+      J3 → d2 → slot 1 → take
+      J2 → d1 → full → skip
+      
+      count 3   profit 100
+
+//////////////////////// QUESTION ////////////////////////////
+
+Job Sequencing Problem
+
+You are given two arrays: deadline[], and profit[], which represent a set of jobs, where each job is associated with a deadline, and a profit. 
+Each job takes 1 unit of time to complete, and only one job can be scheduled at a time. 
+You will earn the profit associated with a job only if it is completed by its deadline.
+
+Your task is to return the following two values
+Number of jobs selected for the maximum profit.
+The total maximum profit by completing those jobs.
+
+Examples :
+
+Input: deadline[] = [4, 1, 1, 1], profit[] = [20, 10, 40, 30]
+Output: [2, 60]
+Explanation: Job1 and Job3 can be done with maximum profit of 60 (20 + 40).
+
+--------------------------------------------------------------------------------
+
+Input: deadline[] = [2, 1, 2, 1, 1], profit[] = [100, 19, 27, 25, 15]
+Output: [2, 127]
+Explanation: Job1 and Job3 can be done with maximum profit of 127 (100 + 27).
+
+--------------------------------------------------------------------------------
+
+Input: deadline[] = [3, 1, 2, 2], profit[] = [50, 10, 20, 30]
+Output: [3, 100]
+Explanation: Job1, Job3 and Job4 can be completed with a maximum profit of 100 (50 + 20 + 30).
+
+Constraints:
+
+deadline.size() ≤ 105
+1 ≤ deadline[i] ≤ deadline.size()
+1 ≤ profit[i] ≤ 500
+profit.size() = deadline.size()
