@@ -1,0 +1,179 @@
+//////////////////////// CODE ////////////////////////////////
+
+class Solution {
+
+    class Node {
+        int freq;                          // Stores frequency
+        int idx;                           // Stores original character index
+        Node left, right;                  // Left and right child nodes
+
+        Node(int freq, int idx) {
+            this.freq = freq;              // Initialize frequency
+            this.idx = idx;                // Initialize index
+        }
+    }
+
+    public ArrayList<String> huffmanCodes(String s, int f[]) {
+
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> {
+            if (a.freq != b.freq)
+                return a.freq - b.freq;     // Sort by frequency
+            return a.idx - b.idx;           // Earlier character first
+        });
+
+        for (int i = 0; i < s.length(); i++) {
+            pq.add(new Node(f[i], i));      // Insert character nodes
+        }
+
+        while (pq.size() > 1) {             // Merge until one node remains
+
+            Node a = pq.poll();             // Remove smallest node
+            Node b = pq.poll();             // Remove second smallest node
+
+            Node parent = new Node(a.freq + b.freq,
+                    Math.min(a.idx, b.idx)); // Create parent node
+
+            parent.left = a;                // Assign left child
+            parent.right = b;               // Assign right child
+
+            pq.add(parent);                 // Insert merged node
+        }
+
+        ArrayList<String> res = new ArrayList<>(); // Store Huffman codes
+
+        preorder(pq.poll(), "", res);       // Generate codes using preorder
+
+        return res;                         // Return all Huffman codes
+    }
+
+    void preorder(Node root, String code, ArrayList<String> res) {
+
+        if (root == null)
+            return;                         // Base case
+
+        if (root.left == null && root.right == null) { // Check leaf node
+            res.add(code.isEmpty() ? "0" : code); // Store generated code
+            return;                         // Stop recursion
+        }
+
+        preorder(root.left, code + "0", res);  // Left subtree gets 0
+        preorder(root.right, code + "1", res); // Right subtree gets 1
+    }
+}
+
+//////////////////////// DRY RUN /////////////////////////////
+
+Input:
+
+s = "abcdef"
+
+f[] = [5, 9, 12, 13, 16, 45]
+
+Huffman Tree:
+
+```
+                    (100)
+                   /     \
+                (45)      (55)
+                /        /    \
+               f       (25)   (30)
+                      /   \   /  \
+                     c     d a    b
+```
+
+Correct tree structure:
+
+```
+                    (100)
+                   /     \
+                f(45)     (55)
+                         /    \
+                       (25)   (30)
+                      /   \   /   \
+                    c(12) d(13) (14) e(16)
+                                  / \
+                               a(5) b(9)
+```
+
+Preorder traversal:
+
+```
+          0
+          |
+         f
+
+          1
+         / \
+        0   1
+        |   |
+        0   1
+        |   |
+        c   d
+
+        1
+       / \
+      0   1
+      |   |
+      0   1
+      |   |
+      a   b
+```
+
+Final Huffman Codes:
+
+| Character | Code |
+| --------- | ---- |
+| a         | 1100 |
+| b         | 1101 |
+| c         | 100  |
+| d         | 101  |
+| e         | 111  |
+| f         | 0    |
+
+Output:
+
+[0, 100, 101, 1100, 1101, 111]
+
+//////////////////////// QUESTION ////////////////////////////
+
+Huffman Encoding
+
+Given a string s of distinct characters and their corresponding frequencies f[].
+Build the Huffman tree and return all the Huffman codes in preorder traversal of the tree.
+
+Note:
+
+- If two nodes have the same frequency, the node whose subtree contains the character appearing earlier in string s goes to the left.
+- Otherwise, the node with smaller frequency goes to the left.
+
+Example:
+
+Input:
+
+s = "abcdef"
+
+f[] = [5, 9, 12, 13, 16, 45]
+
+Output:
+
+[0, 100, 101, 1100, 1101, 111]
+
+Explanation:
+
+The Huffman codes are:
+      
+      a : 1100
+      
+      b : 1101
+      
+      c : 100
+      
+      d : 101
+      
+      e : 111
+      
+      f : 0
+
+Constraints:
+
+1 ≤ s.size() = f.size() ≤ 26
